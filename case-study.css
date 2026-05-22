@@ -84,11 +84,13 @@
 
 /* ============ Hero schematic frame ============ */
 .cs-hero-frame {
-  margin-top: 60px;
+  margin: 60px auto 0;
   position: relative;
   border: 1px solid var(--ink);
   background: var(--paper-2);
   aspect-ratio: 16 / 9;
+  max-height: 500px;
+  max-width: 960px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -136,11 +138,11 @@
 .cs-section h2 {
   font-family: var(--sans);
   font-weight: 300;
-  font-size: clamp(36px, 4.8vw, 76px);
+  font-size: clamp(28px, 3.2vw, 52px);
   line-height: 0.98;
   letter-spacing: -0.045em;
   margin-bottom: 40px;
-  max-width: 22ch;
+  max-width: 75%;
 }
 .cs-section h2 em { font-style: normal; font-weight: 500; color: var(--mark); }
 
@@ -242,6 +244,54 @@
   max-width: 60ch;
 }
 .cs-process .body em { font-style: normal; font-weight: 500; color: var(--ink); }
+
+/* Inline process step image */
+.cs-process-img {
+  grid-column: 3 / -1;
+  width: 100%;
+  max-height: 600px;
+  object-fit: contain;
+  object-position: left center;
+  display: block;
+  border-radius: 6px;
+  margin-top: 4px;
+}
+
+.cs-process-imgs {
+  grid-column: 3 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 4px;
+}
+.cs-process-imgs img {
+  width: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  object-position: top center;
+  display: block;
+  border-radius: 6px;
+}
+
+.cs-process-video {
+  grid-column: 3 / -1;
+  width: 100%;
+  max-height: 600px;
+  display: block;
+  border-radius: 6px;
+  margin-top: 4px;
+  background: #000;
+}
+
+@media (max-width: 900px) {
+  .cs-process-img { grid-column: 1 / -1; }
+  .cs-process-imgs { grid-column: 1 / -1; }
+  .cs-process-video { grid-column: 1 / -1; }
+}
+
+@media (max-width: 600px) {
+  .cs-process-imgs { grid-template-columns: 1fr; }
+}
 
 /* Testimonial quotes — "What users said" section */
 .cs-testimonial {
@@ -355,6 +405,86 @@
   display: block;
 }
 
+/* Clickable screen */
+.screen--clickable { cursor: zoom-in; }
+.screen--clickable:hover .label { background: var(--mark); }
+
+/* Lightbox */
+.cs-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: oklch(0.08 0.01 60 / 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  cursor: zoom-out;
+  animation: lb-in .2s ease;
+}
+@keyframes lb-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.cs-lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+  cursor: default;
+  box-shadow: 0 40px 100px -20px oklch(0 0 0 / 0.6);
+}
+.cs-lightbox-close {
+  position: absolute;
+  top: 20px; right: 24px;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: oklch(0.70 0.01 60);
+  background: none;
+  border: 1px solid oklch(0.30 0.01 60);
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: color .2s, border-color .2s;
+}
+.cs-lightbox-close:hover { color: var(--paper); border-color: oklch(0.60 0.01 60); }
+
+.cs-lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 36px;
+  line-height: 1;
+  color: oklch(0.70 0.01 60);
+  background: oklch(0.14 0.01 60 / 0.7);
+  border: 1px solid oklch(0.30 0.01 60);
+  border-radius: 999px;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color .2s, background .2s, border-color .2s;
+  z-index: 2;
+}
+.cs-lightbox-nav:hover { color: var(--paper); background: oklch(0.22 0.01 60 / 0.9); border-color: oklch(0.50 0.01 60); }
+.cs-lightbox-prev { left: 20px; }
+.cs-lightbox-next { right: 20px; }
+
+.cs-lightbox-counter {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: oklch(0.55 0.01 60);
+  pointer-events: none;
+}
+.cs-lightbox-counter span { margin: 0 4px; }
+
 /* Next project card */
 .cs-next {
   padding: 100px 0;
@@ -401,10 +531,10 @@
   background: var(--mark-soft);
   border-left: 3px solid var(--mark);
   font-family: var(--sans);
-  font-size: 34px;
-  font-weight: 300;
+  font-size: 17px;
+  font-weight: 400;
   color: var(--mark);
-  line-height: 1.2;
+  line-height: 1.55;
 }
 
 /* Confidential banner */
@@ -443,7 +573,7 @@
   .cs-process .item { gap: 20px; padding: 24px 0; }
   .cs-process .heading { font-size: 20px; }
   .cs-process .body { font-size: 15px; }
-  .cs-process-callout { font-size: 22px; }
+  .cs-process-callout { font-size: 15px; }
   .cs-results .cell { padding: 24px 16px; min-height: 160px; }
   .cs-quote { padding: 48px 0; margin: 40px 0; }
   .cs-next { padding: 60px 0; }

@@ -383,7 +383,62 @@
       }
 
       .banner-rush .secondary { display: none; }
+
+      .ai-use-inner { grid-template-columns: 1fr; }
+      .ai-use-lede { font-size: clamp(26px, 6vw, 36px); }
     }
+
+    /* ============== AI section ============== */
+    .ai-use {
+      border-top: 1px solid var(--rule);
+      padding: 80px 0;
+    }
+    .ai-use-inner {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 0 var(--pad);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+    .ai-use-lede {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: clamp(28px, 3vw, 44px);
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+    .ai-use-lede em { font-style: normal; font-weight: 500; color: var(--mark); }
+    .ai-use-sub {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--ink-2);
+      letter-spacing: -0.01em;
+      max-width: 46ch;
+    }
+    .ai-use-grid { display: flex; flex-direction: column; }
+    .ai-use-item {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 128px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    .ai-use-item:first-child { border-top: 1px solid var(--rule); }
+    .ai-use-item .k {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--mark);
+      padding-top: 3px;
+    }
+    .ai-use-item .v { font-size: 14px; line-height: 1.5; color: var(--ink-2); letter-spacing: -0.01em; }
+    .ai-use-item .v strong { color: var(--ink); font-weight: 500; display: block; margin-bottom: 3px; font-size: 15px; letter-spacing: -0.015em; }
   </style>
 </head>
 <body>
@@ -450,9 +505,9 @@
         <div class="l-title">
           <span class="cat">Civic Tech</span>
           <span class="tt">Government <em>Platform</em> Work</span>
-          <p class="l-blurb">Three years designing tools for a government case management platform — workflow design, modernization, and search.</p>
+          <p class="l-blurb">Two years designing tools for a government case management platform — running workshops, large-scale UI updates, research sessions, and much happier users spending much less time completing their tasks.</p>
         </div>
-        <div class="l-metric"><span class="n">3<span class="u">yr</span></span><div class="sub">Platform tenure</div><span class="l-arrow">Open ↗</span></div>
+        <div class="l-metric"><span class="n">2<span class="u">yr</span></span><div class="sub">Platform tenure</div><span class="l-arrow">Open ↗</span></div>
       </a>
 
       <a class="l-row" href="case-study.html?slug=gridx-empower">
@@ -461,7 +516,7 @@
         <div class="l-title">
           <span class="cat">Clean Energy</span>
           <span class="tt">GridX <em>Empower</em>, re-imagined</span>
-          <p class="l-blurb">Took a raw billing API and shaped it into a product utility teams could sell.</p>
+          <p class="l-blurb">Took a raw billing API and turned it into a turn-key solution for utilities and their customers. Giving users on both sides of the electric grid access to more accurate information when they need it.</p>
         </div>
         <div class="l-metric"><span class="n">0&nbsp;→&nbsp;1</span><div class="sub">API to product</div><span class="l-arrow">Open ↗</span></div>
       </a>
@@ -472,7 +527,7 @@
         <div class="l-title">
           <span class="cat">Clean Energy</span>
           <span class="tt">GridX Interactive <em>Touchscreen</em></span>
-          <p class="l-blurb">Replaced the 45-min live demo with a self-serve booth experience.</p>
+          <p class="l-blurb">Replaced the 45-min live demo with a self-serve booth experience, bringing more customers into the funnel, and creating a sweet brand mascot and tone in the process.</p>
         </div>
         <div class="l-metric"><span class="n">24<span class="u">%</span></span><div class="sub">Lift in booth traffic</div><span class="l-arrow">Open ↗</span></div>
       </a>
@@ -483,7 +538,7 @@
         <div class="l-title">
           <span class="cat">Consumer Brand</span>
           <span class="tt">Taylor Guitars <em>Series</em> Pages</span>
-          <p class="l-blurb">Editorial template lifted page views across 15 product series.</p>
+          <p class="l-blurb">Total restructuring and redesign for the guitar series pages. Providing a way in for a number of different customer personas.</p>
         </div>
         <div class="l-metric"><span class="n">105<span class="u">%</span></span><div class="sub">Page views, post-launch</div><span class="l-arrow">Open ↗</span></div>
       </a>
@@ -494,7 +549,7 @@
         <div class="l-title">
           <span class="cat">Consumer Brand</span>
           <span class="tt">Taylor <em>Sustainability</em> Hub</span>
-          <p class="l-blurb">Modular CMS that launched with editorial day-one.</p>
+          <p class="l-blurb">Modular CMS and storytelling platform that brought to life 50 years of editorial content and legitimized the brand's sustainability efforts.</p>
         </div>
         <div class="l-metric"><span class="n">CMS</span><div class="sub">Editorial, at launch</div><span class="l-arrow">Open ↗</span></div>
       </a>
@@ -506,7 +561,7 @@
         <div class="r-orient">
           <div class="row">
             <div class="k">The pitch</div>
-            <div class="v">8+ years designing and scaling SaaS products. GovTech, clean energy, consumer brands — <em>high-stakes work that actually matters</em>.</div>
+            <div class="v">8+ years designing SaaS products. Government tools, energy software, consumer brands. I like working on things where the stakes are real.</div>
           </div>
           <div class="row">
             <div class="k">Currently</div>
@@ -522,16 +577,48 @@
       <div class="r-card">
         <div class="label"><span>Background</span><span>§·02</span></div>
         <div class="r-time">
-          <div class="mk"><span class="y">2013</span><div><div class="r">Design Lead</div><div class="p">CPXI</div></div></div>
-          <div class="mk"><span class="y">2017</span><div><div class="r">Creative Director</div><div class="p">Digital Remedy</div></div></div>
-          <div class="mk"><span class="y">2020</span><div><div class="r">UX Designer</div><div class="p">Taylor Guitars</div></div></div>
-          <div class="mk"><span class="y">2022</span><div><div class="r">Lead Experience Designer</div><div class="p">GridX</div></div></div>
           <div class="mk"><span class="y">2024</span><div><div class="r" style="color: var(--mark);">Sr. Product Designer</div><div class="p">Alpha Omega Integration</div></div></div>
+          <div class="mk"><span class="y">2022</span><div><div class="r">Lead Experience Designer</div><div class="p">GridX</div></div></div>
+          <div class="mk"><span class="y">2020</span><div><div class="r">UX Designer</div><div class="p">Taylor Guitars</div></div></div>
+          <div class="mk"><span class="y">2017</span><div><div class="r">Creative Director</div><div class="p">Digital Remedy</div></div></div>
+          <div class="mk"><span class="y">2013</span><div><div class="r">Design Lead</div><div class="p">CPXI</div></div></div>
         </div>
       </div>
     </aside>
 
   </main>
+
+  <section class="ai-use">
+    <div class="ai-use-inner">
+      <div>
+        <div class="section-eyebrow" style="margin-bottom: 28px;">
+          <span class="num">§AI</span>
+          <span class="label">On AI</span>
+          <div class="rule"></div>
+        </div>
+        <p class="ai-use-lede">The world is changing. You want to know <em>how I'm using it</em>. Here it is.</p>
+        <p class="ai-use-sub">I use AI whenever I can, trying to figure out what's useful and what's just a different kind of work. The work answer and the personal answer are pretty different.</p>
+      </div>
+      <div class="ai-use-grid">
+        <div class="ai-use-item">
+          <span class="k">Research</span>
+          <div class="v"><strong>Where it's actually changed the work</strong>Synthesizing user sessions and finding patterns used to eat days. Now it takes hours. The analysis is still mine. AI handles the part that was mostly just reading and sorting.</div>
+        </div>
+        <div class="ai-use-item">
+          <span class="k">At work</span>
+          <div class="v"><strong>Limited by security constraints</strong>The platform I work on keeps me from running much through external AI tools. So research synthesis is where I'm getting the most out of it professionally right now. That'll change.</div>
+        </div>
+        <div class="ai-use-item">
+          <span class="k">Off the clock</span>
+          <div class="v"><strong>Different story</strong>This portfolio was built with Claude Code. I've been spending time with Stitch and Lovable too. I want to know what this stuff actually feels like to use, not just have opinions about it from a distance. I'm not letting the world pass me by.</div>
+        </div>
+        <div class="ai-use-item">
+          <span class="k">The honest take</span>
+          <div class="v"><strong>No polished philosophy</strong>I'm trying things, keeping what works. The goal is to be better at the job, not to sound good when someone asks about it in an interview.</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section class="closer">
     <h2>Let's work<br /><em>together</em>.</h2>
@@ -560,7 +647,7 @@
         <div>
           <h2 class="ts-h" id="tour-h">Senior IC who turns <em>hard problems</em> into shipped product.</h2>
           <p class="ts-who">
-            <strong>8+ years</strong> designing and scaling SaaS products. GovTech, clean energy, consumer brands. Currently designing tools for a government case management platform — the kind of work where getting it right actually matters. Previously GridX and Taylor Guitars.
+            <strong>8+ years</strong> of SaaS product design. Government case management, clean energy, guitars. Right now I'm working on tools where the stakes are real — bad UX decisions have actual consequences. GridX and Taylor Guitars before that.
           </p>
         </div>
 
@@ -599,7 +686,7 @@
         <div class="ts-block">
           <div class="label">Where I'd go next</div>
           <p class="ts-who">
-            <strong>Senior IC role at a fast-moving startup.</strong> Remote, US-based. Building something that matters with a team that ships. I lead research, advocate for users, partner with engineering, and contribute to the design system as I go.
+            <strong>Senior IC at a company where design has a seat at the table.</strong> Remote, US-based. I want to own problems end-to-end — research through launch — not just execute someone else's spec. Ideally with a team that ships and knows why it's shipping.
           </p>
         </div>
 

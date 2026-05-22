@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1440" />
+  <title>Dan Gruskin — Index-First</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <link rel="stylesheet" href="styles-thirty.css" />
+  <style>
+    /* ============== Index-first ============== */
+    /* The hero is small. The work is the page. */
+    html, body { background: var(--paper); }
+    body { padding-top: 52px; }
+
+    .masthead { display: none; }
+
+    /* Hero strip — compact secondary banner with the punchline */
+    .hero-strip {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 48px var(--pad) 40px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 32px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .hero-strip h1 {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: clamp(40px, 5.4vw, 84px);
+      line-height: 0.98;
+      letter-spacing: -0.045em;
+      max-width: 24ch;
+    }
+    .hero-strip h1 em { font-style: normal; font-weight: 500; color: var(--mark); }
+    .hero-strip .meta { display: flex; flex-direction: column; gap: 8px; text-align: right; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
+    .hero-strip .meta strong { color: var(--ink); font-weight: 500; }
+
+    /* The main event — the ledger */
+    .index-grid {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 32px var(--pad) 0;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .ledger {
+      display: flex;
+      flex-direction: column;
+    }
+    .ledger > h2 {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+      padding-bottom: 14px;
+      margin-bottom: 0;
+      border-bottom: 1px solid var(--ink);
+      display: flex; justify-content: space-between;
+    }
+    .ledger > h2 .count { color: var(--mark); }
+
+    .l-row {
+      display: grid;
+      grid-template-columns: 30px 132px 1fr auto;
+      gap: 28px;
+      align-items: center;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--rule);
+      transition: background .2s;
+      cursor: pointer;
+      position: relative;
+    }
+    .l-row::before {
+      content: "";
+      position: absolute;
+      left: -16px; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--mark);
+      transform: scaleY(0);
+      transform-origin: center;
+      transition: transform .3s cubic-bezier(.22,1,.36,1);
+    }
+    .l-row:hover { background: var(--paper-2); padding-left: 12px; padding-right: 12px; margin: 0 -12px; border-radius: 4px; }
+    .l-row:hover::before { transform: scaleY(0.6); left: -4px; }
+
+    .l-num { font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; color: var(--ink-3); }
+    .l-title { display: flex; flex-direction: column; gap: 10px; }
+    .l-title .cat { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mark); }
+    .l-title .tt {
+      font-family: var(--sans);
+      font-weight: 400;
+      font-size: 32px;
+      line-height: 1.05;
+      letter-spacing: -0.028em;
+    }
+    .l-title .tt em { font-style: normal; font-weight: 500; }
+    .l-title .l-blurb {
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--ink-2);
+      letter-spacing: -0.01em;
+      max-width: 64ch;
+      margin: 0;
+    }
+    .l-metric { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; min-width: 120px; }
+    .l-metric .n { font-family: var(--sans); font-weight: 300; font-size: 48px; line-height: 0.95; letter-spacing: -0.045em; }
+    .l-metric .n .u { font-size: 0.5em; color: var(--mark); font-weight: 500; }
+    .l-metric .sub { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mark); font-weight: 500; }
+    .l-metric .l-arrow {
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--ink-3);
+      margin-top: 6px; padding-top: 8px;
+      border-top: 1px solid var(--rule);
+      width: 100%; text-align: right;
+      transition: color .2s, border-color .2s;
+    }
+    .l-row:hover .l-metric .l-arrow { color: var(--mark); border-color: var(--mark); }
+
+    /* Right rail — sticky about + signals */
+    .rail {
+      position: sticky;
+      top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .r-card {
+      background: var(--paper-2);
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .r-card.dark { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .r-card .label {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--ink-3); margin-bottom: 10px;
+      display: flex; justify-content: space-between;
+    }
+    .r-card.dark .label { color: oklch(0.78 0.005 60); }
+    .r-card p { font-size: 14px; line-height: 1.45; letter-spacing: -0.01em; color: var(--ink-2); margin-bottom: 10px; }
+    .r-card.dark p { color: var(--paper); opacity: 0.86; }
+    .r-card p em { color: var(--ink); font-style: normal; font-weight: 500; }
+    .r-card.dark p em { color: var(--mark); }
+
+    /* Orientation card (pitch / currently / open to) */
+    .r-orient { display: flex; flex-direction: column; }
+    .r-orient .row {
+      padding: 12px 0;
+      border-top: 1px solid var(--rule);
+    }
+    .r-orient .row:first-child { border-top: 0; padding-top: 0; }
+    .r-orient .k {
+      font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--ink-3); margin-bottom: 6px;
+    }
+    .r-orient .v {
+      font-size: 14px; line-height: 1.4; letter-spacing: -0.01em; color: var(--ink);
+    }
+    .r-orient .v em { color: var(--mark); font-style: normal; font-weight: 500; }
+    .r-orient .v .muted { color: var(--ink-3); font-size: 12px; }
+
+    /* Mini timeline list */
+    .r-time {
+      display: flex; flex-direction: column; gap: 0;
+    }
+    .r-time .mk {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 12px;
+      padding: 10px 0;
+      border-top: 1px solid var(--rule);
+    }
+    .r-time .mk:first-child { border-top: 0; padding-top: 0; }
+    .r-time .y { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-3); }
+    .r-time .r { font-size: 14px; font-weight: 500; line-height: 1.2; letter-spacing: -0.015em; }
+    .r-time .p { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin-top: 2px; }
+
+    /* Mini stats */
+    .r-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    }
+    .r-stats .cell {
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+    .r-stats .cell .n { font-family: var(--sans); font-weight: 300; font-size: 24px; letter-spacing: -0.035em; line-height: 1; }
+    .r-stats .cell .n .u { font-size: 0.6em; color: var(--mark); font-weight: 500; }
+    .r-stats .cell .l { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-top: 4px; }
+
+    /* ─── "30-second tour" banner — mirrors the live page's pill ─── */
+    .banner-rush {
+      background: oklch(0.86 0.055 152);
+      color: oklch(0.22 0.04 152);
+      border-bottom: 1px solid oklch(0.74 0.07 152);
+      cursor: pointer;
+      transition: background .25s, gap .25s;
+      display: block;
+    }
+    .banner-rush:hover { background: oklch(0.82 0.075 152); }
+    .banner-rush .inner {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 12px var(--pad);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .banner-rush:hover .inner { gap: 18px; }
+
+    /* Mini ticking clock face, same construction as the pill on index.html */
+    .banner-rush .clock {
+      width: 16px; height: 16px;
+      border: 1.6px solid currentColor;
+      border-radius: 50%;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .banner-rush .clock::before,
+    .banner-rush .clock::after {
+      content: "";
+      position: absolute;
+      background: currentColor;
+      left: 50%; top: 50%;
+      transform-origin: 0 0;
+    }
+    .banner-rush .clock::before {
+      width: 5px; height: 1.6px;
+      transform: rotate(-30deg);
+    }
+    .banner-rush .clock::after {
+      width: 1.6px; height: 6px;
+      transform: rotate(0deg);
+      animation: banner-tick 2.4s steps(60) infinite;
+    }
+    @keyframes banner-tick { to { transform: rotate(360deg); } }
+
+    .banner-rush .primary {
+      font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+      font-weight: 500;
+    }
+    .banner-rush .secondary {
+      font-family: var(--sans);
+      font-size: 13px;
+      letter-spacing: -0.005em;
+      font-weight: 400;
+      opacity: 0.72;
+    }
+    .banner-rush:hover .secondary { opacity: 0.92; }
+    .banner-rush .arrow {
+      font-family: var(--mono);
+      margin-left: auto;
+      opacity: 0.7;
+      transition: transform .25s, opacity .25s;
+    }
+    .banner-rush:hover .arrow { transform: translateX(3px); opacity: 1; }
+
+    /* ─── Thumbnails in the ledger ─── */
+    .l-row {
+      grid-template-columns: 30px 132px 1fr auto;
+    }
+    .l-thumb {
+      width: 132px; height: 88px;
+      border-radius: 6px;
+      background: var(--paper-2);
+      border: 1px solid var(--rule);
+      object-fit: cover;
+      display: block;
+      transition: transform .3s cubic-bezier(.22,1,.36,1);
+    }
+    .l-thumb.placeholder {
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--ink-3);
+      background: linear-gradient(135deg, var(--paper-2), var(--paper-3));
+    }
+    .l-row:hover .l-thumb { transform: scale(1.02); }
+
+    /* Footer band */
+    .closer {
+      max-width: 1480px;
+      margin: 80px auto 0;
+      padding: 48px var(--pad);
+      background: var(--ink);
+      color: var(--paper);
+      border-top-left-radius: 24px;
+      border-top-right-radius: 24px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 32px;
+    }
+    .closer h2 {
+      font-family: var(--sans); font-weight: 300; font-size: clamp(40px, 6vw, 92px);
+      line-height: 0.95; letter-spacing: -0.05em;
+    }
+    .closer h2 em { font-style: normal; font-weight: 500; color: var(--mark); }
+    .closer .right { display: flex; flex-direction: column; gap: 14px; align-items: flex-end; }
+    .closer .right a { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 14px 22px; border-radius: 999px; border: 1px solid color-mix(in oklch, var(--paper) 30%, transparent); }
+    .closer .right a.primary { background: var(--mark); border-color: var(--mark); }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-left">
+        <span class="brand-mark">Dan Gruskin</span>
+        <span class="mono-sm muted" style="border-left: 1px solid var(--rule); padding-left: 14px;">SR. PRODUCT DESIGNER</span>
+      </div>
+      <nav class="topbar-mid">
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="#background">Background</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="topbar-right">
+        <span class="mono-sm" style="display: inline-flex; align-items: center; gap: 8px;">
+          <span class="avail-dot"></span>
+          <span style="color: var(--ink);">Open to senior roles</span>
+        </span>
+        <a class="resume-btn" href="#" onclick="event.preventDefault();">Resume ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <a class="banner-rush" href="#tour" data-open-tour aria-haspopup="dialog" aria-label="30-second tour">
+    <div class="inner">
+      <span class="clock" aria-hidden="true"></span>
+      <span class="primary">Only have 30 seconds?</span>
+      <span class="secondary">Reviewing portfolios can be a slog. Here's the cliff notes.</span>
+      <span class="arrow" aria-hidden="true">→</span>
+    </div>
+  </a>
+
+  <section class="hero-strip">
+    <h1>I design for <em>high-stakes</em> moments and the <em>people</em> who can't work without them.</h1>
+    <div class="meta">
+      <span>Dossier · <strong>2010 — 2026</strong></span>
+      <span>San Diego · <strong>Remote</strong></span>
+    </div>
+  </section>
+
+  <main class="index-grid">
+
+    <section class="ledger">
+      <h2><span>§01 — Selected work</span><span class="count">07 exhibits</span></h2>
+
+      <a class="l-row" href="case-study.html?slug=supervisor-review">
+        <span class="l-num">01</span>
+        <div class="l-thumb placeholder">NDA</div>
+        <div class="l-title">
+          <span class="cat">Civic Tech</span>
+          <span class="tt">Supervisor <em>Review</em> Mode</span>
+          <p class="l-blurb">Cloud-based review surface that replaced a 45-min in-person walkthrough.</p>
+        </div>
+        <div class="l-metric"><span class="n">14<span class="u">min</span></span><div class="sub">Minutes saved</div><span class="l-arrow">Open ↗</span></div>
+      </a>
+
+      <a class="l-row" href="case-study.html?slug=interview-platform">
+        <span class="l-num">02</span>
+        <div class="l-thumb placeholder">NDA</div>
+        <div class="l-title">
+          <span class="cat">Civic Tech</span>
+          <span class="tt"><em>Interview</em> Platform Redesign</span>
+          <p class="l-blurb">Officers opted-in by week one with effectively zero bug reports.</p>
+        </div>
+        <div class="l-metric"><span class="n">98<span class="u">%</span></span><div class="sub">Opt-ins / week one</div><span class="l-arrow">Open ↗</span></div>
+      </a>
+
+      <a class="l-row" href="case-study.html?slug=case-finder">
+        <span class="l-num">03</span>
+        <div class="l-thumb placeholder">NDA</div>
+        <div class="l-title">
+          <span class="cat">Civic Tech</span>
+          <span class="tt">Case <em>Finder</em></span>
+          <p class="l-blurb">Built an in-platform search tool that cut average case-reference lookup time by ~40%.</p>
+        </div>
+        <div class="l-metric"><span class="n">40<span class="u">%</span></span><div class="sub">Decrease in lookup time</div><span class="l-arrow">Open ↗</span></div>
+      </a>
+
+      <a class="l-row" href="case-study.html?slug=gridx-empower">
+        <span class="l-num">04</span>
+        <img class="l-thumb" src="img/thumbnails/empower-thumbnails.jpg" alt="" />
+        <div class="l-title">
+          <span class="cat">Clean Energy</span>
+          <span class="tt">GridX <em>Empower</em>, re-imagined</span>
+          <p class="l-blurb">Took a raw billing API and shaped it into a product utility teams could sell.</p>
+        </div>
+        <div class="l-metric"><span class="n">0&nbsp;→&nbsp;1</span><div class="sub">API to product</div><span class="l-arrow">Open ↗</span></div>
+      </a>
+
+      <a class="l-row" href="case-study.html?slug=gridx-touchscreen">
+        <span class="l-num">05</span>
+        <img class="l-thumb" src="img/thumbnails/gridx-touchscreen-thumbnails.jpg" alt="" />
+        <div class="l-title">
+          <span class="cat">Clean Energy</span>
+          <span class="tt">GridX Interactive <em>Touchscreen</em></span>
+          <p class="l-blurb">Replaced the 45-min live demo with a self-serve booth experience.</p>
+        </div>
+        <div class="l-metric"><span class="n">24<span class="u">%</span></span><div class="sub">Lift in booth traffic</div><span class="l-arrow">Open ↗</span></div>
+      </a>
+
+      <a class="l-row" href="case-study.html?slug=taylor-series">
+        <span class="l-num">06</span>
+        <img class="l-thumb" src="img/thumbnails/series-page-thumbnail.jpg" alt="" />
+        <div class="l-title">
+          <span class="cat">Consumer Brand</span>
+          <span class="tt">Taylor Guitars <em>Series</em> Pages</span>
+          <p class="l-blurb">Editorial template lifted page views across 15 product series.</p>
+        </div>
+        <div class="l-metric"><span class="n">105<span class="u">%</span></span><div class="sub">Page views, post-launch</div><span class="l-arrow">Open ↗</span></div>
+      </a>
+
+      <a class="l-row" href="case-study.html?slug=taylor-sustainability">
+        <span class="l-num">07</span>
+        <img class="l-thumb" src="img/thumbnails/sustainability-hub-thumbnail.jpg" alt="" />
+        <div class="l-title">
+          <span class="cat">Consumer Brand</span>
+          <span class="tt">Taylor <em>Sustainability</em> Hub</span>
+          <p class="l-blurb">Modular CMS that launched with editorial day-one.</p>
+        </div>
+        <div class="l-metric"><span class="n">CMS</span><div class="sub">Editorial, at launch</div><span class="l-arrow">Open ↗</span></div>
+      </a>
+    </section>
+
+    <aside class="rail">
+      <div class="r-card">
+        <div class="label"><span>Orientation</span><span>§·01</span></div>
+        <div class="r-orient">
+          <div class="row">
+            <div class="k">The pitch</div>
+            <div class="v">15+ years turning hard problems into <em>things people actually want to use</em>. Civic tech, clean energy, consumer brands.</div>
+          </div>
+          <div class="row">
+            <div class="k">Currently</div>
+            <div class="v">Senior Product Designer<br /><span class="muted">Civic Tech · confidential</span></div>
+          </div>
+          <div class="row">
+            <div class="k">Open to</div>
+            <div class="v">Senior Product Designer<br /><span class="muted">US · Remote</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="r-card">
+        <div class="label"><span>Background</span><span>§·02</span></div>
+        <div class="r-time">
+          <div class="mk"><span class="y">2008</span><div><div class="r">Web &amp; Print</div><div class="p">Freelance</div></div></div>
+          <div class="mk"><span class="y">2014</span><div><div class="r">Creative Director</div><div class="p">Taylor Guitars</div></div></div>
+          <div class="mk"><span class="y">2019</span><div><div class="r">Lead XD</div><div class="p">GridX</div></div></div>
+          <div class="mk"><span class="y">2022</span><div><div class="r">Sr. Product Designer</div><div class="p">Civic · confidential</div></div></div>
+          <div class="mk"><span class="y">2026</span><div><div class="r" style="color: var(--mark);">Next chapter</div><div class="p">Open to senior roles</div></div></div>
+        </div>
+      </div>
+    </aside>
+
+  </main>
+
+  <section class="closer">
+    <h2>Let's work<br /><em>together</em>.</h2>
+    <div class="right">
+      <a class="primary" href="mailto:dan@dangruskin.com">Start a conversation →</a>
+      <a href="#">linkedin.com/in/dangruskin ↗</a>
+      <a href="#">dan@dangruskin.com</a>
+    </div>
+  </section>
+
+  <!-- 30-second tour modal — ported from the React version, vanilla. -->
+  <div class="ts-backdrop" id="tour-backdrop" role="presentation" hidden>
+    <div class="ts-modal" role="dialog" aria-modal="true" aria-labelledby="tour-h">
+      <div class="ts-header">
+        <div class="ts-meta">
+          <span class="timer-pulse"></span>
+          <span><strong>30 seconds</strong> · the everything-you-need pitch</span>
+        </div>
+        <button class="ts-close" type="button" data-close-tour aria-label="Close">
+          <span>Close</span>
+          <span aria-hidden="true">✕</span>
+        </button>
+      </div>
+
+      <div class="ts-body">
+        <div>
+          <h2 class="ts-h" id="tour-h">Senior IC who turns <em>hard problems</em> into shipped product.</h2>
+          <p class="ts-who">
+            <strong>15+ years.</strong> Civic tech, clean energy SaaS, consumer brands. Currently designing tools for asylum and refugee case management — the kind of work where getting it right actually matters. Previously GridX and Taylor Guitars.
+          </p>
+        </div>
+
+        <div class="ts-block">
+          <div class="label">What I'm great at</div>
+          <div class="ts-chips">
+            <span class="ts-chip">High-stakes workflow design</span>
+            <span class="ts-chip">Research-driven decisions</span>
+            <span class="ts-chip">Cross-functional leadership</span>
+            <span class="ts-chip">0 → 1 vision work</span>
+            <span class="ts-chip">Design systems &amp; handoff</span>
+            <span class="ts-chip">Hi-fi prototyping</span>
+            <span class="ts-chip">Workshops &amp; facilitation</span>
+            <span class="ts-chip">Stakeholder alignment</span>
+          </div>
+        </div>
+
+        <div class="ts-block">
+          <div class="label">Recent wins · receipts on the page below</div>
+          <div class="ts-stats">
+            <div class="ts-stat">
+              <div class="n">14<span class="unit">min</span></div>
+              <div class="l">Saved per review<br />Supervisor Review Mode</div>
+            </div>
+            <div class="ts-stat">
+              <div class="n">98<span class="unit">%</span></div>
+              <div class="l">Officers opted-in / week one<br />Interview Platform Redesign</div>
+            </div>
+            <div class="ts-stat">
+              <div class="n">105<span class="unit">%</span></div>
+              <div class="l">Lift in page views<br />Taylor Series Pages</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ts-block">
+          <div class="label">Where I'd go next</div>
+          <p class="ts-who">
+            <strong>Senior IC role at a fast-moving startup.</strong> Remote, US-based. Building something that matters with a team that ships. I lead research, advocate for users, partner with engineering, and contribute to the design system as I go.
+          </p>
+        </div>
+
+        <div class="ts-cta">
+          <a class="ts-btn-primary" href="mailto:dan@dangruskin.com">
+            Start a conversation <span aria-hidden="true">→</span>
+          </a>
+          <button class="ts-btn-ghost" type="button" data-jump-to-work>
+            See the work ↓
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 30-second tour modal — open / close / Esc / backdrop click / scroll lock.
+    (function () {
+      const backdrop = document.getElementById('tour-backdrop');
+      const modal = backdrop.querySelector('.ts-modal');
+      let openTimer;
+
+      function openTour() {
+        clearTimeout(openTimer);
+        backdrop.hidden = false;
+        document.body.style.overflow = 'hidden';
+        // Trigger entrance after a frame so the transition kicks in.
+        requestAnimationFrame(() => backdrop.classList.add('in'));
+      }
+      function closeTour() {
+        backdrop.classList.remove('in');
+        document.body.style.overflow = '';
+        openTimer = setTimeout(() => { backdrop.hidden = true; }, 400);
+      }
+
+      document.querySelectorAll('[data-open-tour]').forEach((el) => {
+        el.addEventListener('click', (e) => { e.preventDefault(); openTour(); });
+      });
+      document.querySelectorAll('[data-close-tour]').forEach((el) => {
+        el.addEventListener('click', (e) => { e.preventDefault(); closeTour(); });
+      });
+      backdrop.addEventListener('click', (e) => { if (e.target === backdrop) closeTour(); });
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && backdrop.classList.contains('in')) closeTour();
+      });
+
+      const jump = backdrop.querySelector('[data-jump-to-work]');
+      if (jump) {
+        jump.addEventListener('click', () => {
+          closeTour();
+          setTimeout(() => {
+            const work = document.querySelector('.ledger') || document.getElementById('work');
+            if (work) window.scrollTo({ top: work.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
+          }, 250);
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>

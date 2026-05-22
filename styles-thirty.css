@@ -1,0 +1,353 @@
+/* ============================================================
+   "30-second tour" popover + trigger
+   ============================================================ */
+
+/* Trigger pill in the hero */
+.thirty-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px 12px 16px;
+  background: oklch(0.86 0.055 152);
+  color: oklch(0.22 0.04 152);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .25s, color .25s, gap .25s, padding .25s, transform .2s;
+  border: 1px solid oklch(0.78 0.06 152);
+  margin: 8px 0 40px;
+  position: relative;
+  z-index: 3;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.thirty-trigger:hover {
+  background: oklch(0.78 0.085 152);
+  color: oklch(0.18 0.05 152);
+  border-color: oklch(0.70 0.10 152);
+  gap: 16px;
+  padding-right: 24px;
+  transform: translateY(-1px);
+}
+.thirty-trigger .clock {
+  width: 16px; height: 16px;
+  border: 1.6px solid oklch(0.22 0.04 152);
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+}
+.thirty-trigger .clock::before,
+.thirty-trigger .clock::after {
+  content: "";
+  position: absolute;
+  background: oklch(0.22 0.04 152);
+  left: 50%; top: 50%;
+  transform-origin: 0 0;
+}
+.thirty-trigger .clock::before {
+  width: 5px; height: 1.6px;
+  transform: rotate(-30deg);
+}
+.thirty-trigger .clock::after {
+  width: 1.6px; height: 6px;
+  transform: rotate(0deg);
+  animation: tick 2.4s steps(60) infinite;
+}
+.thirty-trigger .text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  gap: 3px;
+  align-items: flex-start;
+}
+.thirty-trigger .primary {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.thirty-trigger .secondary {
+  font-size: 11px;
+  letter-spacing: -0.005em;
+  text-transform: none;
+  font-weight: 400;
+  opacity: 0.72;
+  font-family: var(--sans);
+}
+.thirty-trigger:hover .secondary { opacity: 0.88; }
+@keyframes tick {
+  to { transform: rotate(360deg); }
+}
+.thirty-trigger .arrow {
+  font-family: var(--mono);
+  opacity: 0.7;
+  transition: transform .25s;
+}
+.thirty-trigger:hover .arrow { transform: translateX(2px); opacity: 1; }
+
+/* Backdrop */
+.ts-backdrop {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in oklch, var(--ink) 32%, transparent);
+  backdrop-filter: blur(10px) saturate(110%);
+  -webkit-backdrop-filter: blur(10px) saturate(110%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+}
+/* The HTML `hidden` attribute MUST win over our display:flex, otherwise the
+   modal sits invisibly in front of the page and eats every click. */
+.ts-backdrop[hidden] { display: none; }
+.ts-backdrop.in { opacity: 1; pointer-events: auto; }
+.ts-backdrop.closing { opacity: 0; pointer-events: none; }
+
+/* Modal */
+.ts-modal {
+  width: 100%;
+  max-width: 760px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  position: relative;
+  transform: translateY(24px) scale(.96);
+  opacity: 0;
+  transition: opacity .35s ease, transform .45s cubic-bezier(.22,1,.36,1);
+  box-shadow: 0 30px 80px -20px color-mix(in oklch, var(--ink) 40%, transparent);
+}
+.ts-backdrop.in .ts-modal {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.ts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--ink);
+  position: sticky; top: 0;
+  background: var(--paper);
+  z-index: 2;
+  gap: 16px;
+}
+.ts-header .ts-meta {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  display: flex; align-items: center; gap: 10px;
+}
+.ts-header .ts-meta strong {
+  color: var(--ink); font-weight: 500;
+}
+.ts-header .timer-pulse {
+  width: 7px; height: 7px;
+  background: var(--mark);
+  border-radius: 50%;
+  position: relative;
+}
+.ts-header .timer-pulse::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid var(--mark);
+  opacity: 0.7;
+  animation: pulse 1.8s ease-out infinite;
+}
+.ts-close {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 7px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: background .25s, color .25s, border-color .25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.ts-close:hover {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.ts-body {
+  padding: 36px 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.ts-h {
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: clamp(36px, 5vw, 60px);
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  margin-bottom: 8px;
+}
+.ts-h em {
+  font-style: normal; font-weight: 500;
+  color: var(--mark);
+}
+
+.ts-who {
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  letter-spacing: -0.012em;
+  max-width: 56ch;
+}
+.ts-who strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.ts-block .label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mark);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ts-block .label::after {
+  content: ""; flex: 1; height: 1px; background: var(--rule);
+}
+
+.ts-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.ts-chip {
+  padding: 8px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-size: 12.5px;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  background: transparent;
+  transition: background .2s, border-color .2s, color .2s;
+}
+.ts-chip:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.ts-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+.ts-stat {
+  padding: 20px 16px;
+  border-left: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 130px;
+  justify-content: space-between;
+}
+.ts-stat:first-child { border-left: 0; }
+.ts-stat .n {
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 44px;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+.ts-stat .n .unit {
+  color: var(--mark);
+  font-weight: 500;
+  font-size: 0.55em;
+  letter-spacing: -0.02em;
+}
+.ts-stat .l {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+
+.ts-cta {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  padding-top: 4px;
+}
+.ts-btn-primary, .ts-btn-ghost {
+  padding: 14px 22px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .25s, color .25s, border-color .25s, transform .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.ts-btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+}
+.ts-btn-primary:hover {
+  background: var(--mark);
+  border-color: var(--mark);
+  transform: translateY(-1px);
+}
+.ts-btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+}
+.ts-btn-ghost:hover {
+  background: var(--ink);
+  color: var(--paper);
+  transform: translateY(-1px);
+}
+
+.ts-foot {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 18px 24px;
+  border-top: 1px solid var(--rule);
+  background: var(--paper-2);
+  display: flex; justify-content: space-between;
+}
+
+@media (max-width: 700px) {
+  .ts-stats { grid-template-columns: 1fr; }
+  .ts-stat { border-left: 0; border-top: 1px solid var(--rule); }
+  .ts-stat:first-child { border-top: 0; }
+  .ts-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+}

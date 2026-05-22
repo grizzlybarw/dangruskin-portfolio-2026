@@ -10,7 +10,7 @@ const CASE_STUDIES = {
     eyebrow: ["Workflow Design", "Enterprise UX", "Civic Tech"],
     title: ["Supervisor", "Review", "Mode"],
     titleEm: "Review",
-    lede: "Supervisors were managing asylum case reviews across Acrobat, local folders, and handwritten checklists. We moved the whole thing into the cloud without breaking their brains in the process.",
+    lede: "Supervisors were managing case reviews across Acrobat, local folders, and handwritten checklists. We moved the whole thing into the cloud saving hours per week in manual work, and ensuring reporting and data accuracy.",
     confidential: true,
     meta: [
       { label: "Role",     value: "Product Designer" },
@@ -20,7 +20,7 @@ const CASE_STUDIES = {
     ],
     Schema: SchemaSupervisor,
     problem: {
-      heading: "Supervisors reviewed asylum cases using Adobe Acrobat, local file folders, and manual tracking — entirely outside the system where the work actually lived.",
+      heading: "Working locally was causing friction in the workflow for supervisors and leadership.",
       body: [
         "The workflow looked something like this: download documents, open Acrobat, edit and annotate, save locally, try to remember which version was which. Then do it again tomorrow. The whole thing happened outside the application, which meant every step was a chance for something to get lost or wrong.",
         "In most contexts that's just annoying. In asylum case management it's a real problem. Missed steps and version confusion have consequences for actual people.",
@@ -124,6 +124,53 @@ const CASE_STUDIES = {
       ]
     },
     next: { slug: "case-finder", title: "Case Finder", tags: "Product Design · Civic Tech · Information Architecture" }
+  },
+
+  "civic-platform": {
+    eyebrow: ["Product Design", "Enterprise UX", "Civic Tech"],
+    title: ["Government", "Platform", "Work"],
+    titleEm: "Platform",
+    lede: "Three years designing tools for a government case management platform — modernizing a legacy system, building new workflows from the ground up, and giving leadership the visibility they'd never had.",
+    confidential: true,
+    meta: [
+      { label: "Role",     value: "Senior Product Designer" },
+      { label: "Team",     value: "Design · PM · Eng · Stakeholders" },
+      { label: "Timeline", value: "3 years" },
+      { label: "Domain",   value: "Civic Tech · Enterprise UX" }
+    ],
+    Schema: SchemaSupervisor,
+    problem: {
+      heading: "A platform doing serious work was being undermined by outdated tooling, offline workarounds, and no way for leadership to see what was actually happening.",
+      body: [
+        "The case management platform supported a large team of case workers processing high-stakes decisions — work where accuracy, speed, and accountability all matter. But the tools hadn't kept pace with the work. Core workflows were happening outside the platform entirely, in local files and manual trackers that no one else could see or verify.",
+        "A legacy interface, built seven years prior and never updated, had accumulated friction that workers had learned to route around rather than through. Reference materials were siloed on personal drives. Supervisors were reviewing work in Acrobat, saving files locally, and manually keeping track of versions. The platform had no visibility into any of it.",
+        "The opportunity was to bring the work back into the system — not by forcing change, but by building tools good enough that workers actually wanted to use them."
+      ]
+    },
+    results: [
+      { n: "1,200", u: "+", label: "Sessions in month two",             desc: "Supervisor Review Mode — 75–100 supervisors averaging 12–16 sessions each, above projections" },
+      { n: "98",    u: "%", label: "Opt-in rate, week one",              desc: "Interview Platform Redesign — 194 users opted in; only 6 turned it off after trying it" },
+      { n: "40",    u: "%", label: "Decrease in case lookup time",       desc: "Case Finder — officers using the new search tool vs. prior offline methods" },
+    ],
+    process: [
+      { n: "01", heading: "Supervisor Review Mode", body: "Supervisors were reviewing cases using a patchwork of local tools — Acrobat, personal file folders, handwritten checklists — entirely outside the platform. I interviewed 7 supervisors to map every tool, handoff, and breakdown point in the real workflow. That research became the most persuasive alignment artifact we had. We prototyped three solutions and shipped the leanest: a mode toggle that transformed the existing case view into a dedicated review workspace without changing the underlying navigation. The result was 1,200+ sessions in month two — above projections — driven by a phased rollout I helped design from the start.", callout: "Moving work into the platform only succeeds when the new experience is genuinely better than the workaround it replaces. Meeting users in their existing mental model — same case, same page, different tools — was the design decision that made adoption happen." },
+      { n: "02", heading: "Interview Platform Redesign", body: "The platform's core interview documentation tool had been designed seven years prior and never updated. Case workers had adapted to its friction, but adapted doesn't mean optimal. Drawing on 50+ prior user interviews, I identified the highest-leverage areas and ran a structured design studio with seven other designers. Three prototype sessions with active case workers surfaced clear wins — color coding for multi-respondent interviews, a new table view for dense information, improved drag-and-drop reordering. I proposed an opt-in rollout before the full switchover: 194 users opted in during the first week. Only 6 turned it off.", callout: "An opt-in window before a mandatory switch isn't just a safe rollout strategy — it's a design decision. Early adopters surface edge cases and become advocates before the change is forced on anyone." },
+      { n: "03", heading: "Case Finder", body: "Case workers needed to reference previous cases regularly, but those references lived everywhere except the platform. Every worker had built their own system. I interviewed 4 case workers about their real lookup workflows, facilitated workshops with subject matter experts to surface which data fields were genuinely useful, and built multiple high-fidelity prototypes to take to leadership. The shipped tool included a filterable search table with the fields that actually mattered. 41% of active users use the filters — a strong signal for a newly launched feature. The tool also gave leadership its first analytics layer on which reference materials were being used.", callout: "When everyone has built their own workaround, that's a product gap, not a user problem. Follow the workarounds to find the real requirement." },
+      { n: "04", heading: "Design system & platform contribution", body: "Across all three projects, I built and contributed components to the team's internal Figma design system — state documentation, CSS specs, component maps. I was an active participant in engineering mobs and pairing sessions throughout. That foundation is what made each successive project faster to ship and easier to maintain.", callout: "Design system contributions compound. Every component documented and contributed reduces ambiguity on the next build — and the one after that." }
+    ],
+    quote: {
+      text: "The best brief isn't always the one you're given — sometimes the real work is finding the better one.",
+      cite: "Project takeaway"
+    },
+    takeaways: {
+      heading: "Three years of building tools that people in demanding jobs actually wanted to use.",
+      body: [
+        "The through-line across all three projects was the same: workers had built workarounds because the platform hadn't kept up. Each project was an opportunity to close that gap — to build something good enough that the workaround became unnecessary.",
+        "Adoption was the real measure of success on every one of these. Not launch — adoption. That meant designing rollouts as carefully as the features themselves, staying close to users after launch, and treating post-launch feedback as a roadmap rather than a report card.",
+        "Working in a high-stakes environment changes how you think about interface decisions. Speed, clarity, and reduced friction aren't nice-to-haves — they're the point."
+      ]
+    },
+    next: { slug: "gridx-empower", title: "GridX Empower, re-imagined", tags: "SaaS · Product Strategy · Clean Energy" }
   },
 
   "case-finder": {

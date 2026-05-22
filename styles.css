@@ -265,6 +265,73 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   transform: scaleX(0);
 }
 
+/* ============== Burger button ============== */
+.topbar-burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  padding: 4px;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  flex-shrink: 0;
+}
+.topbar-burger span {
+  display: block;
+  height: 1.5px;
+  background: var(--ink);
+  transition: transform .28s cubic-bezier(.22,1,.36,1), opacity .2s;
+  transform-origin: center;
+}
+.topbar-burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.topbar-burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.topbar-burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ============== Mobile nav panel ============== */
+.topbar-nav-mobile {
+  border-top: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+}
+.topbar-nav-mobile[hidden] { display: none; }
+.topbar-nav-mobile a {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  padding: 18px var(--pad);
+  border-bottom: 1px solid var(--rule);
+  transition: color .2s, background .2s;
+}
+.topbar-nav-mobile a:hover { color: var(--ink); background: var(--paper-2); }
+.topbar-nav-mobile-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px var(--pad);
+}
+
+.topbar-avail { display: inline-flex; align-items: center; gap: 8px; }
+
+/* ============== Responsive topbar ============== */
+@media (max-width: 860px) {
+  .topbar-mid { display: none; }
+  .topbar-inner { grid-template-columns: 1fr auto; }
+  .topbar-avail { display: none; }
+  .topbar-right .resume-btn { display: none; }
+  .topbar-burger { display: flex; }
+}
+
+@media (max-width: 480px) {
+  .topbar-inner { gap: 12px; padding: 8px var(--pad); }
+  .brand-mark { font-size: 14px; }
+  .resume-btn { padding: 6px 12px; font-size: 10px; }
+}
+
 /* ============== Section frame ============== */
 section { padding: 80px 0; position: relative; }
 .section-eyebrow {

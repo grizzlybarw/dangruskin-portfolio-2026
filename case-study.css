@@ -428,5 +428,24 @@
   .cs-body { grid-template-columns: 1fr; gap: 24px; }
   .cs-process .item { grid-template-columns: 60px 1fr; }
   .cs-process .item .heading { grid-column: 1 / -1; }
+  .cs-process-callout { grid-column: 1 / -1; }
   .cs-screens { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .cs-hero { padding: 100px 0 32px; }
+  .cs-back { margin-bottom: 36px; }
+  .cs-meta { grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px 0; }
+  .cs-meta .value { font-size: 14px; }
+  .cs-lede { font-size: clamp(18px, 4.5vw, 24px); margin-bottom: 40px; }
+  .cs-section { padding: 48px 0; }
+  .cs-section h2 { margin-bottom: 28px; }
+  .cs-process .item { gap: 20px; padding: 24px 0; }
+  .cs-process .heading { font-size: 20px; }
+  .cs-process .body { font-size: 15px; }
+  .cs-process-callout { font-size: 22px; }
+  .cs-results .cell { padding: 24px 16px; min-height: 160px; }
+  .cs-quote { padding: 48px 0; margin: 40px 0; }
+  .cs-next { padding: 60px 0; }
+  .cs-next .title { font-size: clamp(28px, 7vw, 52px); }
 }

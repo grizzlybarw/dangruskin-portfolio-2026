@@ -246,7 +246,8 @@ const CASE_STUDIES = {
       { label: "Domain", value: "Clean Energy · SaaS" }
     ],
     Schema: SchemaEmpower,
-    heroImage: "img/empower/empower-campaigns.png",
+    heroImage: "img/empower/empower-hero-mockup.jpg",
+    heroBorderless: true,
     problem: {
       heading: "GridX had powerful energy APIs. Getting them in front of utility customers meant months of manual, client-by-client implementation work — and no system to scale it.",
       body: [
@@ -300,8 +301,8 @@ const CASE_STUDIES = {
       { label: "Audience", value: "Current & prospective customers" }
     ],
     Schema: SchemaTouchscreen,
-    heroImage: "img/touchscreen/gridx-booth.jpg",
-    heroImagePosition: "center center",
+    heroImage: "img/touchscreen/gridx-touchscreen-hero-mockup.jpg",
+    heroBorderless: true,
     problem: {
       heading: "The GridX booth was great at talking to people who already knew GridX. Everyone else kept walking.",
       body: [
@@ -355,8 +356,8 @@ const CASE_STUDIES = {
       { label: "Domain", value: "E-commerce · Content Design" }
     ],
     Schema: SchemaTaylorSeries,
-    heroImage: "img/taylor-series/series-3.png",
-    heroContain: true,
+    heroImage: "img/taylor-series/taylor-series-hero-mockup.jpg",
+    heroBorderless: true,
     problem: {
       heading: "The series pages weren't built to help people buy. They were marketing brochures — rich with content, but with no links to specific models and no path forward.",
       body: [
@@ -410,8 +411,8 @@ const CASE_STUDIES = {
       { label: "Domain",  value: "Editorial Design · Brand" }
     ],
     Schema: SchemaSustainability,
-    heroImage: "img/sustainability/sustainability-hub-thumbnail.jpg",
-    heroContain: true,
+    heroImage: "img/sustainability/sus-hub-hero-mockup.jpg",
+    heroBorderless: true,
     problem: {
       heading: "Taylor's sustainability work was genuinely industry-leading. None of it was anywhere customers could find it.",
       body: [
@@ -554,11 +555,11 @@ function CaseStudy() {
               </React.Fragment>
             )}
           </div>
-          <h1 className="cs-title" style={{ fontSize: "92px" }}>
+          <h1 className="cs-title">
             {data.title.map((line, i) =>
               <React.Fragment key={i}>
+                {i > 0 && " "}
                 {line === data.titleEm ? <em>{line}</em> : line}
-                {i < data.title.length - 1 ? <br /> : null}
               </React.Fragment>
             )}
           </h1>
@@ -580,7 +581,7 @@ function CaseStudy() {
           }
 
           {!data.confidential || data.heroImage
-            ? <div className={"cs-hero-frame" + (data.heroImage ? " cs-hero-frame--photo" : "") + (data.heroContain ? " cs-hero-frame--contain" : "")} ref={schemaRef}>
+            ? <div className={"cs-hero-frame" + (data.heroImage ? " cs-hero-frame--photo" : "") + (data.heroContain ? " cs-hero-frame--contain" : "") + (data.heroBorderless ? " cs-hero-frame--borderless" : "")} ref={schemaRef}>
                 <span className="corner tl"></span>
                 <span className="corner tr"></span>
                 <span className="corner bl"></span>
@@ -626,33 +627,6 @@ function CaseStudy() {
         </div>
       </section>
 
-      <section className="cs-section">
-        <div className="shell">
-          <h2>{data.processLabel || "Process"}</h2>
-          <div className="cs-process">
-            {data.process.map((p, i) =>
-              <div className="item" key={i}>
-                <div className="num">{p.n}</div>
-                <div className="heading">{p.heading}</div>
-                <div className="body">{p.body.split("\n\n").map((para, j) => <p key={j}>{para}</p>)}</div>
-                {p.image && <img src={p.image} alt={p.heading} className="cs-process-img" />}
-                {p.images && (
-                  <div className="cs-process-imgs">
-                    {p.images.map((src, idx) => <img key={idx} src={src} alt={`${p.heading} ${idx + 1}`} />)}
-                  </div>
-                )}
-                {p.video && (
-                  <video className="cs-process-video" controls playsInline preload="metadata">
-                    <source src={p.video} />
-                  </video>
-                )}
-                {p.callout && <div className="cs-process-callout">{p.callout}</div>}
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
       {!data.confidential && (
         <section className="cs-section">
           <div className="shell">
@@ -681,6 +655,33 @@ function CaseStudy() {
           </div>
         </section>
       )}
+
+      <section className="cs-section">
+        <div className="shell">
+          <h2>{data.processLabel || "Process"}</h2>
+          <div className="cs-process">
+            {data.process.map((p, i) =>
+              <div className="item" key={i}>
+                <div className="num">{p.n}</div>
+                <div className="heading">{p.heading}</div>
+                <div className="body">{p.body.split("\n\n").map((para, j) => <p key={j}>{para}</p>)}</div>
+                {p.image && <img src={p.image} alt={p.heading} className="cs-process-img" />}
+                {p.images && (
+                  <div className="cs-process-imgs">
+                    {p.images.map((src, idx) => <img key={idx} src={src} alt={`${p.heading} ${idx + 1}`} />)}
+                  </div>
+                )}
+                {p.video && (
+                  <video className="cs-process-video" controls playsInline preload="metadata">
+                    <source src={p.video} />
+                  </video>
+                )}
+                {p.callout && <div className="cs-process-callout">{p.callout}</div>}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
 
       {data.testimonials && data.testimonials.length > 0 && (
         <section className="cs-section" style={{ paddingTop: 0 }}>

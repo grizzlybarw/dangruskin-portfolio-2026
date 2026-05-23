@@ -1,0 +1,363 @@
+/* ============================================================
+   Style Switcher — nav trigger + dropdown
+   ============================================================ */
+
+/* Font overrides via data-font on <html> */
+[data-font="serif"] { --sans: 'Playfair Display', Georgia, serif; }
+[data-font="mono"]  { --sans: 'Space Mono', 'JetBrains Mono', monospace; }
+
+/* Trigger button — lives in .topbar-right */
+.sx-trigger {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  padding: 7px 13px;
+  border: 1px solid var(--mark);
+  background: var(--mark);
+  color: var(--paper);
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: background .2s, color .2s, opacity .2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.sx-trigger:hover,
+.sx-trigger[aria-expanded="true"] {
+  opacity: 0.85;
+}
+.sx-trigger-icon { font-size: 13px; line-height: 1; }
+.sx-trigger-label { /* shown on desktop */ }
+
+@media (max-width: 860px) {
+  .sx-trigger-label { display: none; }
+  .sx-trigger { padding: 7px 10px; }
+}
+
+/* Dropdown panel */
+.sx-dropdown {
+  position: fixed;
+  top: 0; /* set in JS after measuring topbar */
+  right: 0;
+  width: 300px;
+  background: oklch(0.155 0.015 60);
+  border: 1px solid oklch(0.30 0.015 60);
+  border-top: none;
+  box-shadow: 0 16px 48px oklch(0 0 0 / 0.35);
+  z-index: 49;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 18px;
+  gap: 20px;
+  max-height: calc(100vh - 60px);
+  overflow-y: auto;
+  /* animation */
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity .22s ease, transform .28s cubic-bezier(.22, 1, .36, 1);
+}
+.sx-dropdown.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Section label */
+.sx-section-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 9px;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: oklch(0.75 0.22 254);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sx-section-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: oklch(0.26 0.015 60);
+}
+
+/* Theme swatches */
+.sx-themes {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+}
+/* Geocities swatch spans full width as the 7th item */
+.sx-swatch[data-theme="geocities"] {
+  grid-column: 1 / -1;
+}
+.sx-swatch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: oklch(0.20 0.015 60);
+  border: 1px solid oklch(0.28 0.015 60);
+  border-radius: 7px;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  text-align: left;
+}
+.sx-swatch:hover  { border-color: oklch(0.46 0.015 60); background: oklch(0.22 0.015 60); }
+.sx-swatch.active { border-color: oklch(0.75 0.22 254); background: oklch(0.22 0.015 60); }
+
+.sx-dots {
+  position: relative;
+  width: 20px;
+  height: 12px;
+  flex-shrink: 0;
+}
+.sx-swatch-bg,
+.sx-swatch-accent {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  position: absolute;
+  border: 1px solid oklch(0 0 0 / 0.25);
+}
+.sx-swatch-bg     { left: 0;  background: var(--swatch-bg); }
+.sx-swatch-accent { left: 8px; background: var(--swatch-accent); }
+.sx-swatch-name {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: oklch(0.88 0.01 60);
+  line-height: 1;
+}
+.sx-swatch.active .sx-swatch-name { color: oklch(0.96 0.01 60); }
+
+/* Font options */
+.sx-fonts { display: flex; flex-direction: column; gap: 5px; }
+.sx-font-opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 11px;
+  background: oklch(0.20 0.015 60);
+  border: 1px solid oklch(0.28 0.015 60);
+  border-radius: 7px;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  text-align: left;
+}
+.sx-font-opt:hover  { border-color: oklch(0.46 0.015 60); background: oklch(0.22 0.015 60); }
+.sx-font-opt.active { border-color: oklch(0.75 0.22 254); background: oklch(0.22 0.015 60); }
+
+.sx-font-sample {
+  font-size: 22px;
+  line-height: 1;
+  color: oklch(0.88 0.01 60);
+  width: 30px;
+  flex-shrink: 0;
+  display: block;
+}
+.sx-font-label { display: flex; flex-direction: column; gap: 2px; }
+.sx-font-name {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: oklch(0.88 0.01 60);
+}
+.sx-font-face {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0;
+  color: oklch(0.75 0.01 60);
+}
+.sx-font-opt.active .sx-font-name { color: oklch(0.96 0.01 60); }
+.sx-font-opt.active .sx-font-face { color: oklch(0.78 0.01 60); }
+
+/* Action buttons */
+.sx-actions { display: flex; gap: 6px; }
+
+.sx-random-btn,
+.sx-reset-btn {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 7px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color .2s, color .2s, background .2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.sx-random-btn {
+  background: oklch(0.20 0.015 60);
+  border: 1px dashed oklch(0.42 0.015 60);
+  color: oklch(0.85 0.01 60);
+}
+.sx-random-btn:hover {
+  border-color: oklch(0.60 0.01 60);
+  color: oklch(0.92 0.01 60);
+  background: oklch(0.24 0.015 60);
+}
+.sx-reset-btn {
+  background: transparent;
+  border: 1px solid oklch(0.36 0.015 60);
+  color: oklch(0.78 0.01 60);
+}
+.sx-reset-btn:hover {
+  border-color: oklch(0.55 0.015 60);
+  color: oklch(0.82 0.01 60);
+}
+
+/* Footer */
+.sx-esc {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: oklch(0.65 0.01 60);
+  text-align: center;
+}
+
+/* ============================================================
+   GEOCITIES MODE
+   ============================================================ */
+html[data-geocities] {
+  --paper:      #000033;
+  --paper-2:    #000055;
+  --paper-3:    #000077;
+  --ink:        #ffffff;
+  --ink-2:      #dddddd;
+  --ink-3:      #aaaaaa;
+  --rule:       #3333aa;
+  --rule-2:     #5555cc;
+  --mark:       #ff00ff;
+  --mark-soft:  rgba(255, 0, 255, 0.15);
+  --mark-ink:   #cc00cc;
+  --hot:        #00ff88;
+  --hot-soft:   rgba(0, 255, 136, 0.12);
+  --sans:       'Comic Sans MS', 'Comic Sans', cursive;
+  cursor: crosshair;
+}
+
+/* Starfield */
+html[data-geocities] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(circle, white 1px, transparent 1px),
+    radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px);
+  background-size: 80px 80px, 40px 40px;
+  background-position: 0 0, 20px 20px;
+}
+html[data-geocities] body > *:not(.sx-dropdown):not(.gc-marquee):not(.gc-star):not(.gc-badge) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Rainbow headings */
+@keyframes gc-rainbow {
+  0%   { color: #ff0000; text-shadow: 2px 2px 0 #ff00ff; }
+  16%  { color: #ff8800; text-shadow: 2px 2px 0 #ff0000; }
+  33%  { color: #ffff00; text-shadow: 2px 2px 0 #ff8800; }
+  50%  { color: #00ff88; text-shadow: 2px 2px 0 #ffff00; }
+  66%  { color: #00aaff; text-shadow: 2px 2px 0 #00ff88; }
+  83%  { color: #ff00ff; text-shadow: 2px 2px 0 #00aaff; }
+  100% { color: #ff0000; text-shadow: 2px 2px 0 #ff00ff; }
+}
+html[data-geocities] h1,
+html[data-geocities] h2,
+html[data-geocities] h3 {
+  animation: gc-rainbow 2.5s linear infinite !important;
+  font-family: 'Comic Sans MS', 'Comic Sans', cursive !important;
+}
+
+/* Blinking links */
+html[data-geocities] a { color: #ff00ff !important; text-decoration: underline !important; }
+html[data-geocities] a:visited { color: #ff8800 !important; }
+
+/* Neon borders everywhere */
+html[data-geocities] .shell::before,
+html[data-geocities] .shell::after { background: #ff00ff !important; opacity: 1 !important; }
+html[data-geocities] .topbar { border-bottom-color: #ff00ff !important; }
+
+/* Scrolling marquee */
+.gc-marquee {
+  position: sticky;
+  top: 52px;
+  z-index: 48;
+  background: #000055;
+  border-top: 2px solid #ff00ff;
+  border-bottom: 2px solid #00ff88;
+  overflow: hidden;
+  padding: 5px 0;
+  white-space: nowrap;
+}
+.gc-marquee-inner {
+  display: inline-block;
+  font-family: 'Comic Sans MS', cursive;
+  font-size: 13px;
+  font-weight: bold;
+  color: #ffff00;
+  letter-spacing: 0.06em;
+  animation: gc-scroll 22s linear infinite;
+}
+@keyframes gc-scroll {
+  from { transform: translateX(100vw); }
+  to   { transform: translateX(-100%); }
+}
+
+/* Floating sparkles */
+.gc-star {
+  position: fixed;
+  pointer-events: none;
+  z-index: 399;
+  animation: gc-float 3s ease-in-out infinite;
+  user-select: none;
+}
+@keyframes gc-float {
+  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+  50%       { transform: translateY(-22px) rotate(180deg) scale(1.2); }
+}
+
+/* Under construction badge */
+.gc-badge {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 400;
+  background: #000055;
+  border: 3px dashed #ff00ff;
+  color: #ffff00;
+  font-family: 'Comic Sans MS', cursive;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 8px 14px;
+  letter-spacing: 0.04em;
+  animation: gc-badge-blink 0.9s step-end infinite;
+  line-height: 1.5;
+  text-align: center;
+}
+@keyframes gc-badge-blink {
+  50% { border-color: #00ff88; color: #ff00ff; background: #000033; }
+}
+
+/* Keep the switcher panel itself legible in Geocities mode */
+html[data-geocities] .sx-dropdown,
+html[data-geocities] .sx-trigger { font-family: 'JetBrains Mono', monospace !important; }
+
+/* Mobile: full-width dropdown */
+@media (max-width: 600px) {
+  .sx-dropdown { width: 100%; right: 0; left: 0; }
+}

@@ -122,6 +122,12 @@
   border: 1px solid var(--rule);
 }
 .cs-hero-frame--photo::before { content: none; }
+.cs-hero-frame--contain {
+  background: transparent;
+  border: none;
+  max-height: 560px;
+}
+.cs-hero-frame--contain .corner { display: none; }
 .cs-hero-frame .corner {
   position: absolute;
   width: 12px; height: 12px;
@@ -242,6 +248,9 @@
   letter-spacing: -0.01em;
   color: var(--ink-2);
   max-width: 60ch;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 .cs-process .body em { font-style: normal; font-weight: 500; color: var(--ink); }
 
@@ -260,7 +269,7 @@
 .cs-process-imgs {
   grid-column: 3 / -1;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 12px;
   margin-top: 4px;
 }

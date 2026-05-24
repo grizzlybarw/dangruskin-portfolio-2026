@@ -737,9 +737,8 @@ function CaseStudy() {
       <section className="closer">
         <h2>Let's work<br /><em>together</em>.</h2>
         <div className="right">
-          <a className="primary" href="mailto:dan@dangruskin.com">Start a conversation →</a>
+          <a className="primary" href="contact.html">Start a conversation →</a>
           <a href="https://www.linkedin.com/in/daniel-gruskin-4a514965/" target="_blank">Dan LinkedIn ↗</a>
-          <a href="#">dan@dangruskin.com</a>
         </div>
       </section>
     </>

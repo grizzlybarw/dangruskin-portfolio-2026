@@ -102,10 +102,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.body.appendChild(dropdown);
 
-  // Position dropdown flush under the topbar
+  // Position dropdown below and right-aligned to the trigger button
   function positionDropdown() {
-    var topbar = document.querySelector(".topbar");
-    dropdown.style.top = (topbar ? topbar.offsetHeight : 52) + "px";
+    var rect = trigger.getBoundingClientRect();
+    var dropW = 300;
+    var vpW = window.innerWidth;
+    var left = rect.right - dropW;
+    if (left < 8) left = 8;
+    if (left + dropW > vpW - 8) left = vpW - dropW - 8;
+    dropdown.style.top = (rect.bottom + 6) + "px";
+    dropdown.style.left = left + "px";
+    dropdown.style.right = "auto";
   }
   positionDropdown();
   window.addEventListener("resize", positionDropdown);
@@ -113,6 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // --- Open / close ---
   function openDropdown() {
     isOpen = true;
+    positionDropdown();
     dropdown.classList.add("open");
     trigger.setAttribute("aria-expanded", "true");
   }

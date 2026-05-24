@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact — Dan Gruskin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="style-switcher.css" />
+  <script src="style-switcher.js"></script>
+  <style>
+    html, body { background: var(--paper); }
+    body { padding-top: 52px; }
+
+    /* Hero */
+    .contact-hero {
+      position: relative;
+      padding: 120px var(--pad) 100px;
+      border-bottom: 4px solid var(--mark);
+    }
+    .contact-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url('img/homepage/header-bg.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.5;
+      z-index: 0;
+    }
+    .contact-hero > * { position: relative; z-index: 1; }
+    .contact-eyebrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 20px;
+    }
+    .contact-eyebrow span { color: var(--mark); }
+    .contact-hero h1 {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: clamp(48px, 6.5vw, 100px);
+      line-height: 0.97;
+      letter-spacing: -0.045em;
+      color: var(--ink);
+      max-width: 18ch;
+      margin: 0;
+    }
+    .contact-hero h1 em { font-style: normal; font-weight: 500; color: var(--mark); }
+
+    /* Form section */
+    .contact-section {
+      padding: 80px var(--pad);
+      border-top: 4px solid var(--mark);
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 48px;
+      align-items: start;
+      max-width: 860px;
+    }
+    .contact-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      padding-top: 6px;
+    }
+    .contact-label p {
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--ink-3);
+      letter-spacing: 0;
+      text-transform: none;
+      margin-top: 12px;
+    }
+
+    /* Form */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .form-field label {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+    }
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--ink);
+      background: var(--paper-2);
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color .2s, background .2s;
+      width: 100%;
+      box-sizing: border-box;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .form-field input::placeholder,
+    .form-field textarea::placeholder { color: var(--ink-3); }
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      border-color: var(--mark);
+      background: var(--paper);
+    }
+    .form-field textarea {
+      resize: vertical;
+      min-height: 160px;
+      line-height: 1.6;
+    }
+    .form-field select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+    .form-submit {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .form-submit button {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--paper);
+      background: var(--mark);
+      border: none;
+      border-radius: 999px;
+      padding: 14px 28px;
+      cursor: pointer;
+      transition: opacity .2s;
+    }
+    .form-submit button:hover { opacity: 0.85; }
+    .form-note {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--ink-3);
+    }
+
+    /* Success state */
+    .form-success {
+      display: none;
+      padding: 20px 24px;
+      background: var(--mark-soft);
+      border-left: 3px solid var(--mark);
+      border-radius: 0 8px 8px 0;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      color: var(--mark);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 700px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 24px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-left">
+        <a href="index.html" class="brand-mark">Dan Gruskin</a>
+        <span class="mono-sm muted" style="border-left: 1px solid var(--rule); padding-left: 14px;">SR. PRODUCT DESIGNER</span>
+      </div>
+      <nav class="topbar-mid">
+        <a href="index.html">Work</a>
+        <a href="about.html">About</a>
+        <a href="contact.html" class="active">Contact</a>
+        <a href="daniel-gruskin-resume-2026.pdf" target="_blank">Resume ↗</a>
+      </nav>
+      <div class="topbar-right">
+        <a class="resume-btn" href="daniel-gruskin-resume-2026.pdf" target="_blank">Resume ↗</a>
+        <button class="topbar-burger" id="topbar-burger" aria-label="Open menu" aria-expanded="false" aria-controls="topbar-nav-mobile">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <nav class="topbar-nav-mobile" id="topbar-nav-mobile" hidden>
+      <a href="index.html">Work</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="daniel-gruskin-resume-2026.pdf" target="_blank">Resume ↗</a>
+    </nav>
+  </header>
+
+  <section class="contact-hero">
+    <div class="contact-eyebrow"><span>§</span> Contact</div>
+    <h1>Let's start a <em>conversation.</em></h1>
+  </section>
+
+  <section class="contact-section">
+    <div class="contact-grid">
+      <div class="contact-label">
+        Get in touch
+        <p>I'm always happy to chat about new opportunities, collaborations, or just a good design conversation.</p>
+      </div>
+      <form class="contact-form" id="contact-form" action="https://formspree.io/f/xpqnjljj" method="POST">
+        <div class="form-row">
+          <div class="form-field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required />
+          </div>
+          <div class="form-field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" required />
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="reason">Reason for reaching out</label>
+          <select id="reason" name="reason">
+            <option value="" disabled selected>Select one</option>
+            <option value="job-opportunity">Job opportunity</option>
+            <option value="freelance">Freelance project</option>
+            <option value="collaboration">Collaboration</option>
+            <option value="just-saying-hi">Just saying hi</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="What's on your mind?" required></textarea>
+        </div>
+        <div class="form-submit">
+          <button type="submit">Send it →</button>
+          <span class="form-note">I typically respond within a day or two.</span>
+        </div>
+        <div class="form-success" id="form-success">
+          Got it — I'll be in touch soon.
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="closer">
+    <h2>Let's work<br /><em>together</em>.</h2>
+    <div class="right">
+      <a class="primary" href="mailto:dangruskin@gmail.com">Start a conversation →</a>
+      <a href="https://www.linkedin.com/in/daniel-gruskin-4a514965/" target="_blank">Dan LinkedIn ↗</a>
+      <a href="mailto:dangruskin@gmail.com">dangruskin@gmail.com</a>
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      const burger = document.getElementById('topbar-burger');
+      const nav = document.getElementById('topbar-nav-mobile');
+      if (!burger || !nav) return;
+      burger.addEventListener('click', function () {
+        const open = !nav.hidden;
+        nav.hidden = open;
+        burger.setAttribute('aria-expanded', String(!open));
+      });
+    })();
+
+    // Form submission
+    const form = document.getElementById('contact-form');
+    const success = document.getElementById('form-success');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const data = new FormData(form);
+        fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        }).then(function (res) {
+          if (res.ok) {
+            form.querySelectorAll('input, select, textarea, button').forEach(function (el) { el.disabled = true; });
+            success.style.display = 'block';
+          }
+        });
+      });
+    }
+  </script>
+
+</body>
+</html>

@@ -56,6 +56,39 @@
     .hero-strip .meta { display: flex; flex-direction: column; gap: 8px; text-align: right; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
     .hero-strip .meta strong { color: var(--ink); font-weight: 500; }
 
+    .hero-left { display: flex; flex-direction: column; gap: 24px; }
+    .hero-tags { display: flex; gap: 24px; flex-wrap: wrap; }
+    .hero-tag {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+    }
+    .hero-tag-icon {
+      display: inline-block;
+      font-size: 20px;
+      color: var(--mark);
+      line-height: 1;
+    }
+    .hero-tag-icon--wave  { animation: ht-wave 2.2s ease-in-out infinite; transform-origin: 70% 80%; }
+    .hero-tag-icon--spin  { animation: ht-spin 6s linear infinite; }
+    @keyframes ht-wave {
+      0%, 100% { transform: rotate(0deg); }
+      15%       { transform: rotate(18deg); }
+      30%       { transform: rotate(-8deg); }
+      45%       { transform: rotate(14deg); }
+      60%       { transform: rotate(-4deg); }
+      75%       { transform: rotate(8deg); }
+    }
+    @keyframes ht-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
     /* The main event — the ledger */
     .index-grid {
       padding: 32px var(--pad) 0;
@@ -299,27 +332,6 @@
     .l-row:hover .l-thumb { transform: scale(1.02); }
 
     /* Footer band */
-    .closer {
-      max-width: 1480px;
-      margin: 80px auto 0;
-      padding: 48px var(--pad);
-      background: var(--ink);
-      color: var(--paper);
-      border-top-left-radius: 24px;
-      border-top-right-radius: 24px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: end;
-      gap: 32px;
-    }
-    .closer h2 {
-      font-family: var(--sans); font-weight: 300; font-size: clamp(40px, 6vw, 92px);
-      line-height: 0.95; letter-spacing: -0.05em;
-    }
-    .closer h2 em { font-style: normal; font-weight: 500; color: var(--mark); }
-    .closer .right { display: flex; flex-direction: column; gap: 14px; align-items: flex-end; }
-    .closer .right a { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 14px 22px; border-radius: 999px; border: 1px solid color-mix(in oklch, var(--paper) 30%, transparent); }
-    .closer .right a.primary { background: var(--mark); border-color: var(--mark); }
 
     /* ============== Responsive — tablet (≤900px) ============== */
     @media (max-width: 900px) {
@@ -343,18 +355,6 @@
         text-align: left;
         flex-direction: row;
         gap: 20px;
-      }
-      .closer {
-        grid-template-columns: 1fr;
-        gap: 28px;
-        border-top-left-radius: 16px;
-        border-top-right-radius: 16px;
-      }
-      .closer .right {
-        align-items: flex-start;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 10px;
       }
     }
 
@@ -381,20 +381,6 @@
         grid-template-columns: 1fr;
       }
 
-      .closer {
-        padding: 36px var(--pad);
-        margin-top: 48px;
-      }
-      .closer h2 { font-size: clamp(36px, 9vw, 60px); }
-      .closer .right {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .closer .right a {
-        font-size: 10px;
-        padding: 12px 18px;
-      }
-
       .banner-rush .secondary { display: none; }
 
       .ai-use-inner { grid-template-columns: 1fr; }
@@ -403,7 +389,7 @@
 
     /* ============== AI section ============== */
     .ai-use {
-      border-top: 1px solid var(--rule);
+      border-top: 4px solid var(--mark);
       padding: 80px 0;
     }
     .ai-use-inner {
@@ -457,7 +443,8 @@
        INTERVIEW Q&A
     ============================================================ */
     .qa-section {
-      border-top: 1px solid var(--rule);
+      border-top: 4px solid var(--mark);
+      background: var(--paper-2);
       padding: 80px 0;
     }
     .qa-header {
@@ -596,8 +583,8 @@
        DOODLE BREAK
     ============================================================ */
     .doodle-section {
-      border-top: 1px solid var(--rule);
-      border-bottom: 1px solid var(--rule);
+      border-top: 4px solid var(--mark);
+      background: var(--paper-2);
       padding: 72px 0 60px;
     }
     .doodle-header {
@@ -764,9 +751,8 @@
       </div>
       <nav class="topbar-mid">
         <a href="#work">Work</a>
-        <a href="#about">About</a>
-        <a href="#background">Background</a>
-        <a href="#contact">Contact</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
       </nav>
       <div class="topbar-right">
         <a class="resume-btn" href="daniel-gruskin-resume-2026.pdf" target="_blank">Resume ↗</a>
@@ -777,9 +763,8 @@
     </div>
     <nav class="topbar-nav-mobile" id="topbar-nav-mobile" hidden>
       <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#background">Background</a>
-      <a href="#contact">Contact</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
       <div class="topbar-nav-mobile-footer">
         <a class="resume-btn" href="daniel-gruskin-resume-2026.pdf" target="_blank">Resume ↗</a>
       </div>
@@ -796,14 +781,20 @@
   </a>
 
   <section class="hero-strip">
-    <h1>I design for <em>high-stakes</em> moments and the <em>people</em> who can't work without them.</h1>
+    <div class="hero-left">
+      <h1>I design for <em>high-stakes</em> moments and the <em>people</em> who can't work without them.</h1>
+      <div class="hero-tags">
+        <span class="hero-tag"><span class="hero-tag-icon hero-tag-icon--wave">👋</span> Human centered</span>
+        <span class="hero-tag"><span class="hero-tag-icon hero-tag-icon--spin">✦</span> Creatively driven.</span>
+      </div>
+    </div>
     <div class="meta">
       <span>Dossier · <strong>2010 — 2026</strong></span>
       <span>San Diego · <strong>Remote</strong></span>
     </div>
   </section>
 
-  <main class="index-grid">
+  <main class="index-grid" id="work">
 
     <section class="ledger">
       <h2><span>§01 — Selected work</span><span class="count">05 exhibits</span></h2>
@@ -1041,13 +1032,13 @@
   <section class="doodle-section">
     <div class="shell">
       <div class="doodle-header">
-        <div class="doodle-eyebrow">
-          <span class="doodle-eyebrow-num">§</span> Take a break
-        </div>
-        <div class="doodle-copy">
+        <div>
+          <div class="doodle-eyebrow">
+            <span class="doodle-eyebrow-num">§</span> Take a break
+          </div>
           <h2 class="doodle-headline">Whew. Take a breather.</h2>
-          <p class="doodle-body">You've been reviewing portfolios all day. Science shows drawing for a few minutes a day can reduce stress, sharpen memory, and relieve anxiety. You don't have to be good at it. Just pick up a mouse or a trackpad and doodle for a minute — forget about the world for a bit.</p>
         </div>
+        <p class="doodle-body">You've been reviewing portfolios all day. Science shows drawing for a few minutes a day can reduce stress, sharpen memory, and relieve anxiety. You don't have to be good at it. Just pick up a mouse or a trackpad and doodle for a minute — forget about the world for a bit.</p>
       </div>
       <div class="doodle-wrap">
         <canvas id="doodle-canvas" aria-label="Drawing canvas"></canvas>
@@ -1080,7 +1071,7 @@
     <h2>Let's work<br /><em>together</em>.</h2>
     <div class="right">
       <a class="primary" href="mailto:dan@dangruskin.com">Start a conversation →</a>
-      <a href="#">linkedin.com/in/dangruskin ↗</a>
+      <a href="https://www.linkedin.com/in/daniel-gruskin-4a514965/" target="_blank">Dan LinkedIn ↗</a>
       <a href="#">dan@dangruskin.com</a>
     </div>
   </section>

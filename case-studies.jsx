@@ -130,12 +130,12 @@ const CASE_STUDIES = {
     eyebrow: ["Product Design", "Enterprise UX", "Civic Tech"],
     title: ["Government", "Platform", "Work"],
     titleEm: "Platform",
-    lede: "Two years designing tools for a government case management platform — modernizing a legacy system, representing the users at every step, and giving leadership the visibility they'd never had before.",
+    lede: "Two years designing for a case management platform. Modernizing legacy systems, saving users time, managing stakeholders, running workshops, and chatting with lots and lots of users.",
     confidential: true,
     meta: [
       { label: "Role",     value: "Senior Product Designer" },
       { label: "Team",     value: "Design · PM · Eng · Stakeholders" },
-      { label: "Timeline", value: "3 years" },
+      { label: "Timeline", value: "2 years" },
       { label: "Domain",   value: "Civic Tech · Enterprise UX" }
     ],
     Schema: SchemaSupervisor,
@@ -150,27 +150,19 @@ const CASE_STUDIES = {
     processLabel: "Work Overview",
     resultsBlurb: "From multiple projects, the data doesn't lie.",
     results: [
-      { n: "1,200", u: "+", label: "Sessions in month two",             desc: "Supervisor Review Mode — 75–100 supervisors averaging 12–16 sessions each, above projections" },
+      { n: "55",    u: "",  label: "Hours of time regained a week per case", desc: "Supervisor Review Mode — gained by replacing a manual paper process with a new digital form application" },
       { n: "97",    u: "%", label: "Positive feedback post-launch",      desc: "Interview Platform Redesign — user sentiment survey following full rollout" },
       { n: "40",    u: "%", label: "Decrease in case lookup time",       desc: "Case Finder — officers using the new search tool vs. prior offline methods" },
     ],
     process: [
-      { n: "01", heading: "Supervisor Review Mode", body: "Supervisors were reviewing cases locally on their machines. I interviewed users to map every tool, handoff, and breakdown point in the real workflow. Then synthesized the pain points, and ran workshops with stakeholders and team members to identify solutions.\n\nI pitched three solutions with varying levels of complexity, clearly presenting how users and the organization could benefit from each solution. We landed on a dedicated review workspace that updated the UI to make it more legible and provide all of the information users needed to complete the review. The result was 1,200+ sessions in month two, scaling quickly to all reviews happening in app by month 6.", callout: "You can't just tell people to use the platform. The new experience has to be better than the workaround it's replacing. Keeping the same case view and layering tools on top of it was the design decision that made switching feel safe." },
+      { n: "01", heading: "Supervisor Review Mode", body: "Supervisors were reviewing cases locally on their machines. I interviewed users to map every tool, handoff, and breakdown point in the real workflow. Then synthesized the pain points, and ran workshops with stakeholders and team members to identify solutions.\n\nI pitched three solutions with varying levels of complexity, clearly presenting how users and the organization could benefit from each solution. We landed on a dedicated review workspace that updated the UI to make it more legible and provide all of the information users needed to complete the review. The result was 1,200+ sessions in month two, scaling quickly to all reviews happening in app by month 6.", callout: "You can't just tell people to use the new platform, you have to prove to them the new experience is better. We used training sessions, open message boards, and kept in contact with different offices to understand why folks weren't opting in to the new experience." },
       { n: "02", heading: "Interview Platform Redesign", body: "I led a large-scale UI update to the platform's core interview tool. This involved leveraging insights from 50+ user interviews, running workshops with stakeholders, design studios, user testing, building out new components, and running a phased opt-in period — 194 users opted in during the first week, and only 6 turned the new UI off.\n\nThe new UI received rave reviews and 97% positive feedback from users. We were also able to leverage feedback after the full launch into a handful of new features. Win win.", callout: "194 users opted in during the first week. Only 6 turned it off. An opt-in window gives you a feedback loop and a group of internal advocates before you make anything mandatory." },
       { n: "03", heading: "Case Finder", body: "Case workers needed to reference previous cases regularly, but those references lived everywhere except the platform. Every worker had built their own system. I interviewed 4 case workers about their real lookup workflows, facilitated workshops with subject matter experts to surface which data fields were genuinely useful, and built multiple high-fidelity prototypes to take to leadership.\n\nThe shipped tool included a filterable search table with the fields that actually mattered. 41% of active users use the filters — a strong signal for a newly launched feature. The tool also gave leadership its first analytics layer on which reference materials were being used.", callout: "Every worker had their own system because the shared one didn't work for them. That's not a user behavior problem — it's a product gap. The workarounds told us exactly what to build." },
       { n: "04", heading: "Design system & platform contribution", body: "Across all three projects, I built and contributed components to the team's internal Figma design system — state documentation, CSS specs, component maps. I was an active participant in engineering mobs and pairing sessions throughout. That foundation is what made each successive project faster to ship and easier to maintain.", callout: "Every component I contributed to the design system made the next build a little faster and a little cleaner. That value doesn't show up in any single project." }
     ],
     quote: {
-      text: "The best brief isn't always the one you're given — sometimes the real work is finding the better one.",
+      text: "Not all design needs to be flashy when you're working on life changing moments.",
       cite: "Project takeaway"
-    },
-    takeaways: {
-      heading: "Two years building for people with genuinely high-stakes jobs.",
-      body: [
-        "The through-line across all three projects was the same: workers had built workarounds because the platform hadn't kept up. Each project was an opportunity to close that gap — to build something good enough that the workaround became unnecessary.",
-        "Adoption was the real measure of success on every one of these. Not launch — adoption. That meant designing rollouts as carefully as the features themselves, staying close to users after launch, and treating post-launch feedback as a roadmap rather than a report card.",
-        "Working in a high-stakes environment changes how you think about interface decisions. Speed, clarity, and reduced friction aren't nice-to-haves — they're the point."
-      ]
     },
     next: { slug: "gridx-empower", title: "GridX Empower, re-imagined", tags: "SaaS · Product Strategy · Clean Energy" }
   },
@@ -238,7 +230,7 @@ const CASE_STUDIES = {
     eyebrow: ["Experience Design", "Vision Work", "Clean Energy"],
     title: ["GridX", "Empower,", "re-imagined"],
     titleEm: "Empower,",
-    lede: "I was brought in to design a data visualization system for utility customers. What the research revealed was a bigger problem: the entire path from widget creation to customer deployment was manual, fragmented work — taking teams months to execute. This is the vision I built to fix that.",
+    lede: "I was brought in to design a data visualization system for utility customers. The research revealed a larger problem: it wasn't just about visualizing the data, it was also a problem of getting those visuals in front of a customer. I proposed a totally new platform, providing direction for the application now, and 5 years from now.",
     meta: [
       { label: "Role",   value: "Lead Experience Designer" },
       { label: "Team",   value: "Design · Product · Eng · Execs" },
@@ -249,7 +241,7 @@ const CASE_STUDIES = {
     heroImage: "img/empower/empower-hero-mockup.jpg",
     heroBorderless: true,
     problem: {
-      heading: "GridX had powerful energy APIs. Getting them in front of utility customers meant months of manual, client-by-client implementation work — and no system to scale it.",
+      heading: "GridX had powerful energy APIs. Getting them in front of utility customers meant months of manual, client-by-client implementation work — and no system to measure success.",
       body: [
         "Utilities are navigating a changing grid — new rate models, emerging technology, shifting pricing structures — and their biggest challenge is getting customers to understand and adapt. GridX had the data to help with all of it. The path from that data to a utility customer's screen was the problem.",
         "Every widget deployment was a custom engagement — manual work, rebuilt from scratch for each utility client, taking implementation teams months to complete. GridX's Empower platform had the APIs, but was missing the front-end layer, the campaign tooling, and the measurement capabilities that would let utilities deploy and iterate on their own.",
@@ -263,9 +255,9 @@ const CASE_STUDIES = {
     ],
     process: [
       { n: "01", heading: "Research", image: "img/empower/empower-research.png", body: "Working from recorded research sessions with utility executives — conducted by an outside contractor and the VP of design — I synthesized findings into problem statements and stress-tested them with internal teams. The synthesis mapped each user through the full customer experience: who they were, what they were trying to accomplish, and what value this solution could unlock. The more important finding was the user type nobody had fully designed for yet: utility program managers working with APIs day-to-day. Every widget deployment was a months-long, manual, client-specific engagement. They needed a system, not another custom project. I also led constraint-setting early — working with three other designers and the VP of design to bound the project before it sprawled.", callout: "The synthesis surfaced a user type nobody had fully designed for: the utility program manager dealing with APIs day-to-day. Designing for them reframed the entire product scope." },
-      { n: "02", heading: "Hypothesis", body: "If utilities can segment and sequence widgets like lightweight campaigns — and customers receive timely, contextual guidance — we'd see higher engagement and more program enrollments, with a lower support burden. That became the design brief that shaped everything downstream. Simple to state, surprisingly hard to design for.", callout: "The brief sounds simple: segment, sequence, measure. Getting there took research synthesis, constraint-setting sessions with the VP, and a lot of stress-testing with the team. Those three words were earned." },
+      { n: "02", heading: "Hypothesis", body: "If utilities can segment and sequence widgets like lightweight campaigns (think an advertising campaign), then they can set specific widgets, to display for specific demographics at specific times, based on specific parameters. That's a lot of specifics, but it was all data that already existed...there just wasn't a way to manage and expose that information.\n\nInstead of months of hard coded implementation, looks at weeks of establishing the initial data pipeline, and then years of successful conversions.", callout: "The brief sounds simple: segment, sequence, measure. Getting there took research synthesis, constraint-setting sessions with the VP, and a lot of stress-testing with the team. Those three words were earned." },
       { n: "03", heading: "Information architecture", image: "img/empower/empower-ia.png", body: "The structure I landed on applied a different mental model entirely: a digital marketing campaign system. The program manager at the utility logs into Empower, selects a customer segment, picks which widgets to display, and tracks engagement — all without a developer in the loop. Think Google Ads, but for utility information inside a customer portal. That metaphor drove the entire IA: a Campaign system for orchestrating widget deployments, a Widget Library of pre-built and custom widgets, and an API Explorer for teams who wanted to go deeper. Getting this structure right before wireframing prevented a lot of expensive rework downstream.", callout: "Applying a marketing campaign mental model to widget deployment gave the IA a shape program managers already knew. Borrowing from a different domain was what made the architecture feel obvious in hindsight." },
-      { n: "04", heading: "Wireframes", image: "img/empower/empower-wireframe.png", body: "Moved through lo-fi quickly, using wireframes to map the information requirements for each page and identify what assets needed to be built. I ran these through design critiques with the broader team — a useful pressure test for catching gaps and pulling in ideas I hadn't considered. The wireframes were never the deliverable. In a startup context with other work running in parallel, I needed a fast path to the thing that would actually communicate the vision to executives: a high-fidelity prototype. Wireframes got me there faster.", callout: "I moved through lo-fi quickly. In a startup with other work running in parallel, the artifact that actually matters is the high-fidelity prototype. Wireframes are a step, not a destination." },
+      { n: "04", heading: "Wireframes", image: "img/empower/empower-wireframe.png", body: "Moved through lo-fi quickly, using wireframes to map the information requirements for each page and identify what assets needed to be built. I ran these through design critiques with the broader team, something I love doing. In these sessions the other designer really helped to dial in the structure of the pages and the initial campaign creation flow.", callout: "I moved through lo-fi quickly. In a startup with other work running in parallel, the artifact that actually matters is the high-fidelity prototype. Wireframes are a step, not a destination." },
       { n: "05", heading: "Prototype", body: "I built a complete high-fidelity prototype of the happy path to present to executives. Key surfaces included a Homepage with campaign insights and quick-start actions; a Campaigns section with filterable management and a creation wizard; Campaign Detail pages with embed code, reporting dashboards, and white-labeled widget previews; an APIs explorer for self-service education; and a Widget Library with pre-built and custom widget management — the foundation for a potential marketplace down the road.", callout: "I built the complete happy path, not a partial demo. Executives need to see the system working together, not a few disconnected screens. That's what got us the C-suite presentation." }
     ],
     keyScreens: [
@@ -607,12 +599,12 @@ function CaseStudy() {
         </div>
       </section>
 
-      <section className="cs-section" style={{ paddingTop: 0 }}>
+      <section className="cs-section cs-section--results">
         <div className="shell">
           <div className="cs-body" style={{ marginBottom: 40 }}>
             <div className="lhs">Results</div>
             <div className="rhs">
-              <p>{data.resultsBlurb || "Receipts from shipped work."}</p>
+              {data.resultsBlurb && <p>{data.resultsBlurb}</p>}
             </div>
           </div>
           <div className="cs-results">
@@ -710,6 +702,7 @@ function CaseStudy() {
         </div>
       </div>
 
+      {data.takeaways && (
       <section className="cs-section">
         <div className="shell">
           <h2>{data.takeaways.heading}</h2>
@@ -721,6 +714,7 @@ function CaseStudy() {
           </div>
         </div>
       </section>
+      )}
 
       {lightboxIndex !== null && (
         <Lightbox screens={lbScreens} index={lightboxIndex}
@@ -737,6 +731,15 @@ function CaseStudy() {
             </div>
             <span className="arrow">View →</span>
           </a>
+        </div>
+      </section>
+
+      <section className="closer">
+        <h2>Let's work<br /><em>together</em>.</h2>
+        <div className="right">
+          <a className="primary" href="mailto:dan@dangruskin.com">Start a conversation →</a>
+          <a href="https://www.linkedin.com/in/daniel-gruskin-4a514965/" target="_blank">Dan LinkedIn ↗</a>
+          <a href="#">dan@dangruskin.com</a>
         </div>
       </section>
     </>

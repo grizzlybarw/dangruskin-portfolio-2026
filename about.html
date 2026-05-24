@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About — Dan Gruskin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="style-switcher.css" />
+  <script src="style-switcher.js"></script>
+  <style>
+    html, body { background: var(--paper); }
+    body { padding-top: 52px; }
+
+    /* Hero */
+    .about-hero {
+      position: relative;
+      padding: 120px var(--pad) 100px;
+      border-bottom: 4px solid var(--mark);
+    }
+    .about-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url('img/homepage/header-bg.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.5;
+      z-index: 0;
+    }
+    .about-hero > * { position: relative; z-index: 1; }
+    .about-eyebrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 20px;
+    }
+    .about-eyebrow span { color: var(--mark); }
+    .about-hero h1 {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: clamp(48px, 6.5vw, 100px);
+      line-height: 0.97;
+      letter-spacing: -0.045em;
+      color: var(--ink);
+      max-width: 18ch;
+      margin: 0;
+    }
+    .about-hero h1 em { font-style: normal; font-weight: 500; color: var(--mark); }
+
+    /* Sections */
+    .about-section {
+      padding: 80px var(--pad);
+      border-top: 4px solid var(--mark);
+    }
+    .about-section:nth-of-type(even) { background: var(--paper-2); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 220px 1fr 460px;
+      gap: 48px 24px;
+      align-items: start;
+    }
+    .about-photo {
+      position: sticky;
+      top: 72px;
+    }
+    .about-photo img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+    }
+    @media (max-width: 1100px) {
+      .about-grid { grid-template-columns: 220px 1fr 340px; }
+    }
+    @media (max-width: 860px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+    .about-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      padding-top: 6px;
+    }
+    .about-body {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .about-body p {
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.65;
+      letter-spacing: -0.01em;
+      color: var(--ink-2);
+      margin: 0;
+      max-width: 60ch;
+    }
+    .about-body p strong { color: var(--ink); font-weight: 500; }
+    .about-body p em { font-style: italic; color: var(--ink); }
+
+    .about-callout {
+      padding: 14px 18px;
+      background: var(--mark-soft);
+      border-left: 3px solid var(--mark);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--mark);
+      line-height: 1.65;
+      max-width: 60ch;
+    }
+
+    /* Hobbies chips */
+    .about-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .about-chip {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+      border: 1px solid var(--rule-2);
+      border-radius: 999px;
+      padding: 6px 14px;
+    }
+
+    @media (max-width: 700px) {
+      .about-grid { grid-template-columns: 1fr; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-left">
+        <a href="index.html" class="brand-mark">Dan Gruskin</a>
+        <span class="mono-sm muted" style="border-left: 1px solid var(--rule); padding-left: 14px;">SR. PRODUCT DESIGNER</span>
+      </div>
+      <nav class="topbar-mid">
+        <a href="index.html">Work</a>
+        <a href="about.html" class="active">About</a>
+        <a href="daniel-gruskin-resume-2026.pdf" target="_blank">Resume ↗</a>
+      </nav>
+      <div class="topbar-right">
+        <a class="resume-btn" href="daniel-gruskin-resume-2026.pdf" target="_blank">Resume ↗</a>
+        <button class="topbar-burger" id="topbar-burger" aria-label="Open menu" aria-expanded="false" aria-controls="topbar-nav-mobile">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <nav class="topbar-nav-mobile" id="topbar-nav-mobile" hidden>
+      <a href="index.html">Work</a>
+      <a href="about.html">About</a>
+      <a href="daniel-gruskin-resume-2026.pdf" target="_blank">Resume ↗</a>
+    </nav>
+  </header>
+
+  <section class="about-hero">
+    <div class="about-eyebrow"><span>§</span> About</div>
+    <h1>Hey <em>there!</em></h1>
+  </section>
+
+  <section class="about-section">
+    <div class="about-grid">
+      <div class="about-label">Dan Gruskin</div>
+      <div class="about-body">
+        <p>I'm Dan, a Product Designer by day and a dad, surfer, hiker, woodworker, and serial hobbyist by night.</p>
+        <p>I've worked as a designer creating ad campaigns for NHL and NBA teams, a Creative Director managing brands and marketing, and most recently as a Senior Product Designer for a large government application.</p>
+        <p>Creativity is just a part of who I am. Initially that interest manifested in photography. In high school you would likely find me setting up still life photo shoots in my basement. In college that interest morphed into graphic design and typography. This is when I really started taking an interest in how people were interacting with the world around them — not just what that world looked like. It was also when I coined the phrase that would get written on the first page of every notebook I've owned since 2010.</p>
+        <div class="about-callout">Question everything.</div>
+        <p>It's a phrase that's followed me throughout my career and personal life. I'm perpetually intrigued by the way things work, and the way people get around obstacles. In my day to day that manifests as user interviews and testing sessions, really diving deep into process and understanding peoples goals.</p>
+        <p>Humans are complex. There's so much more to experience design than the happy path. There's the frustration from the morning commute, the lack of sleep from the night before, the excitement about the after work event, the cough that's been lingering for months, and the newborn that you just can't stop thinking about...but keeps you up all night.</p>
+        <p>Design is about trying to understand the humanity of the situation, and providing an experience that works within the bounds of that paradigm. (Sorry for using paradigm)</p>
+        <p>That's all the serious stuff out of the way.</p>
+        <p>Outside of work you're likely to find me in the water surfing, on a bike ride with my kid, or 700 pages deep in a fantasy book.</p>
+        <div class="about-chips">
+          <span class="about-chip">Surfing</span>
+          <span class="about-chip">Hiking</span>
+          <span class="about-chip">Woodworking</span>
+          <span class="about-chip">Dad</span>
+          <span class="about-chip">Fantasy novels</span>
+          <span class="about-chip">Serial hobbyist</span>
+        </div>
+      </div>
+      <div class="about-photo">
+        <img src="img/about-biking.png" alt="Dan and his kid on a bike" />
+      </div>
+    </div>
+  </section>
+
+  <section class="closer">
+    <h2>Let's work<br /><em>together</em>.</h2>
+    <div class="right">
+      <a class="primary" href="mailto:dan@dangruskin.com">Start a conversation →</a>
+      <a href="https://www.linkedin.com/in/daniel-gruskin-4a514965/" target="_blank">Dan LinkedIn ↗</a>
+      <a href="#">dan@dangruskin.com</a>
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      const burger = document.getElementById('topbar-burger');
+      const nav = document.getElementById('topbar-nav-mobile');
+      if (!burger || !nav) return;
+      burger.addEventListener('click', function () {
+        const open = nav.hidden === false;
+        nav.hidden = open;
+        burger.setAttribute('aria-expanded', String(!open));
+      });
+    })();
+  </script>
+
+</body>
+</html>

@@ -22,14 +22,27 @@
 
     /* Hero strip — compact secondary banner with the punchline */
     .hero-strip {
-      max-width: 1480px;
-      margin: 0 auto;
-      padding: 48px var(--pad) 40px;
+      position: relative;
+      padding: 148px var(--pad) 140px;
       display: grid;
       grid-template-columns: 1fr auto;
       align-items: end;
       gap: 32px;
       border-bottom: 1px solid var(--rule);
+    }
+    .hero-strip::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url('img/homepage/header-bg.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.5;
+      z-index: 0;
+    }
+    .hero-strip > * {
+      position: relative;
+      z-index: 1;
     }
     .hero-strip h1 {
       font-family: var(--sans);
@@ -45,8 +58,6 @@
 
     /* The main event — the ledger */
     .index-grid {
-      max-width: 1480px;
-      margin: 0 auto;
       padding: 32px var(--pad) 0;
       display: grid;
       grid-template-columns: 1fr 320px;
@@ -441,6 +452,306 @@
     }
     .ai-use-item .v { font-size: 14px; line-height: 1.5; color: var(--ink-2); letter-spacing: -0.01em; }
     .ai-use-item .v strong { color: var(--ink); font-weight: 500; display: block; margin-bottom: 3px; font-size: 15px; letter-spacing: -0.015em; }
+
+    /* ============================================================
+       INTERVIEW Q&A
+    ============================================================ */
+    .qa-section {
+      border-top: 1px solid var(--rule);
+      padding: 80px 0;
+    }
+    .qa-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: end;
+      margin-bottom: 56px;
+    }
+    .qa-eyebrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 16px;
+    }
+    .qa-eyebrow-num { color: var(--mark); }
+    .qa-headline {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: clamp(32px, 3.6vw, 54px);
+      letter-spacing: -0.04em;
+      line-height: 0.96;
+      color: var(--ink);
+      margin: 0;
+    }
+    .qa-headline em { font-style: normal; font-weight: 500; color: var(--mark); }
+    .qa-subhead {
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--ink-2);
+      max-width: 44ch;
+      margin: 0;
+      align-self: end;
+    }
+    .qa-list { border-top: 1px solid var(--rule); }
+    .qa-item { border-bottom: 1px solid var(--rule); }
+    .qa-trigger {
+      display: grid;
+      grid-template-columns: 36px 1fr 28px;
+      gap: 16px;
+      align-items: center;
+      padding: 22px 0;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+    .qa-trigger:hover .qa-question { color: var(--mark); }
+    .qa-num {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--mark);
+      align-self: start;
+      margin-top: 3px;
+    }
+    .qa-question {
+      font-family: var(--sans);
+      font-size: clamp(15px, 1.4vw, 18px);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      transition: color .2s;
+    }
+    .qa-chevron {
+      color: var(--ink-3);
+      font-size: 18px;
+      transition: transform .38s cubic-bezier(.22,1,.36,1), color .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .qa-item.open .qa-chevron { transform: rotate(180deg); color: var(--mark); }
+    .qa-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows .42s cubic-bezier(.22,1,.36,1);
+    }
+    .qa-item.open .qa-body { grid-template-rows: 1fr; }
+    .qa-body-inner { overflow: hidden; min-height: 0; }
+    .qa-answer {
+      padding: 0 0 32px 52px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .qa-answer p {
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--ink-2);
+      letter-spacing: -0.005em;
+      margin: 0;
+    }
+    .qa-answer p strong { color: var(--ink); font-weight: 500; }
+    .qa-answer .qa-short {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--ink-3);
+      padding: 12px 16px;
+      border-left: 2px solid var(--mark);
+      background: var(--paper-2);
+      border-radius: 0 6px 6px 0;
+      line-height: 1.7;
+    }
+    .qa-answer--split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+    .qa-answer--split .qa-answer-text {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .qa-answer-img img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      display: block;
+    }
+    @media (max-width: 700px) {
+      .qa-header { grid-template-columns: 1fr; gap: 20px; }
+      .qa-answer { padding-left: 0; }
+      .qa-trigger { grid-template-columns: 28px 1fr 24px; gap: 10px; }
+      .qa-answer--split { grid-template-columns: 1fr; }
+    }
+
+    /* ============================================================
+       DOODLE BREAK
+    ============================================================ */
+    .doodle-section {
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      padding: 72px 0 60px;
+    }
+    .doodle-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: end;
+      margin-bottom: 32px;
+    }
+    .doodle-eyebrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .doodle-eyebrow-num { color: var(--mark); }
+    .doodle-headline {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: clamp(36px, 4vw, 60px);
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      color: var(--ink);
+      margin: 0;
+    }
+    .doodle-body {
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--ink-2);
+      max-width: 44ch;
+      margin: 0;
+      align-self: end;
+    }
+    /* Canvas */
+    .doodle-wrap {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 20px oklch(0 0 0 / 0.08);
+    }
+    #doodle-canvas {
+      display: block;
+      width: 100%;
+      height: 380px;
+      cursor: crosshair;
+      background: #fff;
+      touch-action: none;
+    }
+    .doodle-hint {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #bbb;
+      pointer-events: none;
+      transition: opacity .4s;
+    }
+    .doodle-hint.hidden { opacity: 0; }
+    /* Controls */
+    .doodle-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .doodle-colors { display: flex; gap: 7px; align-items: center; }
+    .doodle-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--dc);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform .15s, border-color .15s;
+      padding: 0;
+    }
+    .doodle-color:hover { transform: scale(1.2); }
+    .doodle-color.active {
+      border-color: var(--ink);
+      transform: scale(1.15);
+    }
+    .doodle-sizes { display: flex; gap: 10px; align-items: center; }
+    .doodle-size {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: opacity .15s;
+      opacity: 0.4;
+    }
+    .doodle-size.active { opacity: 1; }
+    .doodle-size:hover { opacity: 0.75; }
+    .doodle-size span {
+      display: block;
+      border-radius: 50%;
+      background: var(--ink);
+    }
+    .doodle-size:nth-child(1) span { width: 4px;  height: 4px;  }
+    .doodle-size:nth-child(2) span { width: 8px;  height: 8px;  }
+    .doodle-size:nth-child(3) span { width: 14px; height: 14px; }
+    .doodle-rule {
+      width: 1px;
+      height: 20px;
+      background: var(--rule);
+      flex-shrink: 0;
+    }
+    .doodle-action {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+      background: transparent;
+      border: 1px solid var(--rule-2);
+      border-radius: 999px;
+      padding: 5px 13px;
+      cursor: pointer;
+      transition: color .2s, border-color .2s;
+    }
+    .doodle-action:hover { color: var(--ink); border-color: var(--ink); }
+    .doodle-action--save { color: var(--mark); border-color: var(--mark); }
+    .doodle-action--save:hover { opacity: 0.75; color: var(--mark); border-color: var(--mark); }
+    .doodle-timer {
+      margin-left: auto;
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      color: var(--ink-3);
+      transition: color .4s;
+      min-width: 3ch;
+      text-align: right;
+    }
+    .doodle-timer.running { color: var(--ink-2); }
+    .doodle-timer.done { color: var(--mark); }
+    @media (max-width: 700px) {
+      .doodle-header { grid-template-columns: 1fr; gap: 20px; }
+      #doodle-canvas { height: 280px; }
+    }
   </style>
 </head>
 <body>
@@ -586,6 +897,115 @@
 
   </main>
 
+  <!-- ============================================================
+       DOODLE BREAK
+  ============================================================ -->
+  <!-- ============================================================
+       INTERVIEW Q&A
+  ============================================================ -->
+  <section class="qa-section">
+    <div class="shell">
+      <div class="qa-header">
+        <div>
+          <div class="qa-eyebrow"><span class="qa-eyebrow-num">§</span> Q&amp;A</div>
+          <h2 class="qa-headline">You might be <em>wondering...</em></h2>
+        </div>
+        <p class="qa-subhead">I get these questions a lot and it's helpful to get it all out of my<br>brain and onto a piece of paper.</p>
+      </div>
+
+      <div class="qa-list">
+
+        <div class="qa-item">
+          <button class="qa-trigger" aria-expanded="false">
+            <span class="qa-num">01</span>
+            <span class="qa-question">Walk me through your design process for a complex product.</span>
+            <span class="qa-chevron">&#8964;</span>
+          </button>
+          <div class="qa-body" role="region">
+            <div class="qa-body-inner">
+              <div class="qa-answer qa-answer--split">
+                <div class="qa-answer-text">
+                  <p>Every project starts the same way: I talk to everyone. Stakeholders, SMEs, users, anyone who touches the problem. Qualitative sessions, quantitative data, whatever I can get my hands on — it all goes in the pot. Out the other side comes a set of assumptions and hypotheses, user flows, pain points and maps. All leading towards a stakeholder pitch, presenting potential solutions which I'll pressure-test for both user impact and product impact.</p>
+                  <p>I'm a 'dream big' person, so the ideas at this stage tend to be large. I work with the team to find the most useful slices, run design workshops around those, test again, and iterate. Analytics get wired up before launch so there's a feedback loop from day one.</p>
+                  <p class="qa-short"><strong>Short version:</strong> gather everything, leverage users for real insight, workshop as a team, define what success looks like, ship, then measure. Oh — and buy the team lunch.</p>
+                </div>
+                <div class="qa-answer-img">
+                  <img src="img/homepage/q1.jpg" alt="Design process diagram" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-trigger" aria-expanded="false">
+            <span class="qa-num">02</span>
+            <span class="qa-question">How do you balance user needs with business goals?</span>
+            <span class="qa-chevron">&#8964;</span>
+          </button>
+          <div class="qa-body" role="region">
+            <div class="qa-body-inner">
+              <div class="qa-answer qa-answer--split">
+                <div class="qa-answer-text">
+                  <p>Research can't be one-sided. Talking to both users and stakeholders early almost always surfaces something useful: the business wants X, users want Y, and there's usually more overlap than anyone expected.</p>
+                  <p>For instance, while working on a case management platform stakeholders were interested in saving time to process cases faster. Users were interested in completing their tasks in less time. We were able to ship a solution that saved users hundreds of hours a quarter (yes, hundreds) — giving the business something to cheer about, and our team a lot of "thanks! this is awesome!" quotes from users.</p>
+                  <p>If there isn't overlap between the primary goals of the business and the main issues users are experiencing, the conversations are a little different. It's really trying to explain the benefits of what we're proposing to help the user, so the business understands the bottom line impact. They may be thinking "we want this to take less time" but really the end goal is keeping users on the platform. Speaking business helps a lot.</p>
+                  <p class="qa-short"><strong>Short version:</strong> talk to everyone early to understand their goals. Don't be afraid to run workshops to understand what the business is actually trying to achieve — then find ways to align the project to those goals.</p>
+                </div>
+                <div class="qa-answer-img">
+                  <img src="img/homepage/q2.jpg" alt="Balancing user and business needs" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-trigger" aria-expanded="false">
+            <span class="qa-num">03</span>
+            <span class="qa-question">Tell me about a time you failed on a project — what did you learn?</span>
+            <span class="qa-chevron">&#8964;</span>
+          </button>
+          <div class="qa-body" role="region">
+            <div class="qa-body-inner">
+              <div class="qa-answer qa-answer--split">
+                <div class="qa-answer-text">
+                  <p>You can't make everyone happy. That's especially true when it comes to user interfaces.</p>
+                  <p>While working on a large case management platform I launched a major UI update. New modern interface, faster loading, better IA, cleaner, shinier — all the good stuff. And people loved it. We tested it and over and over got the response "this takes a 10/10 app to an 11."</p>
+                  <p>And then we launched. The vast majority of users loved the new UI — but a few sent feedback that was really negative. They didn't want to use the new UI at all, and for all the reasons others loved it, they despised it.</p>
+                  <p>I went back and spoke to those users to understand what the problem was, and came to realize we could actually help them. Their feedback and initial dislike for the UI turned into a new feature set of user preferences. The app is stronger for that initial failure, and those users who were once complainers are now champions of the new interface.</p>
+                  <p class="qa-short"><strong>Short version:</strong> launched a new UI and some people hated it. We turned their negative response into a whole new suite of user preference features — making the app more robust and ensuring everyone could keep completing their tasks without friction. The lesson: a great test cohort isn't the same as the full population of your users.</p>
+                </div>
+                <div class="qa-answer-img">
+                  <img src="img/homepage/q3.jpg" alt="Thumbs up and thumbs down" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="qa-item">
+          <button class="qa-trigger" aria-expanded="false">
+            <span class="qa-num">04</span>
+            <span class="qa-question">How do you influence without authority — especially with PMs or engineering leads?</span>
+            <span class="qa-chevron">&#8964;</span>
+          </button>
+          <div class="qa-body" role="region">
+            <div class="qa-body-inner">
+              <div class="qa-answer">
+                <p>Data. A well-constructed pitch. And a willingness to make your PM or engineering lead actually try to use the thing.</p>
+                <p>The most effective tool I've found is empathy-by-experience. Stop explaining the user's frustration and hand them the interface. Let them feel it. A PM who has just spent four minutes trying to complete a task that should take thirty seconds doesn't need convincing — they're already on your side.</p>
+                <p>Beyond that: understand what the people you need to influence are actually trying to achieve. A PM cares about velocity and outcomes. An engineering lead cares about scope and feasibility. Frame the design rationale in those terms. User stories and direct quotes from research sessions help, but really, showing how your proposal gets them closer to their goal is what keeps the conversation moving.</p>
+                <p class="qa-short"><strong>Short version:</strong> speak their language, make them feel the problem firsthand, and frame the work so everyone wins.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <section class="ai-use">
     <div class="ai-use-inner">
       <div>
@@ -614,6 +1034,44 @@
           <span class="k">The honest take</span>
           <div class="v"><strong>No polished philosophy</strong>I'm trying things, keeping what works. The goal is to be better at the job, not to sound good when someone asks about it in an interview.</div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="doodle-section">
+    <div class="shell">
+      <div class="doodle-header">
+        <div class="doodle-eyebrow">
+          <span class="doodle-eyebrow-num">§</span> Take a break
+        </div>
+        <div class="doodle-copy">
+          <h2 class="doodle-headline">Whew. Take a breather.</h2>
+          <p class="doodle-body">You've been reviewing portfolios all day. Science shows drawing for a few minutes a day can reduce stress, sharpen memory, and relieve anxiety. You don't have to be good at it. Just pick up a mouse or a trackpad and doodle for a minute — forget about the world for a bit.</p>
+        </div>
+      </div>
+      <div class="doodle-wrap">
+        <canvas id="doodle-canvas" aria-label="Drawing canvas"></canvas>
+        <div class="doodle-hint" id="doodle-hint">click or tap anywhere to start drawing</div>
+      </div>
+      <div class="doodle-controls">
+        <div class="doodle-colors" role="group" aria-label="Brush color">
+          <button class="doodle-color active" data-color="#111111" style="--dc:#111111" aria-label="Black"></button>
+          <button class="doodle-color" data-color="#3b6ef8" style="--dc:#3b6ef8" aria-label="Blue"></button>
+          <button class="doodle-color" data-color="#e8453c" style="--dc:#e8453c" aria-label="Red"></button>
+          <button class="doodle-color" data-color="#16a34a" style="--dc:#16a34a" aria-label="Green"></button>
+          <button class="doodle-color" data-color="#d97706" style="--dc:#d97706" aria-label="Amber"></button>
+          <button class="doodle-color" data-color="#9333ea" style="--dc:#9333ea" aria-label="Purple"></button>
+        </div>
+        <div class="doodle-rule"></div>
+        <div class="doodle-sizes" role="group" aria-label="Brush size">
+          <button class="doodle-size active" data-size="2" aria-label="Fine"><span></span></button>
+          <button class="doodle-size" data-size="6" aria-label="Medium"><span></span></button>
+          <button class="doodle-size" data-size="14" aria-label="Thick"><span></span></button>
+        </div>
+        <div class="doodle-rule"></div>
+        <button class="doodle-action" id="doodle-clear">Clear</button>
+        <button class="doodle-action doodle-action--save" id="doodle-save">Save ↓</button>
+        <div class="doodle-timer" id="doodle-timer">1:00</div>
       </div>
     </div>
   </section>
@@ -761,6 +1219,178 @@
           }, 250);
         });
       }
+    })();
+  </script>
+
+  <script>
+    /* ============================================================
+       INTERVIEW Q&A — accordion
+    ============================================================ */
+    (function () {
+      document.querySelectorAll('.qa-trigger').forEach(function (trigger) {
+        trigger.addEventListener('click', function () {
+          var item   = trigger.closest('.qa-item');
+          var isOpen = item.classList.contains('open');
+          document.querySelectorAll('.qa-item').forEach(function (i) {
+            i.classList.remove('open');
+            i.querySelector('.qa-trigger').setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            trigger.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+    })();
+
+    /* ============================================================
+       DOODLE BREAK
+    ============================================================ */
+    (function () {
+      const canvas  = document.getElementById('doodle-canvas');
+      const hint    = document.getElementById('doodle-hint');
+      const timerEl = document.getElementById('doodle-timer');
+      if (!canvas) return;
+
+      const ctx = canvas.getContext('2d');
+      const DPR = window.devicePixelRatio || 1;
+
+      let color     = '#111111';
+      let brushSize = 2;
+      let drawing   = false;
+      let points    = [];
+      let started   = false;
+      let timeLeft  = 60;
+      let interval  = null;
+      let done      = false;
+
+      function initCanvas() {
+        const w = canvas.offsetWidth;
+        const h = canvas.offsetHeight;
+        const saved = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        canvas.width  = w * DPR;
+        canvas.height = h * DPR;
+        ctx.scale(DPR, DPR);
+        ctx.lineCap  = 'round';
+        ctx.lineJoin = 'round';
+        try { ctx.putImageData(saved, 0, 0); } catch(e) {}
+      }
+      initCanvas();
+      window.addEventListener('resize', initCanvas);
+
+      function getXY(e) {
+        const r = canvas.getBoundingClientRect();
+        const src = e.touches ? e.touches[0] : e;
+        return { x: src.clientX - r.left, y: src.clientY - r.top };
+      }
+
+      function startStroke(e) {
+        if (done) return;
+        e.preventDefault();
+        drawing = true;
+        const p = getXY(e);
+        points  = [p];
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        if (!started) {
+          started = true;
+          hint.classList.add('hidden');
+          startTimer();
+        }
+      }
+
+      function moveStroke(e) {
+        if (!drawing || done) return;
+        e.preventDefault();
+        const p = getXY(e);
+        points.push(p);
+        ctx.strokeStyle = color;
+        ctx.lineWidth   = brushSize;
+
+        if (points.length < 3) {
+          ctx.beginPath();
+          ctx.moveTo(points[0].x, points[0].y);
+          ctx.lineTo(p.x, p.y);
+          ctx.stroke();
+        } else {
+          const a = points[points.length - 3];
+          const b = points[points.length - 2];
+          const c = points[points.length - 1];
+          const mid1 = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+          const mid2 = { x: (b.x + c.x) / 2, y: (b.y + c.y) / 2 };
+          ctx.beginPath();
+          ctx.moveTo(mid1.x, mid1.y);
+          ctx.quadraticCurveTo(b.x, b.y, mid2.x, mid2.y);
+          ctx.stroke();
+        }
+      }
+
+      function endStroke() { drawing = false; points = []; }
+
+      canvas.addEventListener('mousedown',  startStroke);
+      canvas.addEventListener('mousemove',  moveStroke);
+      canvas.addEventListener('mouseup',    endStroke);
+      canvas.addEventListener('mouseleave', endStroke);
+      canvas.addEventListener('touchstart', startStroke, { passive: false });
+      canvas.addEventListener('touchmove',  moveStroke,  { passive: false });
+      canvas.addEventListener('touchend',   endStroke);
+
+      function startTimer() {
+        timerEl.classList.add('running');
+        interval = setInterval(function () {
+          timeLeft--;
+          const m = Math.floor(timeLeft / 60);
+          const s = timeLeft % 60;
+          timerEl.textContent = m + ':' + String(s).padStart(2, '0');
+          if (timeLeft <= 10) timerEl.style.color = 'var(--mark)';
+          if (timeLeft <= 0) {
+            clearInterval(interval);
+            done = true;
+            timerEl.textContent = 'nice.';
+            timerEl.classList.remove('running');
+            timerEl.classList.add('done');
+          }
+        }, 1000);
+      }
+
+      // Color buttons
+      document.querySelectorAll('.doodle-color').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('.doodle-color').forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          color = btn.dataset.color;
+        });
+      });
+
+      // Size buttons
+      document.querySelectorAll('.doodle-size').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('.doodle-size').forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          brushSize = parseInt(btn.dataset.size);
+        });
+      });
+
+      // Clear
+      document.getElementById('doodle-clear').addEventListener('click', function () {
+        ctx.clearRect(0, 0, canvas.width / DPR, canvas.height / DPR);
+        if (done || started) {
+          clearInterval(interval);
+          done = false; started = false; timeLeft = 60;
+          timerEl.textContent = '1:00';
+          timerEl.style.color = '';
+          timerEl.classList.remove('running', 'done');
+          hint.classList.remove('hidden');
+        }
+      });
+
+      // Save
+      document.getElementById('doodle-save').addEventListener('click', function () {
+        const link = document.createElement('a');
+        link.download = 'doodle.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
     })();
   </script>
 

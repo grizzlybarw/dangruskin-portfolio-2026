@@ -376,14 +376,25 @@
       .hero-strip .meta { flex-direction: column; gap: 4px; }
 
       .l-row {
-        grid-template-columns: 1fr auto;
-        gap: 16px;
+        grid-template-columns: 1fr;
+        gap: 12px;
         padding: 20px 0;
       }
       .l-num { display: none; }
-      .l-thumb { display: none; }
+      .l-thumb {
+        display: block;
+        width: 100%;
+        height: 180px;
+        border-radius: 6px;
+      }
       .l-title .tt { font-size: 22px; }
-      .l-metric .n { font-size: 32px; }
+      .l-metric {
+        text-align: left;
+        align-items: flex-start;
+        min-width: 0;
+      }
+      .l-metric .n { font-size: 28px; }
+      .l-metric .l-arrow { width: auto; border-top: none; padding-top: 0; margin-top: 0; }
 
       .rail {
         grid-template-columns: 1fr;
@@ -391,12 +402,6 @@
 
       .banner-rush .secondary { display: none; }
 
-      .ai-use-inner { grid-template-columns: 1fr; }
-      .ai-use-lede { font-size: clamp(26px, 6vw, 36px); }
-
-      /* AI items: key label stacks above value instead of side-by-side */
-      .ai-use-item { grid-template-columns: 1fr; gap: 4px; }
-      .ai-use-item .k { padding-top: 0; }
     }
 
     /* ============== AI section ============== */
@@ -450,6 +455,13 @@
     }
     .ai-use-item .v { font-size: 14px; line-height: 1.5; color: var(--ink-2); letter-spacing: -0.01em; }
     .ai-use-item .v strong { color: var(--ink); font-weight: 500; display: block; margin-bottom: 3px; font-size: 15px; letter-spacing: -0.015em; }
+
+    @media (max-width: 600px) {
+      .ai-use-inner { grid-template-columns: 1fr; gap: 40px; }
+      .ai-use-lede { font-size: clamp(26px, 6vw, 36px); }
+      .ai-use-item { grid-template-columns: 1fr; gap: 4px; }
+      .ai-use-item .k { padding-top: 0; }
+    }
 
     /* ============================================================
        INTERVIEW Q&A

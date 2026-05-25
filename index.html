@@ -136,8 +136,12 @@
       transform-origin: center;
       transition: transform .3s cubic-bezier(.22,1,.36,1);
     }
-    .l-row:hover { background: var(--paper-2); padding-left: 12px; padding-right: 12px; margin: 0 -12px; border-radius: 4px; }
-    .l-row:hover::before { transform: scaleY(0.6); left: -4px; }
+    /* Negative-margin hover only on pointer devices — touch briefly fires :hover
+       on tap and the margin: 0 -12px causes a horizontal scroll flash on mobile. */
+    @media (hover: hover) and (pointer: fine) {
+      .l-row:hover { background: var(--paper-2); padding-left: 12px; padding-right: 12px; margin: 0 -12px; border-radius: 4px; }
+      .l-row:hover::before { transform: scaleY(0.6); left: -4px; }
+    }
 
     .l-num { font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; color: var(--ink-3); }
     .l-title { display: flex; flex-direction: column; gap: 10px; }
@@ -169,7 +173,9 @@
       width: 100%; text-align: right;
       transition: color .2s, border-color .2s;
     }
-    .l-row:hover .l-metric .l-arrow { color: var(--mark); border-color: var(--mark); }
+    @media (hover: hover) and (pointer: fine) {
+      .l-row:hover .l-metric .l-arrow { color: var(--mark); border-color: var(--mark); }
+    }
 
     /* Right rail — sticky about + signals */
     .rail {
@@ -329,7 +335,9 @@
       font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; color: var(--ink-3);
       background: linear-gradient(135deg, var(--paper-2), var(--paper-3));
     }
-    .l-row:hover .l-thumb { transform: scale(1.02); }
+    @media (hover: hover) and (pointer: fine) {
+      .l-row:hover .l-thumb { transform: scale(1.02); }
+    }
 
     /* Footer band */
 
@@ -385,6 +393,10 @@
 
       .ai-use-inner { grid-template-columns: 1fr; }
       .ai-use-lede { font-size: clamp(26px, 6vw, 36px); }
+
+      /* AI items: key label stacks above value instead of side-by-side */
+      .ai-use-item { grid-template-columns: 1fr; gap: 4px; }
+      .ai-use-item .k { padding-top: 0; }
     }
 
     /* ============== AI section ============== */

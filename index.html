@@ -2,6 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0SSHKT8LPF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0SSHKT8LPF');
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dan Gruskin — Index-First</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1205,11 +1213,13 @@ I thrive in complex situations where understanding the goal of the users is para
         document.body.style.overflow = 'hidden';
         // Trigger entrance after a frame so the transition kicks in.
         requestAnimationFrame(() => backdrop.classList.add('in'));
+        gtag('event', 'tour_open');
       }
       function closeTour() {
         backdrop.classList.remove('in');
         document.body.style.overflow = '';
         openTimer = setTimeout(() => { backdrop.hidden = true; }, 400);
+        gtag('event', 'tour_close');
       }
 
       document.querySelectorAll('[data-open-tour]').forEach((el) => {
@@ -1252,6 +1262,9 @@ I thrive in complex situations where understanding the goal of the users is para
           if (!isOpen) {
             item.classList.add('open');
             trigger.setAttribute('aria-expanded', 'true');
+            gtag('event', 'qa_open', {
+              question: trigger.querySelector('.qa-question').textContent.trim()
+            });
           }
         });
       });
@@ -1310,6 +1323,7 @@ I thrive in complex situations where understanding the goal of the users is para
           started = true;
           hint.classList.add('hidden');
           startTimer();
+          gtag('event', 'doodle_started');
         }
       }
 
@@ -1404,6 +1418,21 @@ I thrive in complex situations where understanding the goal of the users is para
         link.download = 'doodle.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
+      });
+    })();
+
+    /* ============================================================
+       ANALYTICS — custom events
+    ============================================================ */
+    (function () {
+      // Case study clicks — track which project was opened
+      document.querySelectorAll('.l-row').forEach(function (row) {
+        row.addEventListener('click', function () {
+          var href = row.getAttribute('href') || '';
+          var slug = href.split('slug=')[1] || href;
+          var title = row.querySelector('.tt') ? row.querySelector('.tt').textContent.trim() : slug;
+          gtag('event', 'case_study_click', { case_study: slug, title: title });
+        });
       });
     })();
   </script>

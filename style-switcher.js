@@ -206,6 +206,7 @@ document.addEventListener("DOMContentLoaded", function () {
     dropdown.querySelectorAll(".sx-swatch").forEach(function (b) {
       b.classList.toggle("active", b.dataset.theme === id);
     });
+    if (typeof gtag === "function") gtag("event", "theme_change", { theme: id || "studio" });
   }
 
   function setFont(id) {
@@ -215,6 +216,7 @@ document.addEventListener("DOMContentLoaded", function () {
     dropdown.querySelectorAll(".sx-font-opt").forEach(function (b) {
       b.classList.toggle("active", b.dataset.font === id);
     });
+    if (typeof gtag === "function") gtag("event", "font_change", { font: id });
   }
 
   dropdown.querySelectorAll(".sx-swatch").forEach(function (btn) {

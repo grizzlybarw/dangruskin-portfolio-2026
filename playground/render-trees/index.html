@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RENDER TREES</title>
+<meta property="og:title" content="RENDER TREES">
+<meta property="og:description" content="Psychedelic 3D tree generator">
+<meta property="og:image" content="https://dangruskin.com/playground/render-trees/preview.png">
+<meta property="og:url" content="https://dangruskin.com/playground/render-trees/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://dangruskin.com/playground/render-trees/preview.png">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'Press Start 2P',monospace}
+#c{display:block;position:fixed;inset:0;width:100%;height:100%}
+#scanlines{position:fixed;inset:0;pointer-events:none;z-index:5;
+  background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,rgba(0,0,0,.13) 3px,rgba(0,0,0,.13) 4px)}
+#hud{position:fixed;top:0;right:0;width:340px;height:100vh;z-index:20;
+  overflow-y:auto;overflow-x:hidden;padding:6px;
+  scrollbar-width:thin;scrollbar-color:#4a1a7a #0a0010}
+#hud::-webkit-scrollbar{width:5px}
+#hud::-webkit-scrollbar-track{background:#0a0010}
+#hud::-webkit-scrollbar-thumb{background:#4a1a7a}
+#hud-frame{background:#0d0614;border:3px solid #4a1a7a;
+  box-shadow:0 0 0 1px #7a2aaa,inset 0 0 0 1px #0a0010,0 0 24px rgba(120,40,180,.45);
+  min-height:calc(100vh - 12px);padding:8px;display:flex;flex-direction:column;gap:7px}
+#hud-title{color:#ff60ff;font-size:11px;text-align:center;letter-spacing:2px;
+  text-shadow:0 0 10px #ff60ff,0 0 20px #c030c0;padding:6px 0 2px}
+.hud-sub{color:#4a1a7a;font-size:5px;text-align:center;letter-spacing:1px;margin-bottom:2px}
+.section{background:#0a0010;border:2px solid #2a0a50;padding:8px}
+.sec-title{color:#c060ff;font-size:7px;letter-spacing:1px;margin-bottom:7px;
+  text-shadow:0 0 6px #c060ff;border-bottom:1px solid #2a0a50;padding-bottom:4px}
+.slot-row{display:flex;gap:5px}
+.slot{flex:1;cursor:pointer;user-select:none}
+.slot canvas,.pxbtn canvas,.pattern-btn canvas{display:block;width:100%;image-rendering:pixelated}
+.slider-wrap{display:flex;flex-direction:column;gap:3px;margin-bottom:8px}
+.slider-label-row{display:flex;justify-content:space-between}
+.slider-lbl{color:#9060c0;font-size:7px;letter-spacing:.5px}
+.slider-val{color:#ff60ff;font-size:7px;min-width:36px;text-align:right}
+.slider-track{position:relative;height:22px;cursor:pointer;user-select:none}
+.slider-track canvas{display:block;width:100%;height:22px;image-rendering:pixelated}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:7px;cursor:pointer;user-select:none}
+.toggle-lbl{color:#9060c0;font-size:7px;letter-spacing:.5px}
+.toggle-row canvas{image-rendering:pixelated;display:block}
+.btn-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px}
+.pxbtn{flex:1;min-width:50px;cursor:pointer;user-select:none}
+.pattern-row{display:flex;gap:3px;margin-bottom:6px}
+.pattern-btn{flex:1;cursor:pointer;user-select:none}
+</style>
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="scanlines"></div>
+<div id="hud"><div id="hud-frame"></div></div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls }    from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer }   from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass }       from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass }  from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { ShaderPass }       from 'three/addons/postprocessing/ShaderPass.js';
+import { AfterimagePass }   from 'three/addons/postprocessing/AfterimagePass.js';
+import { OutputPass }       from 'three/addons/postprocessing/OutputPass.js';
+import { mergeGeometries }  from 'three/addons/utils/BufferGeometryUtils.js';
+
+/* ─── PALETTE ──────────────────────────────────────────────────────────── */
+const P = {
+  bg:'#0d0614', panel:'#1a0a2e', b1:'#2a0a50', b2:'#4a1a7a', b3:'#7a2aaa',
+  hi:'#c060ff', acc:'#ff60ff', lo:'#06000f', track:'#0a0818',
+  knob:'#8040c0', knobHi:'#d080ff', knobLo:'#300060',
+  green:'#60ff90', yellow:'#ffff60', dimText:'#9060c0',
+};
+
+/* ─── STATE ─────────────────────────────────────────────────────────────── */
+const S = {
+  treeType:'crystal', depth:6, branchAngle:35, branchDecay:0.68,
+  cloneCount:7, clonePattern:'radial', cloneSpacing:4.5,
+  autoRotate:true, rotSpeed:0.6, tumble:false,
+  bloom:1.8, chroma:true, tripIntensity:0.55,
+  pulse:true, bpm:90, particles:true, rainbow:true,
+};
+
+/* ─── SPRITE KIT ────────────────────────────────────────────────────────── */
+function bevel(ctx,x,y,w,h,bg,hi,lo){
+  ctx.fillStyle=bg; ctx.fillRect(x+1,y+1,w-2,h-2);
+  ctx.fillStyle=hi; ctx.fillRect(x,y,w-1,1); ctx.fillRect(x,y,1,h-1);
+  ctx.fillStyle=lo; ctx.fillRect(x+1,y+h-1,w-1,1); ctx.fillRect(x+w-1,y+1,1,h-1);
+  ctx.fillStyle='#000'; ctx.fillRect(x,y+h-1,1,1); ctx.fillRect(x+w-1,y,1,1);
+}
+
+function makeBtn(label,W,H,state='normal',accent=P.hi){
+  const c=document.createElement('canvas'); c.width=W; c.height=H;
+  const ctx=c.getContext('2d');
+  ctx.imageSmoothingEnabled=false;
+  const bg=state==='pressed'?P.b1:P.panel;
+  const hi=state==='pressed'?P.b2:P.b3;
+  const lo=state==='pressed'?P.lo:P.b1;
+  ctx.fillStyle=P.b2; ctx.fillRect(0,0,W,H);
+  bevel(ctx,1,1,W-2,H-2,bg,hi,lo);
+  if(state==='hover'){ctx.fillStyle='rgba(192,96,255,.08)';ctx.fillRect(2,2,W-4,H-4)}
+  const fs=Math.max(5,Math.min(8,Math.floor(H/3.2)));
+  ctx.font=`${fs}px 'Press Start 2P',monospace`;
+  const ty=Math.floor(H*0.58)+(state==='pressed'?1:0);
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle='#000'; ctx.fillText(label,Math.floor(W/2)+1,ty+1);
+  ctx.fillStyle=state==='pressed'?P.dimText:accent; ctx.fillText(label,Math.floor(W/2),ty);
+  return c;
+}
+
+function makeTrack(W,H,value,min,max){
+  const c=document.createElement('canvas'); c.width=W; c.height=H;
+  const ctx=c.getContext('2d');
+  ctx.imageSmoothingEnabled=false;
+  const t=5,ty=Math.floor((H-t)/2);
+  ctx.fillStyle='#000'; ctx.fillRect(0,ty-1,W,t+2);
+  ctx.fillStyle=P.track; ctx.fillRect(1,ty,W-2,t);
+  const pct=(value-min)/(max-min);
+  const filled=Math.floor(pct*(W-2));
+  if(filled>0){
+    ctx.fillStyle=P.b3; ctx.fillRect(1,ty,filled,t);
+    if(filled>3){ctx.fillStyle=P.hi; ctx.fillRect(filled-2,ty,3,t)}
+  }
+  const kw=13,kh=H-2,kx=Math.max(0,Math.min(W-kw,Math.floor(pct*(W-kw))));
+  bevel(ctx,kx,1,kw,kh,P.knob,P.knobHi,P.knobLo);
+  ctx.fillStyle=P.knobHi; ctx.fillRect(kx+Math.floor(kw/2)-1,Math.floor(kh/2),3,3);
+  return c;
+}
+
+function makeToggleSprite(on){
+  const W=46,H=18,c=document.createElement('canvas'); c.width=W; c.height=H;
+  const ctx=c.getContext('2d'); ctx.imageSmoothingEnabled=false;
+  bevel(ctx,0,0,W,H,on?P.b2:P.lo,on?P.b3:P.b1,on?P.b1:'#000');
+  const gx=on?W-15:2;
+  bevel(ctx,gx,3,13,H-6,on?P.green:P.b1,on?'#a0ffb0':P.b2,on?'#006030':'#000');
+  if(on){ctx.fillStyle='#00ff70'; ctx.fillRect(gx+3,6,7,4)}
+  return c;
+}
+
+function makeSlotSprite(label,icon,sel,W,H){
+  const c=document.createElement('canvas'); c.width=W; c.height=H;
+  const ctx=c.getContext('2d'); ctx.imageSmoothingEnabled=false;
+  if(sel){ctx.fillStyle='rgba(192,96,255,.18)'; ctx.fillRect(0,0,W,H)}
+  ctx.fillStyle=sel?P.hi:P.b2; ctx.fillRect(0,0,W,H);
+  bevel(ctx,1,1,W-2,H-2,sel?P.b2:P.lo,sel?P.b3:P.b1,sel?P.b2:'#000');
+  drawIcon(ctx,icon,Math.floor(W/2),Math.floor(H/2)-5,sel);
+  ctx.font=`5px 'Press Start 2P',monospace`;
+  ctx.fillStyle=sel?P.acc:P.dimText; ctx.textAlign='center'; ctx.textBaseline='bottom';
+  ctx.fillText(label,Math.floor(W/2),H-3);
+  return c;
+}
+
+function drawIcon(ctx,type,cx,cy,active){
+  const col=active?P.hi:P.b3;
+  ctx.fillStyle=col;
+  if(type==='fractal'){
+    ctx.fillRect(cx,cy-2,1,7);
+    ctx.fillRect(cx-3,cy,4,1); ctx.fillRect(cx,cy-3,4,1);
+    ctx.fillRect(cx-2,cy-5,1,4); ctx.fillRect(cx+2,cy-6,1,4);
+    ctx.fillRect(cx-3,cy-7,2,1); ctx.fillRect(cx+3,cy-8,2,1);
+  } else if(type==='particle'){
+    const d=[[-2,-6],[0,-8],[2,-6],[3,-4],[1,-2],[-1,-3],[-3,-4],[0,-4],[2,-8],[-2,-8]];
+    d.forEach(([dx,dy])=>ctx.fillRect(cx+dx,cy+dy,1+(Math.random()>.6?1:0),1+(Math.random()>.6?1:0)));
+  } else {
+    ctx.fillRect(cx,cy-8,1,1);
+    ctx.fillRect(cx-1,cy-7,3,1); ctx.fillRect(cx-2,cy-6,5,1);
+    ctx.fillRect(cx-3,cy-5,7,1); ctx.fillRect(cx-2,cy-4,5,1);
+    ctx.fillRect(cx-1,cy-3,3,1); ctx.fillRect(cx,cy-2,1,1);
+    ctx.fillRect(cx,cy-2,1,4);
+    ctx.fillStyle=active?P.acc:P.b2;
+    ctx.fillRect(cx-4,cy-6,1,2); ctx.fillRect(cx+4,cy-7,1,2);
+  }
+}
+
+/* ─── REUSABLE UI MAKERS ────────────────────────────────────────────────── */
+function pxBtn(label,onClick,accent){
+  const wrap=document.createElement('div'); wrap.className='pxbtn';
+  const W=100,H=26;
+  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  cv.style.cssText=`display:block;width:100%;height:${H}px;image-rendering:pixelated`;
+  wrap.appendChild(cv);
+  let state='normal';
+  const draw=()=>{const ctx=cv.getContext('2d');ctx.drawImage(makeBtn(label,W,H,state,accent||P.hi),0,0)};
+  draw();
+  wrap.addEventListener('pointerenter',()=>{state='hover';draw()});
+  wrap.addEventListener('pointerleave',()=>{state='normal';draw()});
+  wrap.addEventListener('pointerdown',()=>{state='pressed';draw()});
+  wrap.addEventListener('pointerup',()=>{state='hover';draw();onClick()});
+  return wrap;
+}
+
+function slider(label,min,max,value,dec,onChange){
+  const wrap=document.createElement('div'); wrap.className='slider-wrap';
+  const row=document.createElement('div'); row.className='slider-label-row';
+  const lbl=document.createElement('div'); lbl.className='slider-lbl'; lbl.textContent=label;
+  const val=document.createElement('div'); val.className='slider-val'; val.textContent=value.toFixed(dec);
+  row.appendChild(lbl); row.appendChild(val);
+  const trk=document.createElement('div'); trk.className='slider-track';
+  const W=240,H=22;
+  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  cv.style.cssText=`display:block;width:100%;height:${H}px;image-rendering:pixelated`;
+  trk.appendChild(cv);
+  let cur=value;
+  const draw=()=>{const ctx=cv.getContext('2d');ctx.clearRect(0,0,W,H);ctx.drawImage(makeTrack(W,H,cur,min,max),0,0)};
+  draw();
+  function fromX(x){
+    const r=cv.getBoundingClientRect();
+    const pct=Math.max(0,Math.min(1,(x-r.left)/r.width));
+    cur=min+pct*(max-min);
+    if(dec===0) cur=Math.round(cur);
+    val.textContent=cur.toFixed(dec);
+    draw(); onChange(cur);
+  }
+  let drag=false;
+  trk.addEventListener('pointerdown',e=>{drag=true;trk.setPointerCapture(e.pointerId);fromX(e.clientX)});
+  trk.addEventListener('pointermove',e=>{if(drag)fromX(e.clientX)});
+  trk.addEventListener('pointerup',()=>drag=false);
+  wrap.appendChild(row); wrap.appendChild(trk);
+  return{el:wrap,set:v=>{cur=v;val.textContent=v.toFixed(dec);draw()}};
+}
+
+function toggle(label,value,onChange){
+  const wrap=document.createElement('div'); wrap.className='toggle-row';
+  const lbl=document.createElement('div'); lbl.className='toggle-lbl'; lbl.textContent=label;
+  const cv=document.createElement('canvas'); cv.width=46; cv.height=18;
+  cv.style.cssText='image-rendering:pixelated;cursor:pointer';
+  let cur=value;
+  const draw=()=>{const ctx=cv.getContext('2d');ctx.drawImage(makeToggleSprite(cur),0,0)};
+  draw();
+  wrap.addEventListener('click',()=>{cur=!cur;draw();onChange(cur)});
+  wrap.appendChild(lbl); wrap.appendChild(cv);
+  return{el:wrap,set:v=>{cur=v;draw()}};
+}
+
+function sec(title){
+  const s=document.createElement('div'); s.className='section';
+  const t=document.createElement('div'); t.className='sec-title'; t.textContent=title;
+  s.appendChild(t); return s;
+}
+
+/* ─── THREE SETUP ───────────────────────────────────────────────────────── */
+const canvas=document.getElementById('c');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,preserveDrawingBuffer:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth,innerHeight);
+
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,1000);
+camera.position.set(0,5,20);
+
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true; controls.dampingFactor=0.05;
+controls.autoRotate=S.autoRotate; controls.autoRotateSpeed=S.rotSpeed;
+
+// Lights
+scene.add(new THREE.AmbientLight(0x200040,4));
+const pl1=new THREE.PointLight(0xff60ff,80,60); pl1.position.set(6,10,4); scene.add(pl1);
+const pl2=new THREE.PointLight(0x6030ff,60,60); pl2.position.set(-6,8,-4); scene.add(pl2);
+const pl3=new THREE.PointLight(0x30ffff,30,40); pl3.position.set(0,-4,10); scene.add(pl3);
+
+// Animated gradient background (screen-space plane)
+const bgMat=new THREE.ShaderMaterial({
+  depthWrite:false,
+  uniforms:{uTime:{value:0},uC1:{value:new THREE.Color(0x0d0614)},uC2:{value:new THREE.Color(0x1a0030)},uRes:{value:new THREE.Vector2(innerWidth,innerHeight)}},
+  vertexShader:`void main(){gl_Position=vec4(position.xy,1.,1.);}`,
+  fragmentShader:`
+    uniform float uTime; uniform vec3 uC1,uC2; uniform vec2 uRes;
+    void main(){
+      vec2 uv=gl_FragCoord.xy/uRes;
+      float t=sin(uv.y*2.+uTime*.25)*.5+.5;
+      t+=sin(uv.x*1.5+uTime*.18)*.15;
+      t=clamp(t,0.,1.);
+      float v=1.-smoothstep(.3,1.3,length((uv-.5)*vec2(1.,uRes.y/uRes.x))*2.5);
+      gl_FragColor=vec4(mix(uC1,uC2,pow(t,1.4))*(.5+v*.5),1.);
+    }`,
+  side:THREE.DoubleSide,
+});
+const bgMesh=new THREE.Mesh(new THREE.PlaneGeometry(2,2),bgMat);
+bgMesh.renderOrder=-1; scene.add(bgMesh);
+
+/* ─── POST PROCESSING ───────────────────────────────────────────────────── */
+const composer=new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene,camera));
+
+const bloomPass=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),S.bloom,0.5,0.1);
+composer.addPass(bloomPass);
+
+const afterPass=new AfterimagePass(0.85+S.tripIntensity*0.13);
+composer.addPass(afterPass);
+
+const ChromaWave={
+  uniforms:{tDiffuse:{value:null},amount:{value:S.tripIntensity*.006},uTime:{value:0},intensity:{value:S.tripIntensity}},
+  vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+  fragmentShader:`
+    uniform sampler2D tDiffuse; uniform float amount,uTime,intensity;
+    varying vec2 vUv;
+    void main(){
+      vec2 uv=vUv;
+      uv.x+=sin(uv.y*18.+uTime*2.8)*intensity*.0025;
+      uv.y+=cos(uv.x*14.+uTime*2.1)*intensity*.0015;
+      vec2 d=uv-.5;
+      float r=texture2D(tDiffuse,uv+d*amount*1.8).r;
+      float g=texture2D(tDiffuse,uv).g;
+      float b=texture2D(tDiffuse,uv-d*amount*1.8).b;
+      gl_FragColor=vec4(r,g,b,1.);
+    }`,
+};
+const chromaPass=new ShaderPass(ChromaWave);
+chromaPass.enabled=S.chroma;
+composer.addPass(chromaPass);
+composer.addPass(new OutputPass());
+
+/* ─── AMBIENT PARTICLES ─────────────────────────────────────────────────── */
+let ambPts=null;
+function spawnAmbient(){
+  if(ambPts){scene.remove(ambPts);ambPts.geometry.dispose();ambPts.material.dispose();ambPts=null}
+  const N=900,pos=new Float32Array(N*3),rnd=new Float32Array(N);
+  for(let i=0;i<N;i++){
+    pos[i*3]=(Math.random()-.5)*50; pos[i*3+1]=(Math.random()-.5)*35; pos[i*3+2]=(Math.random()-.5)*50;
+    rnd[i]=Math.random();
+  }
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  geo.setAttribute('aR',new THREE.BufferAttribute(rnd,1));
+  const mat=new THREE.ShaderMaterial({
+    uniforms:{uTime:{value:0},uSize:{value:90*renderer.getPixelRatio()}},
+    vertexShader:`
+      attribute float aR; uniform float uTime,uSize; varying float vA;
+      void main(){
+        vec3 p=position;
+        p.y+=sin(uTime*.4+aR*6.28)*.35;
+        p.x+=cos(uTime*.3+aR*3.14)*.25;
+        vec4 mv=modelViewMatrix*vec4(p,1.);
+        gl_PointSize=uSize/-mv.z;
+        gl_Position=projectionMatrix*mv;
+        vA=.3+.5*sin(uTime*.7+aR*6.28);
+      }`,
+    fragmentShader:`
+      varying float vA;
+      void main(){
+        vec2 uv=gl_PointCoord-.5; float d=length(uv);
+        if(d>.5)discard;
+        float a=(1.-d*2.)*vA;
+        gl_FragColor=vec4(.85,.4,1.,a*.7);
+      }`,
+    transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+  });
+  ambPts=new THREE.Points(geo,mat);
+  if(S.particles) scene.add(ambPts);
+}
+function syncAmbient(){
+  if(S.particles){if(!ambPts)spawnAmbient();else scene.add(ambPts)}
+  else if(ambPts) scene.remove(ambPts);
+}
+
+/* ─── TREE FACTORIES ────────────────────────────────────────────────────── */
+function branches(pos,dir,len,rad,depth,maxD,ang,dec,out){
+  if(depth>maxD||len<.04||out.length>2500) return;
+  const end=pos.clone().addScaledVector(dir,len);
+  out.push({from:pos.clone(),to:end.clone(),rad,depth,maxD});
+  if(depth===maxD) return;
+  const perp=new THREE.Vector3();
+  Math.abs(dir.y)<.99?perp.crossVectors(dir,new THREE.Vector3(0,1,0)).normalize():perp.set(1,0,0);
+  const n=depth<2?3:(Math.random()<.25?3:2);
+  const twist=Math.random()*Math.PI*.5;
+  const a=ang*Math.PI/180;
+  for(let i=0;i<n;i++){
+    const ta=(i/n)*Math.PI*2+twist;
+    const pr=perp.clone().applyAxisAngle(dir,ta);
+    const nd=dir.clone().applyAxisAngle(pr,a*(.85+Math.random()*.3)).normalize();
+    branches(end,nd,len*dec,rad*dec,depth+1,maxD,ang,dec,out);
+  }
+}
+
+function segMatrix(from,to){
+  const dir=to.clone().sub(from),len=dir.length();
+  const q=new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),dir.clone().normalize());
+  return{m:new THREE.Matrix4().compose(from.clone().lerp(to,.5),q,new THREE.Vector3(1,1,1)),len};
+}
+
+/* --- FRACTAL TREE --- */
+function fractalTree(){
+  const segs=[];
+  branches(new THREE.Vector3(0,0,0),new THREE.Vector3(0,1,0),2.2,.18,0,S.depth,S.branchAngle,S.branchDecay,segs);
+  const geos=[],leafP=[];
+  segs.forEach(({from,to,rad,depth,maxD})=>{
+    const dir=to.clone().sub(from),len=dir.length();
+    if(len<.001) return;
+    const r1=Math.max(.01,rad),r2=r1*.65;
+    const geo=new THREE.CylinderGeometry(r2,r1,len,5,1,false);
+    const q=new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),dir.clone().normalize());
+    geo.applyMatrix4(new THREE.Matrix4().compose(from.clone().lerp(to,.5),q,new THREE.Vector3(1,1,1)));
+    geos.push(geo);
+    if(depth===maxD) leafP.push(to.clone());
+  });
+  if(!geos.length) return new THREE.Group();
+  const merged=mergeGeometries(geos,false);
+  geos.forEach(g=>g.dispose());
+  const grp=new THREE.Group();
+  grp.add(new THREE.Mesh(merged,new THREE.MeshPhongMaterial({color:0x3a1505,emissive:0x180800,shininess:15})));
+  if(leafP.length){
+    const lGeo=new THREE.SphereGeometry(.13,5,4);
+    const lMat=new THREE.MeshPhongMaterial({color:0x20ff70,emissive:0x005520,shininess:80,transparent:true,opacity:.92});
+    const lm=new THREE.InstancedMesh(lGeo,lMat,leafP.length);
+    const d=new THREE.Object3D();
+    leafP.forEach((p,i)=>{d.position.copy(p);d.scale.setScalar(.7+Math.random()*.7);d.updateMatrix();lm.setMatrixAt(i,d.matrix)});
+    lm.instanceMatrix.needsUpdate=true; grp.add(lm);
+  }
+  return grp;
+}
+
+/* --- PARTICLE TREE --- */
+function particleTree(){
+  const segs=[];
+  branches(new THREE.Vector3(0,0,0),new THREE.Vector3(0,1,0),2.2,.18,0,S.depth,S.branchAngle,S.branchDecay,segs);
+  const pos=[],off=[],sz=[];
+  segs.forEach(({from,to,depth})=>{
+    const len=from.distanceTo(to),n=Math.max(3,Math.floor(len*14));
+    const sc=Math.max(.02,.18-depth*.015);
+    for(let i=0;i<n;i++){
+      const t=i/(n-1),p=from.clone().lerp(to,t);
+      p.x+=(Math.random()-.5)*sc; p.y+=(Math.random()-.5)*sc; p.z+=(Math.random()-.5)*sc;
+      pos.push(p.x,p.y,p.z);
+      off.push(Math.random()*Math.PI*2,Math.random()*Math.PI*2,Math.random());
+      sz.push(.4+Math.random()*.9);
+    }
+  });
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+  geo.setAttribute('aOff',new THREE.Float32BufferAttribute(off,3));
+  geo.setAttribute('aSz',new THREE.Float32BufferAttribute(sz,1));
+  const mat=new THREE.ShaderMaterial({
+    uniforms:{uTime:{value:0},uHue:{value:0},uSize:{value:130*renderer.getPixelRatio()}},
+    vertexShader:`
+      attribute vec3 aOff; attribute float aSz;
+      uniform float uTime,uSize;
+      varying float vB,vH;
+      void main(){
+        vec3 p=position;
+        float dr=sin(uTime*.65+aOff.x)*.09;
+        p+=vec3(dr*cos(aOff.y),abs(sin(uTime*.45+aOff.y))*.06,dr*sin(aOff.z*6.28));
+        vec4 mv=modelViewMatrix*vec4(p,1.);
+        gl_PointSize=aSz*uSize/-mv.z;
+        gl_Position=projectionMatrix*mv;
+        vB=.45+.55*sin(uTime*1.1+aOff.x);
+        vH=aOff.z;
+      }`,
+    fragmentShader:`
+      uniform float uHue; varying float vB,vH;
+      vec3 hsl(float h,float s,float l){
+        float c=(1.-abs(2.*l-1.))*s,x=c*(1.-abs(mod(h*6.,2.)-1.)),m=l-c/2.;
+        vec3 r;
+        if(h<1./6.)r=vec3(c,x,0.);else if(h<2./6.)r=vec3(x,c,0.);
+        else if(h<3./6.)r=vec3(0.,c,x);else if(h<4./6.)r=vec3(0.,x,c);
+        else if(h<5./6.)r=vec3(x,0.,c);else r=vec3(c,0.,x);
+        return r+m;
+      }
+      void main(){
+        vec2 uv=gl_PointCoord-.5; float d=length(uv);
+        if(d>.5)discard;
+        float a=pow(1.-d*2.,.8)*vB;
+        gl_FragColor=vec4(hsl(mod(uHue+vH,1.),.95,.68),a*.88);
+      }`,
+    transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+  });
+  const grp=new THREE.Group();
+  grp.add(new THREE.Points(geo,mat));
+  return grp;
+}
+
+/* --- CRYSTAL TREE --- */
+function crystalTree(){
+  const maxD=Math.min(S.depth,7);
+  const segs=[];
+  branches(new THREE.Vector3(0,0,0),new THREE.Vector3(0,1,0),2.2,.2,0,maxD,S.branchAngle*.9,S.branchDecay,segs);
+  const geos=[],leafP=[],leafS=[];
+  segs.forEach(({from,to,rad,depth,maxD})=>{
+    const dir=to.clone().sub(from),len=dir.length();
+    if(len<.001) return;
+    const geo=new THREE.ConeGeometry(Math.max(.015,rad*.85),len,3,1,false);
+    const q=new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),dir.clone().normalize());
+    geo.applyMatrix4(new THREE.Matrix4().compose(from.clone().lerp(to,.5),q,new THREE.Vector3(1,1,1)));
+    geos.push(geo);
+    if(depth===maxD){leafP.push(to.clone());leafS.push(.15+Math.random()*.3)}
+  });
+  if(!geos.length) return new THREE.Group();
+  const merged=mergeGeometries(geos,false);
+  geos.forEach(g=>g.dispose());
+  const grp=new THREE.Group();
+  grp.add(new THREE.Mesh(merged,new THREE.MeshPhongMaterial({
+    color:0x7030ff,emissive:0x2010a0,shininess:220,flatShading:true,transparent:true,opacity:.87
+  })));
+  if(leafP.length){
+    const sGeo=new THREE.OctahedronGeometry(1,0);
+    const sMat=new THREE.MeshPhongMaterial({
+      color:0xd090ff,emissive:0x5020ff,shininess:320,flatShading:true,transparent:true,opacity:.72,side:THREE.DoubleSide
+    });
+    const sm=new THREE.InstancedMesh(sGeo,sMat,leafP.length);
+    const d=new THREE.Object3D();
+    leafP.forEach((p,i)=>{
+      d.position.copy(p);const s=leafS[i];
+      d.scale.set(s*.5,s,s*.5);
+      d.rotation.set(Math.random()*Math.PI,Math.random()*Math.PI,Math.random()*Math.PI);
+      d.updateMatrix();sm.setMatrixAt(i,d.matrix);
+    });
+    sm.instanceMatrix.needsUpdate=true; grp.add(sm);
+  }
+  return grp;
+}
+
+/* ─── CLONE SYSTEM ──────────────────────────────────────────────────────── */
+const treeRoot=new THREE.Group(); scene.add(treeRoot);
+
+function clonePos(n,pat,sp){
+  const p=[];
+  if(pat==='grid'){
+    const s=Math.ceil(Math.sqrt(n));
+    for(let i=0;i<n;i++) p.push(new THREE.Vector3((i%s-s/2+.5)*sp,(Math.floor(i/s)-s/2+.5)*sp*.2,0));
+  } else if(pat==='radial'){
+    for(let i=0;i<n;i++){const a=(i/n)*Math.PI*2,r=n===1?0:sp*1.2;p.push(new THREE.Vector3(Math.cos(a)*r,0,Math.sin(a)*r))}
+  } else if(pat==='spiral'){
+    for(let i=0;i<n;i++){const a=i*2.399,r=sp*.65*Math.sqrt(i+1);p.push(new THREE.Vector3(Math.cos(a)*r,0,Math.sin(a)*r))}
+  } else {
+    const base=Math.ceil(n/4);
+    for(let i=0;i<base;i++){
+      const a=(i/base)*Math.PI*.5,r=sp*(1+i*.35);
+      const [x,z]=[Math.cos(a)*r,Math.sin(a)*r];
+      p.push(new THREE.Vector3(x,0,z),new THREE.Vector3(-x,0,z),new THREE.Vector3(x,0,-z),new THREE.Vector3(-x,0,-z));
+    }
+    return p.slice(0,n);
+  }
+  return p;
+}
+
+function buildTree(){
+  if(S.treeType==='fractal') return fractalTree();
+  if(S.treeType==='particle') return particleTree();
+  return crystalTree();
+}
+
+function rebuildTrees(){
+  treeRoot.traverse(o=>{
+    if(o.geometry) o.geometry.dispose();
+    if(o.material){Array.isArray(o.material)?o.material.forEach(m=>m.dispose()):o.material.dispose()}
+  });
+  treeRoot.clear();
+  const N=Math.max(1,Math.round(S.cloneCount));
+  const ps=clonePos(N,S.clonePattern,S.cloneSpacing);
+  ps.forEach((pos,i)=>{
+    const t=buildTree();
+    t.position.copy(pos);
+    t.rotation.y=(i/N)*Math.PI*2;
+    treeRoot.add(t);
+  });
+}
+
+/* ─── HUE / COLOR SYNC ──────────────────────────────────────────────────── */
+function syncHue(hue){
+  treeRoot.traverse(o=>{
+    if(!o.isMesh&&!o.isPoints) return;
+    if(o.material?.uniforms?.uHue){o.material.uniforms.uHue.value=hue;return}
+    if(S.rainbow&&o.material){
+      if(o.material.color) o.material.color.setHSL(hue,1,.4);
+      if(o.material.emissive) o.material.emissive.setHSL(hue,1,.15);
+    }
+  });
+}
+
+/* ─── PRESETS ───────────────────────────────────────────────────────────── */
+const PRESETS={
+  mellow:{treeType:'fractal',depth:7,branchAngle:22,branchDecay:.75,
+    cloneCount:3,clonePattern:'radial',cloneSpacing:5,
+    autoRotate:true,rotSpeed:.3,tumble:false,
+    bloom:.6,chroma:false,tripIntensity:.08,
+    pulse:true,bpm:55,particles:true,rainbow:false},
+  neon:{treeType:'particle',depth:6,branchAngle:30,branchDecay:.70,
+    cloneCount:13,clonePattern:'radial',cloneSpacing:3.8,
+    autoRotate:true,rotSpeed:.55,tumble:false,
+    bloom:2.3,chroma:true,tripIntensity:.45,
+    pulse:true,bpm:115,particles:true,rainbow:true},
+  hyperspace:{treeType:'particle',depth:5,branchAngle:44,branchDecay:.62,
+    cloneCount:32,clonePattern:'spiral',cloneSpacing:2.2,
+    autoRotate:true,rotSpeed:2.2,tumble:true,
+    bloom:2.9,chroma:true,tripIntensity:.88,
+    pulse:true,bpm:155,particles:true,rainbow:true},
+  acid:{treeType:'crystal',depth:6,branchAngle:35,branchDecay:.68,
+    cloneCount:7,clonePattern:'radial',cloneSpacing:4.5,
+    autoRotate:true,rotSpeed:.6,tumble:false,
+    bloom:1.8,chroma:true,tripIntensity:.55,
+    pulse:true,bpm:90,particles:true,rainbow:true},
+};
+
+function syncFX(){
+  controls.autoRotate=S.autoRotate;
+  controls.autoRotateSpeed=S.rotSpeed;
+  bloomPass.strength=S.bloom;
+  chromaPass.enabled=S.chroma;
+  chromaPass.uniforms.amount.value=S.tripIntensity*.006;
+  chromaPass.uniforms.intensity.value=S.tripIntensity;
+  afterPass.uniforms.damp.value=.85+S.tripIntensity*.13;
+}
+
+function applyPreset(name){
+  Object.assign(S,PRESETS[name]||{});
+  syncFX(); syncAmbient(); rebuildTrees(); buildHUD();
+}
+
+function randomize(){
+  const types=['fractal','particle','crystal'],pats=['grid','radial','spiral','kaleidoscope'];
+  S.treeType=types[0|Math.random()*3];
+  S.depth=4+(0|Math.random()*4); S.branchAngle=15+Math.random()*40;
+  S.branchDecay=.55+Math.random()*.35; S.cloneCount=1+(0|Math.random()*22);
+  S.clonePattern=pats[0|Math.random()*4]; S.cloneSpacing=2+Math.random()*7;
+  S.autoRotate=true; S.rotSpeed=.3+Math.random()*1.8; S.tumble=Math.random()>.5;
+  S.bloom=Math.random()*2.8; S.chroma=Math.random()>.25; S.tripIntensity=Math.random()*.85;
+  S.pulse=Math.random()>.3; S.bpm=55+(0|Math.random()*130);
+  S.rainbow=Math.random()>.35; S.particles=Math.random()>.25;
+  syncFX(); syncAmbient(); rebuildTrees(); buildHUD();
+}
+
+function screenshot(){
+  afterPass.enabled=false; composer.render(); afterPass.enabled=true;
+  const a=document.createElement('a'); a.download='render-trees.png';
+  a.href=canvas.toDataURL('image/png'); a.click();
+}
+
+/* ─── BUILD HUD ─────────────────────────────────────────────────────────── */
+function buildHUD(){
+  const frame=document.getElementById('hud-frame'); frame.innerHTML='';
+
+  // Title
+  const h=document.createElement('div');
+  h.innerHTML='<div id="hud-title">RENDER TREES</div><div class="hud-sub">✦ PSYCHEDELIC TREE GENERATOR ✦</div>';
+  frame.appendChild(h);
+
+  // ── Tree Type ──
+  const tSec=sec('TREE TYPE'); frame.appendChild(tSec);
+  const slotRow=document.createElement('div'); slotRow.className='slot-row';
+  const TREES=[{k:'fractal',l:'FRACTAL'},{k:'particle',l:'PARTS'},{k:'crystal',l:'CRYSTAL'}];
+  const SW=90,SH=58,slotDraw={};
+  TREES.forEach(({k,l})=>{
+    const wrap=document.createElement('div'); wrap.className='slot';
+    const cv=document.createElement('canvas'); cv.width=SW; cv.height=SH;
+    cv.style.cssText=`display:block;width:100%;height:${SH}px;image-rendering:pixelated;cursor:pointer`;
+    const draw=sel=>{const ctx=cv.getContext('2d');ctx.drawImage(makeSlotSprite(l,k,sel,SW,SH),0,0)};
+    draw(S.treeType===k); slotDraw[k]=draw;
+    wrap.addEventListener('click',()=>{S.treeType=k;TREES.forEach(t=>slotDraw[t.k](t.k===k));rebuildTrees()});
+    wrap.appendChild(cv); slotRow.appendChild(wrap);
+  });
+  tSec.appendChild(slotRow);
+
+  // ── Tree Controls ──
+  const tcSec=sec('TREE CONTROLS'); frame.appendChild(tcSec);
+  tcSec.appendChild(slider('DEPTH',3,9,S.depth,0,v=>{S.depth=v;rebuildTrees()}).el);
+  tcSec.appendChild(slider('BRANCH ANGLE',5,60,S.branchAngle,0,v=>{S.branchAngle=v;rebuildTrees()}).el);
+  tcSec.appendChild(slider('DECAY',.5,.95,S.branchDecay,2,v=>{S.branchDecay=v;rebuildTrees()}).el);
+
+  // ── Clone ──
+  const clSec=sec('CLONE'); frame.appendChild(clSec);
+  const patLbl=document.createElement('div'); patLbl.className='slider-lbl';
+  patLbl.style.marginBottom='3px'; patLbl.textContent='PATTERN'; clSec.appendChild(patLbl);
+  const patRow=document.createElement('div'); patRow.className='pattern-row'; clSec.appendChild(patRow);
+  const PATS=[{k:'grid',l:'GRID'},{k:'radial',l:'RADIAL'},{k:'spiral',l:'SPIRAL'},{k:'kaleidoscope',l:'KALEIDO'}];
+  const PW=60,PH=22,patDraw={};
+  PATS.forEach(({k,l})=>{
+    const wrap=document.createElement('div'); wrap.className='pattern-btn';
+    const cv=document.createElement('canvas'); cv.width=PW; cv.height=PH;
+    cv.style.cssText=`display:block;width:100%;height:${PH}px;image-rendering:pixelated;cursor:pointer`;
+    const draw=sel=>{const ctx=cv.getContext('2d');ctx.drawImage(makeBtn(l,PW,PH,sel?'pressed':'normal'),0,0)};
+    draw(S.clonePattern===k); patDraw[k]=draw;
+    wrap.addEventListener('click',()=>{S.clonePattern=k;PATS.forEach(p=>patDraw[p.k](p.k===k));rebuildTrees()});
+    wrap.appendChild(cv); patRow.appendChild(wrap);
+  });
+  clSec.appendChild(slider('COUNT',1,64,S.cloneCount,0,v=>{S.cloneCount=v;rebuildTrees()}).el);
+  clSec.appendChild(slider('SPACING',1,12,S.cloneSpacing,1,v=>{S.cloneSpacing=v;rebuildTrees()}).el);
+
+  // ── Motion ──
+  const moSec=sec('MOTION'); frame.appendChild(moSec);
+  moSec.appendChild(toggle('AUTO ROTATE',S.autoRotate,v=>{S.autoRotate=v;controls.autoRotate=v}).el);
+  moSec.appendChild(slider('ROT SPEED',.1,3.,S.rotSpeed,1,v=>{S.rotSpeed=v;controls.autoRotateSpeed=v}).el);
+  moSec.appendChild(toggle('TUMBLE',S.tumble,v=>{S.tumble=v}).el);
+  moSec.appendChild(toggle('PULSE',S.pulse,v=>{S.pulse=v}).el);
+  moSec.appendChild(slider('BPM',30,200,S.bpm,0,v=>{S.bpm=v}).el);
+
+  // ── Effects ──
+  const fxSec=sec('EFFECTS'); frame.appendChild(fxSec);
+  fxSec.appendChild(slider('BLOOM',0,3,S.bloom,1,v=>{S.bloom=v;bloomPass.strength=v}).el);
+  fxSec.appendChild(toggle('CHROMA SHIFT',S.chroma,v=>{S.chroma=v;chromaPass.enabled=v}).el);
+  fxSec.appendChild(toggle('RAINBOW MODE',S.rainbow,v=>{S.rainbow=v}).el);
+  fxSec.appendChild(slider('INTENSITY',0,1,S.tripIntensity,2,v=>{
+    S.tripIntensity=v;
+    afterPass.uniforms.damp.value=.85+v*.13;
+    chromaPass.uniforms.amount.value=v*.006;
+    chromaPass.uniforms.intensity.value=v;
+  }).el);
+  fxSec.appendChild(toggle('PARTICLES',S.particles,v=>{S.particles=v;syncAmbient()}).el);
+
+  // ── Presets ──
+  const prSec=sec('PRESETS'); frame.appendChild(prSec);
+  const row1=document.createElement('div'); row1.className='btn-row';
+  row1.appendChild(pxBtn('MELLOW',()=>applyPreset('mellow'),P.green));
+  row1.appendChild(pxBtn('NEON FOREST',()=>applyPreset('neon'),'#60ffff'));
+  prSec.appendChild(row1);
+  const row2=document.createElement('div'); row2.className='btn-row';
+  row2.appendChild(pxBtn('HYPERSPACE',()=>applyPreset('hyperspace'),'#7080ff'));
+  row2.appendChild(pxBtn('ACID BLOOM',()=>applyPreset('acid'),P.acc));
+  prSec.appendChild(row2);
+  const row3=document.createElement('div'); row3.className='btn-row';
+  row3.style.marginTop='4px';
+  row3.appendChild(pxBtn('⚄ RANDOM',randomize,P.yellow));
+  row3.appendChild(pxBtn('⊡ CAPTURE',screenshot,P.green));
+  prSec.appendChild(row3);
+}
+
+/* ─── ANIMATION LOOP ────────────────────────────────────────────────────── */
+const clock=new THREE.Clock();
+let hue=0;
+
+(function animate(){
+  requestAnimationFrame(animate);
+  const dt=clock.getDelta(),el=clock.getElapsedTime();
+
+  bgMat.uniforms.uTime.value=el;
+  if(ambPts&&S.particles) ambPts.material.uniforms.uTime.value=el;
+
+  treeRoot.traverse(o=>{
+    if(o.isPoints&&o.material.uniforms?.uTime) o.material.uniforms.uTime.value=el;
+    if(o.isPoints&&o.material.uniforms?.uHue) o.material.uniforms.uHue.value=hue;
+  });
+  chromaPass.uniforms.uTime.value=el;
+
+  if(S.pulse){
+    const bf=S.bpm/60;
+    treeRoot.scale.setScalar(1+Math.sin(el*bf*Math.PI*2)*.045);
+  } else treeRoot.scale.setScalar(1);
+
+  if(S.tumble){treeRoot.rotation.x+=dt*.28;treeRoot.rotation.z+=dt*.14}
+
+  if(S.rainbow){
+    hue=(hue+dt*.1)%1;
+    syncHue(hue);
+    pl1.color.setHSL((hue+.33)%1,1,.6);
+    pl2.color.setHSL((hue+.66)%1,1,.6);
+  }
+
+  pl1.position.x=Math.sin(el*.65)*9; pl1.position.z=Math.cos(el*.5)*9;
+  pl2.position.x=Math.cos(el*.55)*9; pl2.position.z=Math.sin(el*.75)*9;
+
+  controls.update();
+  composer.render();
+})();
+
+/* ─── RESIZE ────────────────────────────────────────────────────────────── */
+window.addEventListener('resize',()=>{
+  const w=innerWidth,h=innerHeight;
+  camera.aspect=w/h; camera.updateProjectionMatrix();
+  renderer.setSize(w,h); composer.setSize(w,h);
+  bloomPass.resolution.set(w,h);
+  bgMat.uniforms.uRes.value.set(w,h);
+});
+
+/* ─── INIT ──────────────────────────────────────────────────────────────── */
+buildHUD();
+spawnAmbient();
+rebuildTrees();
+</script>
+</body>
+</html>

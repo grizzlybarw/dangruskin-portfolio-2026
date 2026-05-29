@@ -32,20 +32,26 @@
     /* Hero strip — compact secondary banner with the punchline */
     .hero-strip {
       position: relative;
-      padding: 148px var(--pad) 140px;
+      padding: 100px var(--pad) 100px;
+      display: flex;
+      flex-direction: column;
+    }
+    .hero-top {
       display: grid;
       grid-template-columns: 1fr auto;
       align-items: end;
       gap: 32px;
-      border-bottom: 1px solid var(--rule);
+      padding-bottom: 48px;
+      position: relative;
+      z-index: 1;
     }
     .hero-strip::before {
       content: "";
       position: absolute;
       inset: 0;
-      background-image: url('img/homepage/header-bg.png');
+      background-image: url('img/homepage/header-bg-stickers.png');
       background-size: cover;
-      background-position: center;
+      background-position: center center;
       opacity: 0.5;
       z-index: 0;
     }
@@ -59,7 +65,7 @@
       font-size: clamp(40px, 5.4vw, 84px);
       line-height: 0.98;
       letter-spacing: -0.045em;
-      max-width: 24ch;
+      max-width: 16ch;
     }
     .hero-strip h1 em { font-style: normal; font-weight: 500; color: var(--mark); }
     .hero-strip .meta { display: flex; flex-direction: column; gap: 8px; text-align: right; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
@@ -126,7 +132,7 @@
 
     .l-row {
       display: grid;
-      grid-template-columns: 30px 132px 1fr auto;
+      grid-template-columns: 30px 220px 1fr auto;
       gap: 28px;
       align-items: center;
       padding: 28px 0;
@@ -328,10 +334,29 @@
 
     /* ─── Thumbnails in the ledger ─── */
     .l-row {
-      grid-template-columns: 30px 132px 1fr auto;
+      grid-template-columns: 30px 220px 1fr auto;
+    }
+    .l-thumb-wrap {
+      position: relative;
+      width: 220px;
+      flex-shrink: 0;
+    }
+    .l-stamp {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      top: -15px;
+      left: -15px;
+      z-index: 2;
+      pointer-events: none;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.30));
+      transition: transform .4s cubic-bezier(.22,1,.36,1);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .l-row:hover .l-stamp { transform: rotate(15deg); }
     }
     .l-thumb {
-      width: 132px; height: 88px;
+      width: 220px; height: 148px;
       border-radius: 6px;
       background: var(--paper-2);
       border: 1px solid var(--rule);
@@ -346,6 +371,85 @@
     }
     @media (hover: hover) and (pointer: fine) {
       .l-row:hover .l-thumb { transform: scale(1.02); }
+    }
+
+    /* ─── Hero stats bar ─── */
+    .hero-stats {
+      position: relative;
+      z-index: 10;
+      background: var(--paper);
+      padding: 20px 0;
+      margin: 0 calc(-1 * var(--pad));
+      border-top: 1px solid var(--rule);
+      box-shadow:
+        0 16px 48px rgba(0,0,0,0.09),
+        0  4px 16px rgba(0,0,0,0.05);
+    }
+    .hero-stats-inner {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 0 var(--pad);
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .hs-col {
+      padding: 0 48px;
+      border-right: 1px solid var(--rule);
+    }
+    .hs-col:last-child { border-right: none; }
+    .hs-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 14px;
+    }
+    .hs-number {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: clamp(44px, 5.5vw, 72px);
+      line-height: 0.95;
+      letter-spacing: -0.045em;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+    .hs-unit {
+      font-size: 0.55em;
+      color: var(--mark);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+    .hs-desc {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--ink-2);
+      letter-spacing: -0.005em;
+      max-width: 38ch;
+    }
+    @media (max-width: 900px) {
+      .hero-stats-inner {
+        grid-template-columns: 1fr 1fr;
+      }
+      .hs-col:nth-child(2) { border-right: none; }
+      .hs-col:nth-child(3) {
+        grid-column: 1 / -1;
+        border-right: none;
+        border-top: 1px solid var(--rule);
+        padding-top: 32px;
+      }
+    }
+    @media (max-width: 600px) {
+      .hero-stats-inner { grid-template-columns: 1fr; }
+      .hs-col {
+        border-right: none;
+        border-top: 1px solid var(--rule);
+        padding: 28px 0 32px;
+      }
+      .hs-col:first-child { border-top: none; }
+      .hs-col:nth-child(2) { border-right: none; }
+      .hs-col:nth-child(3) { border-top: 1px solid var(--rule); }
+      .hs-number { font-size: clamp(52px, 14vw, 72px); }
     }
 
     /* Footer band */
@@ -364,9 +468,12 @@
         gap: 16px;
       }
       .hero-strip {
+        padding: 36px var(--pad) 0;
+      }
+      .hero-top {
         grid-template-columns: 1fr;
         gap: 16px;
-        padding: 36px var(--pad) 32px;
+        padding-bottom: 32px;
       }
       .hero-strip .meta {
         text-align: left;
@@ -814,16 +921,37 @@
   </a>
 
   <section class="hero-strip">
-    <div class="hero-left">
-      <h1>I design for <em>high-stakes</em> moments and the <em>people</em> who can't work without them.</h1>
-      <div class="hero-tags">
-        <span class="hero-tag"><span class="hero-tag-icon hero-tag-icon--wave">👋</span> Human centered</span>
-        <span class="hero-tag"><span class="hero-tag-icon hero-tag-icon--spin">✦</span> Creatively driven.</span>
+    <div class="hero-top">
+      <div class="hero-left">
+        <h1>Senior Product Designer turning <em>hard problems</em> into shipped solutions.</h1>
+        <div class="hero-tags">
+          <span class="hero-tag"><span class="hero-tag-icon hero-tag-icon--wave">👋</span> Human centered</span>
+          <span class="hero-tag"><span class="hero-tag-icon hero-tag-icon--spin">✦</span> Creatively driven.</span>
+        </div>
+      </div>
+      <div class="meta">
+        <span>Dossier · <strong>2010 — 2026</strong></span>
+        <span>San Diego · <strong>Remote</strong></span>
       </div>
     </div>
-    <div class="meta">
-      <span>Dossier · <strong>2010 — 2026</strong></span>
-      <span>San Diego · <strong>Remote</strong></span>
+    <div class="hero-stats">
+      <div class="hero-stats-inner">
+        <div class="hs-col">
+          <div class="hs-label">Saved per case</div>
+          <div class="hs-number">55<span class="hs-unit">hrs</span></div>
+          <p class="hs-desc">On a weekly basis over 55 hours of time gained back in case processing times.</p>
+        </div>
+        <div class="hs-col">
+          <div class="hs-label">Jump in usage</div>
+          <div class="hs-number">2,757<span class="hs-unit">%</span></div>
+          <p class="hs-desc">New form tool unlocked huge time savings and massive adoption numbers. Usage increased over 2,700% overnight.</p>
+        </div>
+        <div class="hs-col">
+          <div class="hs-label">User satisfaction</div>
+          <div class="hs-number">98<span class="hs-unit">%</span></div>
+          <p class="hs-desc">A big bold new UI, and a whole bunch of really happy users.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -834,7 +962,10 @@
 
       <a class="l-row" href="case-study.html?slug=civic-platform">
         <span class="l-num">01</span>
-        <div class="l-thumb placeholder">NDA</div>
+        <div class="l-thumb-wrap">
+          <div class="l-thumb placeholder">NDA</div>
+          <img class="l-stamp" src="img/homepage/top-secret.png" alt="" />
+        </div>
         <div class="l-title">
           <span class="cat">Civic Tech</span>
           <span class="tt">Government <em>Platform</em> Work</span>
@@ -845,7 +976,10 @@
 
       <a class="l-row" href="case-study.html?slug=gridx-empower">
         <span class="l-num">02</span>
-        <img class="l-thumb" src="img/thumbnails/empower-thumbnails.jpg" alt="" />
+        <div class="l-thumb-wrap">
+          <img class="l-thumb" src="img/thumbnails/empower-thumbnails.jpg" alt="" />
+          <img class="l-stamp" src="img/homepage/lightbulb.png" alt="" />
+        </div>
         <div class="l-title">
           <span class="cat">Clean Energy</span>
           <span class="tt">GridX <em>Empower</em>, re-imagined</span>
@@ -856,7 +990,10 @@
 
       <a class="l-row" href="case-study.html?slug=gridx-touchscreen">
         <span class="l-num">03</span>
-        <img class="l-thumb" src="img/thumbnails/gridx-touchscreen-thumbnails.jpg" alt="" />
+        <div class="l-thumb-wrap">
+          <img class="l-thumb" src="img/thumbnails/gridx-touchscreen-thumbnails.jpg" alt="" />
+          <img class="l-stamp" src="img/homepage/deci.png" alt="" />
+        </div>
         <div class="l-title">
           <span class="cat">Clean Energy</span>
           <span class="tt">GridX Interactive <em>Touchscreen</em></span>
@@ -867,7 +1004,10 @@
 
       <a class="l-row" href="case-study.html?slug=taylor-series">
         <span class="l-num">04</span>
-        <img class="l-thumb" src="img/thumbnails/series-page-thumbnail.jpg" alt="" />
+        <div class="l-thumb-wrap">
+          <img class="l-thumb" src="img/thumbnails/series-page-thumbnail.jpg" alt="" />
+          <img class="l-stamp" src="img/homepage/headstock.png" alt="" />
+        </div>
         <div class="l-title">
           <span class="cat">Consumer Brand</span>
           <span class="tt">Taylor Guitars <em>Series</em> Pages</span>
@@ -878,7 +1018,10 @@
 
       <a class="l-row" href="case-study.html?slug=taylor-sustainability">
         <span class="l-num">05</span>
-        <img class="l-thumb" src="img/thumbnails/sustainability-hub-thumbnail.jpg" alt="" />
+        <div class="l-thumb-wrap">
+          <img class="l-thumb" src="img/thumbnails/sustainability-hub-thumbnail.jpg" alt="" />
+          <img class="l-stamp" src="img/homepage/tree.png" alt="" />
+        </div>
         <div class="l-title">
           <span class="cat">Consumer Brand</span>
           <span class="tt">Taylor <em>Sustainability</em> Hub</span>

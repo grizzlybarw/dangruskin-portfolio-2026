@@ -386,8 +386,6 @@
         0  4px 16px rgba(0,0,0,0.05);
     }
     .hero-stats-inner {
-      max-width: 1480px;
-      margin: 0 auto;
       padding: 0 var(--pad);
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
@@ -396,6 +394,7 @@
       padding: 0 48px;
       border-right: 1px solid var(--rule);
     }
+    .hs-col:first-child { padding-left: 0; }
     .hs-col:last-child { border-right: none; }
     .hs-label {
       font-family: var(--mono);
@@ -928,10 +927,6 @@
           <span class="hero-tag"><span class="hero-tag-icon hero-tag-icon--wave">👋</span> Human centered</span>
           <span class="hero-tag"><span class="hero-tag-icon hero-tag-icon--spin">✦</span> Creatively driven.</span>
         </div>
-      </div>
-      <div class="meta">
-        <span>Dossier · <strong>2010 — 2026</strong></span>
-        <span>San Diego · <strong>Remote</strong></span>
       </div>
     </div>
     <div class="hero-stats">

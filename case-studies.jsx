@@ -230,7 +230,10 @@ const CASE_STUDIES = {
     eyebrow: ["Experience Design", "Vision Work", "Clean Energy"],
     title: ["GridX", "Empower,", "re-imagined"],
     titleEm: "Empower,",
-    lede: "I was brought in to design a data visualization system for utility customers. The research revealed a larger problem: it wasn't just about visualizing the data, it was also a problem of getting those visuals in front of a customer. I proposed a totally new platform, providing direction for the application now, and 5 years from now.",
+    lede: [
+      "Robust APIs are only valuable if the data they process can be presented in a valuable way to end users. GridX was in a position where they had incredible access to customer utility data, but the implementation strategy and frontend weren't there to support product growth.",
+      "I designed a new product, that gave utilities the tools to run complex targeted campaigns to achieve their clean energy adoption goals, while also providing customers the right information to make those decisions."
+    ],
     meta: [
       { label: "Role",   value: "Lead Experience Designer" },
       { label: "Team",   value: "Design · Product · Eng · Execs" },
@@ -244,21 +247,21 @@ const CASE_STUDIES = {
       heading: "GridX had powerful energy APIs. Getting them in front of utility customers meant months of manual, client-by-client implementation work — and no system to measure success.",
       body: [
         "Utilities are navigating a changing grid — new rate models, emerging technology, shifting pricing structures — and their biggest challenge is getting customers to understand and adapt. GridX had the data to help with all of it. The path from that data to a utility customer's screen was the problem.",
-        "Every widget deployment was a custom engagement — manual work, rebuilt from scratch for each utility client, taking implementation teams months to complete. GridX's Empower platform had the APIs, but was missing the front-end layer, the campaign tooling, and the measurement capabilities that would let utilities deploy and iterate on their own.",
+        "For GridX every API widget deployment was a custom engagement — manual in-house work, rebuilt from scratch for each utility client, taking implementation teams months to complete. GridX's Empower platform had the APIs, but was missing the front-end layer, the campaign tooling, and the measurement capabilities that would let utilities deploy and iterate on their own.",
         "The core question: how do you give utilities a system — not a service — for getting the right widget to the right customer at the right time, across a hundred different clients and portals?"
       ]
     },
     results: [
-      { n: "C-suite", u: "",  label: "Presentation arranged", desc: "Leadership found the work compelling enough to arrange a dedicated presentation — design, marketing, and sales VPs all in the room." },
-      { n: "0 → 1",  u: "",  label: "APIs to product", desc: "Provided the frontend vision and roadmap that transformed Empower from API suite into something utilities could actually deploy to customers." },
-      { n: "Platform", u: "", label: "Thinking shaped", desc: "The prototype helped formalize how GridX's standalone products could work together — one piece of what became the GridX Platform." }
+      { n: "7", u: "weeks", label: "Time saved per campaign", desc: "Time saved in implementation for each individual campaign per client." },
+      { n: "0 → 1",  nEm: "1", u: "",  label: "APIs to product", desc: "Provided the frontend vision and roadmap that transformed Empower from API suite into something utilities could actually deploy to customers." },
+      { n: "4", u: "Widgets", label: "Built for utilities", desc: "In the short term, 4 widgets were created to be easily used by utilities." }
     ],
     process: [
       { n: "01", heading: "Research", image: "img/empower/empower-research.png", body: "Working from recorded research sessions with utility executives — conducted by an outside contractor and the VP of design — I synthesized findings into problem statements and stress-tested them with internal teams. The synthesis mapped each user through the full customer experience: who they were, what they were trying to accomplish, and what value this solution could unlock. The more important finding was the user type nobody had fully designed for yet: utility program managers working with APIs day-to-day. Every widget deployment was a months-long, manual, client-specific engagement. They needed a system, not another custom project. I also led constraint-setting early — working with three other designers and the VP of design to bound the project before it sprawled.", callout: "The synthesis surfaced a user type nobody had fully designed for: the utility program manager dealing with APIs day-to-day. Designing for them reframed the entire product scope." },
       { n: "02", heading: "Hypothesis", body: "If utilities can segment and sequence widgets like lightweight campaigns (think an advertising campaign), then they can set specific widgets, to display for specific demographics at specific times, based on specific parameters. That's a lot of specifics, but it was all data that already existed...there just wasn't a way to manage and expose that information.\n\nInstead of months of hard coded implementation, looks at weeks of establishing the initial data pipeline, and then years of successful conversions.", callout: "The brief sounds simple: segment, sequence, measure. Getting there took research synthesis, constraint-setting sessions with the VP, and a lot of stress-testing with the team. Those three words were earned." },
       { n: "03", heading: "Information architecture", image: "img/empower/empower-ia.png", body: "The structure I landed on applied a different mental model entirely: a digital marketing campaign system. The program manager at the utility logs into Empower, selects a customer segment, picks which widgets to display, and tracks engagement — all without a developer in the loop. Think Google Ads, but for utility information inside a customer portal. That metaphor drove the entire IA: a Campaign system for orchestrating widget deployments, a Widget Library of pre-built and custom widgets, and an API Explorer for teams who wanted to go deeper. Getting this structure right before wireframing prevented a lot of expensive rework downstream.", callout: "Applying a marketing campaign mental model to widget deployment gave the IA a shape program managers already knew. Borrowing from a different domain was what made the architecture feel obvious in hindsight." },
       { n: "04", heading: "Wireframes", image: "img/empower/empower-wireframe.png", body: "Moved through lo-fi quickly, using wireframes to map the information requirements for each page and identify what assets needed to be built. I ran these through design critiques with the broader team, something I love doing. In these sessions the other designer really helped to dial in the structure of the pages and the initial campaign creation flow.", callout: "I moved through lo-fi quickly. In a startup with other work running in parallel, the artifact that actually matters is the high-fidelity prototype. Wireframes are a step, not a destination." },
-      { n: "05", heading: "Prototype", body: "I built a complete high-fidelity prototype of the happy path to present to executives. Key surfaces included a Homepage with campaign insights and quick-start actions; a Campaigns section with filterable management and a creation wizard; Campaign Detail pages with embed code, reporting dashboards, and white-labeled widget previews; an APIs explorer for self-service education; and a Widget Library with pre-built and custom widget management — the foundation for a potential marketplace down the road.", callout: "I built the complete happy path, not a partial demo. Executives need to see the system working together, not a few disconnected screens. That's what got us the C-suite presentation." }
+      { n: "05", heading: "Prototype", images: ["img/empower/empower-proto-home.png", "img/empower/empower-proto-apis.png", "img/empower/empower-proto-widget-detail.png"], body: "I built a complete high-fidelity prototype of the happy path to present to executives. Key surfaces included a Homepage with campaign insights and quick-start actions; a Campaigns section with filterable management and a creation wizard; Campaign Detail pages with embed code, reporting dashboards, and white-labeled widget previews; an APIs explorer for self-service education; and a Widget Library with pre-built and custom widget management — the foundation for a potential marketplace down the road.", callout: "I built the complete happy path, not a partial demo. Executives need to see the system working together, not a few disconnected screens. That's what got us the C-suite presentation." }
     ],
     keyScreens: [
       { label: "Campaigns dashboard",        image: "img/empower/empower-campaigns.png",        desc: "Campaign Insights surface active campaigns, impressions, and engagement at a glance — with a filterable list and one-click campaign creation." },
@@ -490,6 +493,7 @@ function CaseStudy() {
   const data = CASE_STUDIES[slug];
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const lbScreens = (data.keyScreens || []).filter(s => s.image);
+  const [processLb, setProcessLb] = useState(null);
   const openLightbox  = (s) => setLightboxIndex(lbScreens.indexOf(s));
   const closeLightbox = () => setLightboxIndex(null);
   const prevScreen = () => setLightboxIndex(i => (i - 1 + lbScreens.length) % lbScreens.length);
@@ -555,7 +559,10 @@ function CaseStudy() {
               </React.Fragment>
             )}
           </h1>
-          <p className="cs-lede">{data.lede}</p>
+          {Array.isArray(data.lede)
+            ? data.lede.map((p, i) => <p key={i} className="cs-lede">{p}</p>)
+            : <p className="cs-lede">{data.lede}</p>
+          }
 
           <div className="cs-meta">
             {data.meta.map((m, i) =>
@@ -611,7 +618,17 @@ function CaseStudy() {
             {data.results.map((r, i) =>
               <div className="cell" key={i}>
                 <div className="top">{r.label}</div>
-                <div className="stat">{r.n}<span className="unit">{r.u}</span></div>
+                <div className="stat">
+                  {r.nEm
+                    ? r.n.split(r.nEm).map((part, i, arr) =>
+                        <React.Fragment key={i}>
+                          {part}{i < arr.length - 1 && <span className="mark">{r.nEm}</span>}
+                        </React.Fragment>
+                      )
+                    : r.n
+                  }
+                  <span className="unit">{r.u}</span>
+                </div>
                 <div className="desc">{r.desc}</div>
               </div>
             )}
@@ -660,7 +677,11 @@ function CaseStudy() {
                 {p.image && <img src={p.image} alt={p.heading} className="cs-process-img" />}
                 {p.images && (
                   <div className="cs-process-imgs">
-                    {p.images.map((src, idx) => <img key={idx} src={src} alt={`${p.heading} ${idx + 1}`} />)}
+                    {p.images.map((src, idx) => (
+                      <img key={idx} src={src} alt={`${p.heading} ${idx + 1}`}
+                        className="cs-process-img-clickable"
+                        onClick={() => setProcessLb({ screens: p.images.map((s, j) => ({ image: s, label: `${p.heading} ${j + 1}` })), index: idx })} />
+                    ))}
                   </div>
                 )}
                 {p.video && (
@@ -719,6 +740,15 @@ function CaseStudy() {
       {lightboxIndex !== null && (
         <Lightbox screens={lbScreens} index={lightboxIndex}
           onClose={closeLightbox} onPrev={prevScreen} onNext={nextScreen} />
+      )}
+
+      {processLb !== null && (
+        <Lightbox
+          screens={processLb.screens}
+          index={processLb.index}
+          onClose={() => setProcessLb(null)}
+          onPrev={() => setProcessLb(lb => ({ ...lb, index: (lb.index - 1 + lb.screens.length) % lb.screens.length }))}
+          onNext={() => setProcessLb(lb => ({ ...lb, index: (lb.index + 1) % lb.screens.length }))} />
       )}
 
       <section className="cs-next">

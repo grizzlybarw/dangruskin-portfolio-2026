@@ -2,7 +2,7 @@
    Not screenshots. Architectural shapes only. */
 
 const SchemaSupervisor = () => (
-  <svg className="schema" viewBox="0 0 380 280" preserveAspectRatio="xMidYMid meet">
+  <svg className="schema" viewBox="0 0 380 300" preserveAspectRatio="xMidYMid meet">
     {/* before vs after frame */}
     <rect x="20" y="36" width="148" height="200" className="stroke-thin draw" />
     <text x="20" y="28">Before · Acrobat</text>
@@ -39,11 +39,22 @@ const SchemaSupervisor = () => (
     {/* concur badge */}
     <rect x="288" y="200" width="60" height="18" className="fill-mark pop" />
     <text x="294" y="212" style={{fill: 'var(--paper)'}}>Concur</text>
+
+    {/* legend */}
+    <g className="schema-legend" transform="translate(20, 284)">
+      <rect x="0" y="-7" width="7" height="7" className="legend-border" />
+      <text x="11" y="0">prior</text>
+      <rect x="47" y="-7" width="7" height="7" className="legend-fill-soft" />
+      <text x="58" y="0">new</text>
+      <line x1="94" y1="-3" x2="106" y2="-3" className="legend-arrow" />
+      <polyline points="102,-7 106,-3 102,1" className="legend-arrow" />
+      <text x="110" y="0">action</text>
+    </g>
   </svg>
 );
 
 const SchemaInterview = () => (
-  <svg className="schema" viewBox="0 0 380 280" preserveAspectRatio="xMidYMid meet">
+  <svg className="schema" viewBox="0 0 380 300" preserveAspectRatio="xMidYMid meet">
     <text x="20" y="28">Q&amp;A list · color-coded applicants</text>
     <rect x="20" y="36" width="340" height="220" className="stroke-thin draw" />
     {/* Q rows with colored dots */}
@@ -74,6 +85,16 @@ const SchemaInterview = () => (
       <circle cx="10" cy="17" r="2" className="fill-ink" />
       <circle cx="16" cy="17" r="2" className="fill-ink" />
       <text x="28" y="14">Drag to reorder</text>
+    </g>
+
+    {/* legend */}
+    <g className="schema-legend" transform="translate(20, 284)">
+      <circle cx="3" cy="-3" r="4" className="fill-mark" />
+      <text x="11" y="0">applicant A</text>
+      <circle cx="71" cy="-3" r="4" className="fill-ink" />
+      <text x="79" y="0">applicant B</text>
+      <rect x="148" y="-7" width="7" height="7" className="legend-fill-soft" />
+      <text x="159" y="0">reorder</text>
     </g>
   </svg>
 );

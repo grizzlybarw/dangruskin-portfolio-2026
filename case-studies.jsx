@@ -19,6 +19,35 @@ const CASE_STUDIES = {
       { label: "Domain",   value: "Civic Tech · Enterprise UX" }
     ],
     Schema: SchemaSupervisor,
+    workflow: {
+      before: {
+        label: "Before · Acrobat",
+        steps: [
+          "Download case documents from platform",
+          "Open and annotate in Acrobat",
+          "Save locally with manual naming",
+          "Re-upload or email to team",
+          "Track review status manually"
+        ],
+        tools: "Acrobat · Local files · Email",
+        summary: "5 steps · 3 tools · fully off-platform"
+      },
+      after: {
+        label: "After · Review mode",
+        steps: [
+          "Toggle supervisor review mode",
+          "Review inline Q&A and interview content",
+          "Concur — decision propagates automatically"
+        ],
+        tools: "Platform only",
+        summary: "3 steps · 1 tool · no downloads, no email"
+      }
+    },
+    schemaAnnotations: [
+      { lp: 67, tp: 20, note: "Toggle activates separate data layer, UI context, and permissions" },
+      { lp: 67, tp: 58, note: "Inline interview content removes tab-switching from the review loop" },
+      { lp: 84, tp: 70, note: "Concur auto-propagates decision to downstream systems" }
+    ],
     problem: {
       heading: "Working locally was causing friction in the workflow for supervisors and leadership.",
       body: [
@@ -28,9 +57,9 @@ const CASE_STUDIES = {
       ]
     },
     results: [
-      { n: "1,200", u: "+", label: "Sessions in month two", desc: "across 75–100 supervisors — roughly 12–16 per person, above projections" },
-      { n: "22",   u: "%", label: "Month-over-month growth", desc: "sustained through Q1" },
-      { n: "83",   u: "%", label: "First-session happy path completion", desc: "onboarding was minimal and existed out of app due to tech constraints" }
+      { n: "1,200", u: "+", label: "Sessions in month two",             desc: "across 75–100 supervisors — roughly 12–16 per person, above projections",       note: "Source: platform analytics, month two post-rollout [VERIFY exact window]" },
+      { n: "22",    u: "%", label: "Month-over-month growth",           desc: "sustained through Q1",                                                           note: "Source: platform analytics, Q1 [VERIFY]" },
+      { n: "83",    u: "%", label: "First-session happy path completion", desc: "onboarding was minimal and existed out of app due to tech constraints",         note: "Source: [VERIFY measurement method]" }
     ],
     process: [
       { n: "01", heading: "Research & analysis", body: "I interviewed 7 supervisors to understand what was actually happening, not what the documentation said should be happening. The gap was significant. Users had built their own workarounds over the years — personal naming conventions, duplicate backups, handwritten checklists. Brilliant, honestly, but not exactly a sustainable system. I turned those conversations into user flows showing every tool, handoff, and breakdown point. Those flows ended up being the most useful artifact for getting leadership aligned — way more persuasive than a summary doc.", callout: "What convinced leadership wasn't a summary of findings. It was a flow that showed exactly where the process broke down — every tool, every handoff, every point where something got lost." },
@@ -79,6 +108,35 @@ const CASE_STUDIES = {
       { label: "Domain",   value: "Civic Tech · Enterprise UX" }
     ],
     Schema: SchemaInterview,
+    workflow: {
+      before: {
+        label: "Before · Legacy UI",
+        steps: [
+          "Navigate cluttered 7-year-old interface",
+          "Manually scan dense text for answers",
+          "Switch tabs to cross-reference information",
+          "Reorder questions through a cumbersome edit flow",
+          "Lose context switching between views"
+        ],
+        tools: "Legacy platform UI",
+        summary: "5 friction points accumulated over 7 years"
+      },
+      after: {
+        label: "After · Redesigned UI",
+        steps: [
+          "Color-coded Q&A identifies each applicant at a glance",
+          "Table view surfaces density for officers on small monitors",
+          "Drag-to-reorder refined for speed in long sessions"
+        ],
+        tools: "Redesigned platform UI",
+        summary: "Reduced cognitive load · 97% positive feedback"
+      }
+    },
+    schemaAnnotations: [
+      { lp: 10, tp: 21, note: "Color per applicant tracks multiple voices in group interviews" },
+      { lp: 71, tp: 49, note: "Table view adds density for officers on smaller monitors" },
+      { lp: 32, tp: 77, note: "Drag-to-reorder refined for long interview sessions" }
+    ],
     problem: {
       heading: "Asylum and refugee officers are already managing one of the most cognitively demanding jobs imaginable. The interview platform was adding to that load — not reducing it.",
       body: [
@@ -88,9 +146,9 @@ const CASE_STUDIES = {
       ]
     },
     results: [
-      { n: "30",  u: "%", label: "Adoption rate in week one", desc: "strong for any UI update, exceptional for this user base" },
-      { n: "194", u: "",  label: "Officers opted in during the first week", desc: "only 6 turned the new UI off after trying it" },
-      { n: "1",   u: "",  label: "Bug report in launch week", desc: "a minor alignment fix for an edge case involving an extremely long question" }
+      { n: "30",  u: "%", label: "Adoption rate in week one",             desc: "strong for any UI update, exceptional for this user base",                  note: "Source: platform analytics, week one of opt-in period [VERIFY]" },
+      { n: "194", u: "",  label: "Officers opted in during the first week", desc: "only 6 turned the new UI off after trying it",                            note: "Source: opt-in period platform data [VERIFY]" },
+      { n: "1",   u: "",  label: "Bug report in launch week",              desc: "a minor alignment fix for an edge case involving an extremely long question", note: "Source: engineering bug tracker, launch week [VERIFY]" }
     ],
     process: [
       { n: "01", heading: "Prior research & assumptions", body: "50+ prior user interviews with officers meant I already had a deep picture of how the platform was being used — the workarounds, the friction points, the moments where the interface was fighting the user rather than helping them. No separate discovery round was needed. I drew directly on that knowledge to form design assumptions and identify the highest-leverage areas to address.", callout: "50+ prior interviews meant I could skip a discovery round and go straight to design assumptions. That only works if you've actually synthesized what you learned, not just collected it." },
@@ -150,9 +208,9 @@ const CASE_STUDIES = {
     processLabel: "Work Overview",
     resultsBlurb: "From multiple projects, the data doesn't lie.",
     results: [
-      { n: "55",    u: "",  label: "Hours of time regained a week per case", desc: "Supervisor Review Mode — gained by replacing a manual paper process with a new digital form application" },
-      { n: "97",    u: "%", label: "Positive feedback post-launch",      desc: "Interview Platform Redesign — user sentiment survey following full rollout" },
-      { n: "40",    u: "%", label: "Decrease in case lookup time",       desc: "Case Finder — officers using the new search tool vs. prior offline methods" },
+      { n: "1,200", u: "+", label: "Sessions in month two",         desc: "Supervisor Review Mode — strong early adoption across 75–100 supervisors, above projections", note: "Source: platform analytics, month two post-rollout [VERIFY exact window]" },
+      { n: "97",    u: "%", label: "Positive feedback post-launch", desc: "Interview Platform Redesign — user sentiment survey following full rollout",                  note: "Source: post-launch user sentiment survey [VERIFY survey details]" },
+      { n: "40",    u: "%", label: "Decrease in case lookup time",  desc: "Case Finder — officers using the new search tool vs. prior offline methods",                  note: "Source: [VERIFY measurement method and baseline]" },
     ],
     process: [
       { n: "01", heading: "Supervisor Review Mode", body: "Supervisors were reviewing cases locally on their machines. I interviewed users to map every tool, handoff, and breakdown point in the real workflow. Then synthesized the pain points, and ran workshops with stakeholders and team members to identify solutions.\n\nI pitched three solutions with varying levels of complexity, clearly presenting how users and the organization could benefit from each solution. We landed on a dedicated review workspace that updated the UI to make it more legible and provide all of the information users needed to complete the review. The result was 1,200+ sessions in month two, scaling quickly to all reviews happening in app by month 6.", callout: "You can't just tell people to use the new platform, you have to prove to them the new experience is better. We used training sessions, open message boards, and kept in contact with different offices to understand why folks weren't opting in to the new experience." },
@@ -180,6 +238,34 @@ const CASE_STUDIES = {
       { label: "Domain",   value: "Civic Tech · Information Architecture" }
     ],
     Schema: SchemaInterview,
+    workflow: {
+      before: {
+        label: "Before · Personal systems",
+        steps: [
+          "Recall which personal folder holds the reference",
+          "Search local drive, shared drive, or handwritten notes",
+          "Cross-reference multiple systems for context",
+          "Piece together the case reference from memory"
+        ],
+        tools: "Local folders · Personal notes · Shared drives",
+        summary: "4+ steps · every officer had a different system"
+      },
+      after: {
+        label: "After · Case Finder",
+        steps: [
+          "Open Case Finder in the platform",
+          "Filter by the fields that matter to the work",
+          "Find and reference case without leaving the workflow"
+        ],
+        tools: "Platform only",
+        summary: "3 steps · 1 tool · ~40% faster case lookup"
+      }
+    },
+    schemaAnnotations: [
+      { lp: 10, tp: 21, note: "Category indicators surfaced through SME workshops" },
+      { lp: 71, tp: 49, note: "Fields chosen for utility over completeness" },
+      { lp: 32, tp: 77, note: "Sort and filter refined through officer usability testing" }
+    ],
     problem: {
       heading: "Officers were spending real time digging through personal folders, local drives, and handwritten notes to find reference materials that should have lived in the system all along.",
       body: [
@@ -487,9 +573,100 @@ function Lightbox({ screens, index, onClose, onPrev, onNext }) {
   );
 }
 
+function tipSide(lp, tp) {
+  if (lp < 20) return 'right';
+  if (lp > 80) return 'left';
+  if (tp < 30) return 'below';
+  if (tp > 70) return 'above';
+  if (lp > 55) return 'left';
+  return 'right';
+}
+
+function SchemaFigure({ Schema, annotations = [] }) {
+  return (
+    <div>
+      <div className="schema-figure">
+        <Schema />
+        {annotations.map((ann, i) => {
+          const side = tipSide(ann.lp, ann.tp);
+          return (
+            <div key={i} className="schema-ann" style={{ left: ann.lp + '%', top: ann.tp + '%' }}>
+              <button className="schema-ann-dot" aria-label={"Annotation " + (i + 1) + ": " + ann.note}>
+                {i + 1}
+              </button>
+              <div className={"schema-ann-tip schema-ann-tip--" + side} role="tooltip">
+                {ann.note}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <p className="schema-caption">Abstracted system diagram. Not actual UI.</p>
+    </div>
+  );
+}
+
+function WorkflowComparison({ workflow }) {
+  const { before, after } = workflow;
+  return (
+    <div className="wf-compare">
+      <div className="wf-eyebrow">Workflow change</div>
+      <div className="wf-grid">
+        <div className="wf-col wf-before">
+          <div className="wf-col-hd">{before.label}</div>
+          <ol className="wf-steps">
+            {before.steps.map((step, i) => (
+              <li key={i} className="wf-step">
+                <span className="wf-step-num">{String(i + 1).padStart(2, '0')}</span>
+                <span className="wf-step-text">{step}</span>
+              </li>
+            ))}
+          </ol>
+          <div className="wf-foot">
+            <div><span className="wf-tools-label">Tools: </span>{before.tools}</div>
+            <div>{before.summary}</div>
+          </div>
+        </div>
+        <div className="wf-sep" aria-hidden="true">→</div>
+        <div className="wf-col wf-after">
+          <div className="wf-col-hd">{after.label}</div>
+          <ol className="wf-steps">
+            {after.steps.map((step, i) => (
+              <li key={i} className="wf-step">
+                <span className="wf-step-num">{String(i + 1).padStart(2, '0')}</span>
+                <span className="wf-step-text">{step}</span>
+              </li>
+            ))}
+          </ol>
+          <div className="wf-foot">
+            <div><span className="wf-tools-label">Tools: </span>{after.tools}</div>
+            <div>{after.summary}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ConfidentialNotice() {
+  return (
+    <div className="cs-conf-notice">
+      <div className="cs-conf-badge">
+        <span className="cs-conf-badge-icon" aria-hidden="true"></span>
+        Confidential
+      </div>
+      <div className="cs-conf-body">
+        <p>This platform is confidential. No production UI can be shown. What follows is the full decision record: research, architecture, tradeoffs, and measured outcomes.</p>
+        <p>I walk approved artifacts through live in interviews.</p>
+      </div>
+    </div>
+  );
+}
+
 function CaseStudy() {
   const params = new URLSearchParams(window.location.search);
-  const slug = params.get("slug") || "supervisor-review";
+  const pathSlug = window.location.pathname.match(/\/work\/([^/]+)\//)?.[1];
+  const slug = params.get("slug") || pathSlug || "supervisor-review";
   const data = CASE_STUDIES[slug];
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const lbScreens = (data.keyScreens || []).filter(s => s.image);
@@ -538,6 +715,25 @@ function CaseStudy() {
     return () => cancelAnimationFrame(raf);
   }, [slug]);
 
+  useEffect(() => {
+    const pageTitle = data.title.join(" ") + " — Dan Gruskin";
+    document.title = pageTitle;
+
+    const setMeta = (attr, key, value) => {
+      let el = document.querySelector(`meta[${attr}="${key}"]`);
+      if (!el) { el = document.createElement("meta"); el.setAttribute(attr, key); document.head.appendChild(el); }
+      el.setAttribute("content", value);
+    };
+    const desc = data.lede || "";
+    setMeta("name", "description", desc);
+    setMeta("property", "og:title", pageTitle);
+    setMeta("property", "og:description", desc);
+    setMeta("property", "og:type", "article");
+    setMeta("name", "twitter:card", "summary_large_image");
+    setMeta("name", "twitter:title", pageTitle);
+    setMeta("name", "twitter:description", desc);
+  }, [slug]);
+
   return (
     <>
       <section className="cs-hero">
@@ -573,11 +769,7 @@ function CaseStudy() {
             )}
           </div>
 
-          {data.confidential &&
-            <div className="cs-confidential">
-              Interface screenshots are under NDA. Everything below is based on production outcomes and documented process.
-            </div>
-          }
+          {data.confidential && <ConfidentialNotice />}
 
           {!data.confidential || data.heroImage
             ? <div className={"cs-hero-frame" + (data.heroImage ? " cs-hero-frame--photo" : "") + (data.heroContain ? " cs-hero-frame--contain" : "") + (data.heroBorderless ? " cs-hero-frame--borderless" : "")} ref={schemaRef}>
@@ -630,11 +822,36 @@ function CaseStudy() {
                   <span className="unit">{r.u}</span>
                 </div>
                 <div className="desc">{r.desc}</div>
+                {r.note && <div className="cs-metric-note">{r.note}</div>}
               </div>
             )}
           </div>
         </div>
       </section>
+
+      {data.confidential && (data.workflow || data.schemaAnnotations) && (
+        <section className="cs-design-record">
+          <div className="shell">
+            <h2>Decision record</h2>
+            {data.workflow && (
+              <div className="cs-body" style={{ marginBottom: 48 }}>
+                <div className="lhs">Workflow change</div>
+                <div className="rhs">
+                  <WorkflowComparison workflow={data.workflow} />
+                </div>
+              </div>
+            )}
+            {Schema && data.schemaAnnotations && (
+              <div className="cs-body">
+                <div className="lhs">System diagram</div>
+                <div className="rhs">
+                  <SchemaFigure Schema={Schema} annotations={data.schemaAnnotations} />
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {!data.confidential && (
         <section className="cs-section">

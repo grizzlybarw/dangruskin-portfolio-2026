@@ -11,6 +11,12 @@
     gtag('config', 'G-0SSHKT8LPF');
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      var slug = new URLSearchParams(window.location.search).get("slug");
+      if (slug) { window.location.replace("/work/" + slug + "/"); }
+    })();
+  </script>
   <link rel="icon" href="favicon.ico" sizes="any" />
   <title>Case Study — Dan Gruskin</title>
 
@@ -36,10 +42,9 @@
         <span class="mono-sm muted" style="border-left: 1px solid var(--rule); padding-left: 14px;">Case Study</span>
       </div>
       <nav class="topbar-mid">
-        <a href="index.html#work">Work</a>
-        <a href="index.html#about">About</a>
-        <a href="index.html#background">Background</a>
-        <a href="index.html#contact">Contact</a>
+        <a href="index.html">Work</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
       </nav>
       <div class="topbar-right">
         <a class="resume-btn" href="index.html">All work ←</a>
@@ -49,10 +54,9 @@
       </div>
     </div>
     <nav class="topbar-nav-mobile" id="topbar-nav-mobile" hidden>
-      <a href="index.html#work">Work</a>
-      <a href="index.html#about">About</a>
-      <a href="index.html#background">Background</a>
-      <a href="index.html#contact">Contact</a>
+      <a href="index.html">Work</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
       <div class="topbar-nav-mobile-footer">
         <a class="resume-btn" href="index.html">All work ←</a>
       </div>

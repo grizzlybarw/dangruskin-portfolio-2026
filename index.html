@@ -72,37 +72,29 @@
     .hero-strip .meta strong { color: var(--ink); font-weight: 500; }
 
     .hero-left { display: flex; flex-direction: column; gap: 24px; }
-    .hero-tags { display: flex; gap: 24px; flex-wrap: wrap; }
-    .hero-tag {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
+    .hero-sub {
+      font-family: var(--sans);
       font-size: 15px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      line-height: 1.5;
+      letter-spacing: -0.01em;
       color: var(--ink-2);
+      max-width: 52ch;
+      margin: 0;
     }
-    .hero-tag-icon {
-      display: inline-block;
-      font-size: 20px;
-      color: var(--mark);
-      line-height: 1;
+    .hero-proof-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px 14px;
+      margin-top: 12px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-3);
     }
-    .hero-tag-icon--wave  { animation: ht-wave 2.2s ease-in-out infinite; transform-origin: 70% 80%; }
-    .hero-tag-icon--spin  { animation: ht-spin 6s linear infinite; }
-    @keyframes ht-wave {
-      0%, 100% { transform: rotate(0deg); }
-      15%       { transform: rotate(18deg); }
-      30%       { transform: rotate(-8deg); }
-      45%       { transform: rotate(14deg); }
-      60%       { transform: rotate(-4deg); }
-      75%       { transform: rotate(8deg); }
-    }
-    @keyframes ht-spin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
+    .hero-proof-strip strong { color: var(--ink); font-weight: 500; font-style: normal; }
+    .hero-proof-sep { color: var(--ink-3); opacity: 0.4; }
 
     /* Hero sticker collage */
     .hero-right {
@@ -257,6 +249,32 @@
     }
     @media (hover: hover) and (pointer: fine) {
       .l-row:hover .l-metric .l-arrow { color: var(--mark); border-color: var(--mark); }
+    }
+
+    /* ─── Government hub: grouped sub-rows ─── */
+    .l-sub-group {
+      background: var(--paper-2);
+      border-bottom: 1px solid var(--rule);
+    }
+    .l-row--hub { border-bottom: 1px solid var(--rule-2); }
+    .l-row--sub {
+      grid-template-columns: 20px 160px 1fr auto;
+      gap: 16px;
+      padding: 14px 0 14px 24px;
+      border-bottom: 1px solid var(--rule-2);
+      background: var(--paper-2);
+    }
+    .l-row--sub:last-child { border-bottom: none; }
+    .l-row--sub .l-num { font-size: 18px; color: var(--rule); letter-spacing: 0; }
+    .l-row--sub .l-title .tt { font-size: 20px; }
+    .l-row--sub .l-blurb { font-size: 13px; }
+    .l-row--sub .l-metric .n { font-size: 32px; }
+    .l-row--sub .l-thumb-wrap { width: 160px; }
+    .l-row--sub .l-thumb { width: 160px; height: 106px; }
+    .l-row--sub .l-stamp { display: none; }
+    @media (hover: hover) and (pointer: fine) {
+      .l-row--sub:hover { background: var(--paper-3); padding: 14px 0 14px 24px; margin: 0; border-radius: 0; }
+      .l-row--sub:hover::before { transform: none; }
     }
 
     /* Right rail — sticky about + signals */
@@ -495,6 +513,16 @@
       letter-spacing: -0.005em;
       max-width: 38ch;
     }
+    .metric-note {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      color: var(--ink-3);
+      line-height: 1.55;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--rule);
+    }
     @media (max-width: 900px) {
       .hero-stats-inner {
         grid-template-columns: 1fr 1fr;
@@ -566,6 +594,9 @@
         padding: 20px 0;
       }
       .l-num { display: none; }
+      .l-row--sub { grid-template-columns: 1fr; padding-left: 14px; }
+      .l-row--sub .l-thumb-wrap { width: 100%; }
+      .l-row--sub .l-thumb { width: 100%; height: 130px; }
       .l-thumb {
         display: block;
         width: 100%;
@@ -992,10 +1023,14 @@
   <section class="hero-strip">
     <div class="hero-top">
       <div class="hero-left">
-        <h1>Senior Product Designer focused on turning hard problems into <em>great experiences.</em></h1>
-        <div class="hero-tags">
-          <span class="hero-tag"><span class="hero-tag-icon hero-tag-icon--wave">👋</span> Human centered</span>
-          <span class="hero-tag"><span class="hero-tag-icon hero-tag-icon--spin">✦</span> Creatively driven.</span>
+        <h1>Senior Product Designer for <em>high-stakes</em> government, energy, and enterprise software.</h1>
+        <p class="hero-sub">Government case management · clean energy · consumer e-commerce</p>
+        <div class="hero-proof-strip">
+          <span><strong>167 days</strong> staff time saved</span>
+          <span class="hero-proof-sep" aria-hidden="true">·</span>
+          <span><strong>2,757%</strong> jump in usage</span>
+          <span class="hero-proof-sep" aria-hidden="true">·</span>
+          <span><strong>97%</strong> positive feedback</span>
         </div>
       </div>
       <div class="hero-right">
@@ -1028,19 +1063,22 @@
     <div class="hero-stats">
       <div class="hero-stats-inner">
         <div class="hs-col">
-          <div class="hs-label">Saved per case</div>
-          <div class="hs-number">55<span class="hs-unit">hrs</span></div>
-          <p class="hs-desc">On a weekly basis over 55 hours of time gained back in case processing times.</p>
+          <div class="hs-label">Staff time saved — first two weeks</div>
+          <div class="hs-number">167<span class="hs-unit">days</span></div>
+          <p class="hs-desc">One form type, first two weeks post-launch. 8,000 forms generated, ~10 min saved each — conservative vs. stakeholder estimate of 15–30 min manual.</p>
+          <p class="metric-note">8,000 forms × ~10 min saved each (conservative vs. stakeholder estimate of 15–30 min manual → 2–3 min in-app). Source: platform analytics.</p>
         </div>
         <div class="hs-col">
-          <div class="hs-label">Jump in usage</div>
+          <div class="hs-label">Jump in platform usage</div>
           <div class="hs-number">2,757<span class="hs-unit">%</span></div>
-          <p class="hs-desc">New form tool unlocked huge time savings and massive adoption numbers. Usage increased over 2,700% overnight.</p>
+          <p class="hs-desc">New consolidated forms space digitized case management workflows and unlocked massive adoption — usage jumped over 2,700% within two months of launch.</p>
+          <p class="metric-note">Source: Matomo analytics, 2 months post-launch.</p>
         </div>
         <div class="hs-col">
-          <div class="hs-label">User satisfaction</div>
-          <div class="hs-number">98<span class="hs-unit">%</span></div>
-          <p class="hs-desc">A big bold new UI, and a whole bunch of really happy users.</p>
+          <div class="hs-label">Positive feedback post-launch</div>
+          <div class="hs-number">97<span class="hs-unit">%</span></div>
+          <p class="hs-desc">Post-launch user sentiment survey following full rollout of the Interview Platform Redesign.</p>
+          <p class="metric-note">Source: post-launch user sentiment survey, Interview Platform Redesign.</p>
         </div>
       </div>
     </div>
@@ -1048,25 +1086,11 @@
 
   <main class="index-grid" id="work">
 
-    <section class="ledger">
-      <h2><span>§01 — Selected work</span><span class="count">05 exhibits</span></h2>
-
-      <a class="l-row" href="case-study.html?slug=civic-platform">
-        <span class="l-num">01</span>
-        <div class="l-thumb-wrap">
-          <div class="l-thumb placeholder">NDA</div>
-          <img class="l-stamp" src="img/homepage/top-secret.png" alt="" />
-        </div>
-        <div class="l-title">
-          <span class="cat">Civic Tech</span>
-          <span class="tt">Government <em>Platform</em> Work</span>
-          <p class="l-blurb">Two years designing tools for a government case management platform — running workshops, large-scale UI updates, research sessions, and much happier users spending much less time completing their tasks.</p>
-        </div>
-        <div class="l-metric"><span class="n">55<span class="u">hrs</span></span><div class="sub">Gained back per case</div><span class="l-arrow">Open ↗</span></div>
-      </a>
+    <section class="ledger" id="work">
+      <h2><span>§01 — Selected work</span><span class="count">08 projects</span></h2>
 
       <a class="l-row" href="case-study.html?slug=gridx-empower">
-        <span class="l-num">02</span>
+        <span class="l-num">01</span>
         <div class="l-thumb-wrap">
           <img class="l-thumb" src="img/thumbnails/empower-thumbnails.jpg" alt="" />
           <img class="l-stamp" src="img/homepage/lightbulb.png" alt="" />
@@ -1080,10 +1104,10 @@
       </a>
 
       <a class="l-row" href="case-study.html?slug=gridx-touchscreen">
-        <span class="l-num">03</span>
+        <span class="l-num">02</span>
         <div class="l-thumb-wrap">
-          <img class="l-thumb" src="img/thumbnails/gridx-touchscreen-thumbnails.jpg" alt="" />
-          <img class="l-stamp" src="img/homepage/deci.png" alt="" />
+          <img class="l-thumb" src="img/thumbnails/gridx-touchscreen-thumbnails.jpg" alt="" loading="lazy" />
+          <img class="l-stamp" src="img/homepage/deci.png" alt="" loading="lazy" />
         </div>
         <div class="l-title">
           <span class="cat">Clean Energy</span>
@@ -1093,11 +1117,65 @@
         <div class="l-metric"><span class="n">24<span class="u">%</span></span><div class="sub">Lift in booth traffic</div><span class="l-arrow">Open ↗</span></div>
       </a>
 
+      <div class="l-hub">
+        <a class="l-row l-row--hub" href="case-study.html?slug=civic-platform">
+          <span class="l-num">03</span>
+          <div class="l-thumb-wrap">
+            <div class="l-thumb placeholder">NDA</div>
+            <img class="l-stamp" src="img/homepage/top-secret.png" alt="" />
+          </div>
+          <div class="l-title">
+            <span class="cat">Civic Tech</span>
+            <span class="tt">Government <em>Platform</em> Work</span>
+            <p class="l-blurb">Two years designing tools for a government case management platform — running workshops, large-scale UI updates, research sessions, and much happier users spending much less time completing their tasks.</p>
+          </div>
+          <div class="l-metric"><span class="n">167<span class="u">days</span></span><div class="sub">Staff time saved</div><span class="l-arrow">3 case studies ↓</span></div>
+        </a>
+        <div class="l-sub-group">
+          <a class="l-row l-row--sub" href="case-study.html?slug=supervisor-review">
+            <span class="l-num">↳</span>
+            <div class="l-thumb-wrap">
+              <div class="l-thumb placeholder">NDA</div>
+            </div>
+            <div class="l-title">
+              <span class="cat">Civic Tech</span>
+              <span class="tt">Supervisor <em>Review</em> Mode</span>
+              <p class="l-blurb">A new review mode replacing a cumbersome PDF-to-email workflow for supervisor sign-off on officer submissions.</p>
+            </div>
+            <div class="l-metric"><span class="n">1,200<span class="u">+</span></span><div class="sub">Sessions, month two</div><span class="l-arrow">Open ↗</span></div>
+          </a>
+          <a class="l-row l-row--sub" href="case-study.html?slug=interview-platform">
+            <span class="l-num">↳</span>
+            <div class="l-thumb-wrap">
+              <div class="l-thumb placeholder">NDA</div>
+            </div>
+            <div class="l-title">
+              <span class="cat">Civic Tech</span>
+              <span class="tt">Interview <em>Platform</em> Redesign</span>
+              <p class="l-blurb">Modernized the UI and workflow for officers conducting interviews — reducing friction and driving opt-in adoption.</p>
+            </div>
+            <div class="l-metric"><span class="n">194</span><div class="sub">Officers opted in</div><span class="l-arrow">Open ↗</span></div>
+          </a>
+          <a class="l-row l-row--sub" href="case-study.html?slug=case-finder">
+            <span class="l-num">↳</span>
+            <div class="l-thumb-wrap">
+              <div class="l-thumb placeholder">NDA</div>
+            </div>
+            <div class="l-title">
+              <span class="cat">Civic Tech</span>
+              <span class="tt"><em>Case</em> Finder</span>
+              <p class="l-blurb">Purpose-built search tool for caseworkers to quickly locate files across a large, disorganized case database.</p>
+            </div>
+            <div class="l-metric"><span class="n">40<span class="u">%</span></span><div class="sub">Faster lookup</div><span class="l-arrow">Open ↗</span></div>
+          </a>
+        </div>
+      </div>
+
       <a class="l-row" href="case-study.html?slug=taylor-series">
         <span class="l-num">04</span>
         <div class="l-thumb-wrap">
-          <img class="l-thumb" src="img/thumbnails/series-page-thumbnail.jpg" alt="" />
-          <img class="l-stamp" src="img/homepage/headstock.png" alt="" />
+          <img class="l-thumb" src="img/thumbnails/series-page-thumbnail.jpg" alt="" loading="lazy" />
+          <img class="l-stamp" src="img/homepage/headstock.png" alt="" loading="lazy" />
         </div>
         <div class="l-title">
           <span class="cat">Consumer Brand</span>
@@ -1110,8 +1188,8 @@
       <a class="l-row" href="case-study.html?slug=taylor-sustainability">
         <span class="l-num">05</span>
         <div class="l-thumb-wrap">
-          <img class="l-thumb" src="img/thumbnails/sustainability-hub-thumbnail.jpg" alt="" />
-          <img class="l-stamp" src="img/homepage/tree.png" alt="" />
+          <img class="l-thumb" src="img/thumbnails/sustainability-hub-thumbnail.jpg" alt="" loading="lazy" />
+          <img class="l-stamp" src="img/homepage/tree.png" alt="" loading="lazy" />
         </div>
         <div class="l-title">
           <span class="cat">Consumer Brand</span>
@@ -1128,7 +1206,7 @@
         <div class="r-orient">
           <div class="row">
             <div class="k">The pitch</div>
-            <div class="v">8+ years designing SaaS products. Government tools, energy software, consumer brands. I like working on things where the stakes are real.</div>
+            <div class="v">8+ years designing software for government, clean energy, and consumer brands. High-stakes systems where the outcomes are measurable and the UX decisions matter.</div>
           </div>
           <div class="row">
             <div class="k">Currently</div>
@@ -1282,7 +1360,7 @@
         </div>
         <div class="ai-use-item">
           <span class="k">At work</span>
-          <div class="v"><strong>Limited by security constraints</strong>The platform I work on keeps me from running much through external AI tools. So research synthesis is where I'm getting the most out of it professionally right now. That'll change.</div>
+          <div class="v"><strong>Organizing and facilitating</strong>I help run AOI's AI capability group — coordinating the group, running workshops, and helping it define what it wants to accomplish. I also led a workshop for the design capability on bringing AI into design workflows. The facilitation role, not the technical one.</div>
         </div>
         <div class="ai-use-item">
           <span class="k">Off the clock</span>
@@ -1358,23 +1436,23 @@
 
       <div class="ts-body">
         <div>
-          <h2 class="ts-h" id="tour-h">Senior Product Designer who turns <em>hard problems</em> into shipped product.</h2>
+          <h2 class="ts-h" id="tour-h">Senior Product Designer for <em>high-stakes</em> software with measurable outcomes.</h2>
           <p class="ts-who">
-            <strong>8+ years</strong> of SaaS product design. Government case management, clean energy, guitars. Right now I'm working on tools where the stakes are real — bad UX decisions have actual consequences. GridX and Taylor Guitars before that.
+            <strong>8+ years</strong> designing SaaS across government case management, clean energy, and consumer brands. I work where stakes are real: bad UX decisions have actual consequences for actual people. Measurable outcomes, not just shipped features.
           </p>
         </div>
 
         <div class="ts-block">
           <div class="label">What I'm great at</div>
           <div class="ts-chips">
-            <span class="ts-chip">High-stakes workflow design</span>
-            <span class="ts-chip">Research-driven decisions</span>
+            <span class="ts-chip">Regulated &amp; gov-adjacent platforms</span>
+            <span class="ts-chip">Enterprise workflow design</span>
+            <span class="ts-chip">Research ops &amp; synthesis</span>
+            <span class="ts-chip">Design systems (Figma)</span>
+            <span class="ts-chip">Section 508 / WCAG accessibility</span>
             <span class="ts-chip">Cross-functional leadership</span>
             <span class="ts-chip">0 → 1 vision work</span>
-            <span class="ts-chip">Design systems &amp; handoff</span>
-            <span class="ts-chip">Hi-fi prototyping</span>
             <span class="ts-chip">Workshops &amp; facilitation</span>
-            <span class="ts-chip">Stakeholder alignment</span>
           </div>
         </div>
 
@@ -1382,12 +1460,12 @@
           <div class="label">Recent wins</div>
           <div class="ts-stats">
             <div class="ts-stat">
-              <div class="n">55<span class="unit">hrs</span></div>
-              <div class="l">Hours gained back per case<br />from a form application</div>
+              <div class="n">167<span class="unit">days</span></div>
+              <div class="l">Staff time saved — first two weeks<br />one form type, Forms Platform</div>
             </div>
             <div class="ts-stat">
-              <div class="n">98<span class="unit">%</span></div>
-              <div class="l">Positive feedback on new UI<br />Interview Platform Redesign</div>
+              <div class="n">97<span class="unit">%</span></div>
+              <div class="l">Positive feedback post-launch<br />Interview Platform Redesign</div>
             </div>
             <div class="ts-stat">
               <div class="n">105<span class="unit">%</span></div>
@@ -1399,7 +1477,7 @@
         <div class="ts-block">
           <div class="label">Where I'd go next</div>
           <p class="ts-who">
-I thrive in complex situations where understanding the goal of the users is paramount to success. If this sounds like you, let's chat!
+            Senior Product Designer roles at companies building software where the work genuinely matters. Regulated industries, complex workflows, high user stakes. If measurable outcomes matter as much as shipped features, let's talk.
           </p>
         </div>
 

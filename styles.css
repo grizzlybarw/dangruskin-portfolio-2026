@@ -9,7 +9,7 @@
   --paper-3: oklch(0.895 0.014 80);
   --ink:     oklch(0.180 0.015 60);
   --ink-2:   oklch(0.360 0.015 60);
-  --ink-3:   oklch(0.560 0.014 60);
+  --ink-3:   oklch(0.480 0.014 60);
   --rule:    oklch(0.850 0.014 80);
   --rule-2:  oklch(0.750 0.014 80);
   --mark:    oklch(0.520 0.220 254);
@@ -32,7 +32,7 @@
   --paper-3: oklch(0.905 0.012 85);
   --ink:     oklch(0.170 0.012 60);
   --ink-2:   oklch(0.350 0.012 60);
-  --ink-3:   oklch(0.560 0.010 60);
+  --ink-3:   oklch(0.480 0.010 60);
   --rule:    oklch(0.840 0.010 60);
   --rule-2:  oklch(0.760 0.010 60);
   --mark:    oklch(0.620 0.180 38);
@@ -399,4 +399,89 @@ section { padding: 80px 0; position: relative; }
   .closer h2 { font-size: clamp(36px, 9vw, 60px); }
   .closer .right { flex-direction: column; align-items: flex-start; }
   .closer .right a { font-size: 10px; padding: 12px 18px; }
+}
+
+/* ============================================================
+   SITE FOOTER
+   ============================================================ */
+.site-footer {
+  border-top: 1px solid var(--rule);
+  padding: 24px 0;
+}
+.site-footer-inner {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 0 var(--pad);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.site-footer-copy,
+.site-footer-a11y {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.site-footer-mid {
+  flex: 1;
+}
+.site-footer-mid a {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-decoration: none;
+}
+.site-footer-mid a:hover { color: var(--mark); }
+
+@media (max-width: 600px) {
+  .site-footer-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+/* ============================================================
+   ACCESSIBILITY — GLOBAL
+   ============================================================ */
+
+/* Visible focus ring for keyboard nav — uses mark colour across all themes */
+:focus-visible {
+  outline: 2px solid var(--mark);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+/* Remove default outline when :focus-visible is supported (pointer users won't see rings) */
+:focus:not(:focus-visible) { outline: none; }
+
+/* Skip-to-content link for screen readers / keyboard users */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--pad);
+  z-index: 1000;
+  background: var(--mark);
+  color: var(--paper);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 0 0 4px 4px;
+  text-decoration: none;
+  transition: top 0.1s;
+}
+.skip-link:focus { top: 0; }
+
+/* Reduced-motion: disable decorative animations, keep functional transitions */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

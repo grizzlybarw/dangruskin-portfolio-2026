@@ -539,24 +539,42 @@ const CASE_STUDIES = {
    Page renderer
    ============================================================ */
 
-function Lightbox({ screens, index, onClose, onPrev, onNext }) {
+function Lightbox({ screens, index, onClose, onPrev, onNext, triggerRef }) {
+  const closeRef = useRef(null);
+  const dialogRef = useRef(null);
+
   useEffect(() => {
+    const prev = document.activeElement;
+    closeRef.current?.focus();
+
     const onKey = (e) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") { onClose(); return; }
       if (e.key === "ArrowRight" || e.key === "ArrowDown") onNext();
       if (e.key === "ArrowLeft"  || e.key === "ArrowUp")   onPrev();
+      if (e.key === "Tab") {
+        const focusable = dialogRef.current?.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])');
+        if (!focusable?.length) return;
+        const first = focusable[0], last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
     };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+      (triggerRef?.current || prev)?.focus();
+    };
   }, [onClose, onPrev, onNext]);
 
   const screen = screens[index];
   const multi = screens.length > 1;
 
   return (
-    <div className="cs-lightbox" onClick={onClose}>
-      <button className="cs-lightbox-close" onClick={onClose} aria-label="Close">✕</button>
+    <div className="cs-lightbox" role="dialog" aria-modal="true"
+      aria-label={screen.label} ref={dialogRef} onClick={onClose}>
+      <button className="cs-lightbox-close" onClick={onClose} aria-label="Close" ref={closeRef}>✕</button>
       {multi && (
         <button className="cs-lightbox-nav cs-lightbox-prev" aria-label="Previous"
           onClick={(e) => { e.stopPropagation(); onPrev(); }}>‹</button>
@@ -567,7 +585,7 @@ function Lightbox({ screens, index, onClose, onPrev, onNext }) {
           onClick={(e) => { e.stopPropagation(); onNext(); }}>›</button>
       )}
       {multi && (
-        <div className="cs-lightbox-counter">{index + 1} <span>/</span> {screens.length}</div>
+        <div className="cs-lightbox-counter" aria-live="polite">{index + 1} <span>/</span> {screens.length}</div>
       )}
     </div>
   );

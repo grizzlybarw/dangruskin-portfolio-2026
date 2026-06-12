@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0SSHKT8LPF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0SSHKT8LPF');
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How This Site Was Built — Dan Gruskin</title>
+  <meta name="description" content="The stack, build pipeline, design decisions, and Claude Code workflow behind this portfolio." />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="style-switcher.css" />
+  <script src="style-switcher.js"></script>
+  <link rel="stylesheet" href="styles-hero.css" />
+  <link rel="stylesheet" href="styles-rest.css" />
+
+  <style>
+    body { padding-top: 52px; }
+
+    .col-hero {
+      border-bottom: 1px solid var(--rule);
+      padding: 80px var(--pad) 64px;
+      max-width: 1480px;
+      margin: 0 auto;
+    }
+    .col-eyebrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .col-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+    .col-h1 {
+      font-family: var(--sans);
+      font-weight: 200;
+      font-size: clamp(40px, 6vw, 80px);
+      letter-spacing: -0.05em;
+      line-height: 0.95;
+      color: var(--ink);
+      margin-bottom: 24px;
+    }
+    .col-h1 em { font-style: normal; font-weight: 500; color: var(--mark); }
+    .col-lede {
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--ink-2);
+      max-width: 60ch;
+      letter-spacing: -0.01em;
+    }
+
+    .col-body {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 0 var(--pad);
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 64px;
+      align-items: start;
+      padding-top: 64px;
+      padding-bottom: 80px;
+    }
+    .col-nav {
+      position: sticky;
+      top: 72px;
+    }
+    .col-nav-list {
+      list-style: none;
+      border-top: 1px solid var(--rule);
+    }
+    .col-nav-list li {
+      border-bottom: 1px solid var(--rule);
+    }
+    .col-nav-list a {
+      display: block;
+      padding: 10px 0;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      text-decoration: none;
+    }
+    .col-nav-list a:hover { color: var(--mark); }
+
+    .col-sections { display: flex; flex-direction: column; gap: 64px; }
+    .col-section { border-top: 1px solid var(--rule); padding-top: 40px; }
+    .col-section-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--mark);
+      margin-bottom: 20px;
+    }
+    .col-section h2 {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: clamp(24px, 3vw, 36px);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+    .col-section h2 em { font-style: normal; font-weight: 500; color: var(--mark); }
+    .col-section p {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--ink-2);
+      letter-spacing: -0.01em;
+      max-width: 62ch;
+      margin-bottom: 16px;
+    }
+    .col-section p:last-child { margin-bottom: 0; }
+    .col-section p strong { font-weight: 500; color: var(--ink); }
+
+    .col-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+    }
+    .col-table th, .col-table td {
+      text-align: left;
+      padding: 10px 16px 10px 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: 14px;
+      letter-spacing: -0.005em;
+    }
+    .col-table th {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      border-bottom-color: var(--rule-2);
+    }
+    .col-table td { color: var(--ink-2); }
+    .col-table td:first-child { color: var(--ink); font-weight: 500; }
+    .col-table tr:last-child td { border-bottom: none; }
+
+    .col-decision {
+      border-left: 2px solid var(--mark);
+      padding: 16px 0 16px 20px;
+      margin: 24px 0;
+    }
+    .col-decision-q {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mark);
+      margin-bottom: 8px;
+    }
+    .col-decision-a {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--ink-2);
+      letter-spacing: -0.01em;
+      max-width: 58ch;
+    }
+
+    .col-stat-row {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin: 24px 0;
+    }
+    .col-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .col-stat .n {
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 48px;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      color: var(--ink);
+    }
+    .col-stat .n em { font-style: normal; font-weight: 500; color: var(--mark); }
+    .col-stat .l {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+    }
+
+    @media (max-width: 800px) {
+      .col-body { grid-template-columns: 1fr; gap: 40px; }
+      .col-nav { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#col-main">Skip to main content</a>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-left">
+        <a href="/" class="brand-mark">Dan Gruskin</a>
+        <span class="mono-sm muted" style="border-left:1px solid var(--rule);padding-left:14px">Colophon</span>
+      </div>
+      <nav class="topbar-mid">
+        <a href="/">Work</a>
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+      <div class="topbar-right">
+        <a class="resume-btn" href="/">All work ←</a>
+        <button class="topbar-burger" id="topbar-burger" aria-label="Open menu" aria-expanded="false" aria-controls="topbar-nav-mobile">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <nav class="topbar-nav-mobile" id="topbar-nav-mobile" hidden>
+      <a href="/">Work</a>
+      <a href="/about.html">About</a>
+      <a href="/contact.html">Contact</a>
+      <div class="topbar-nav-mobile-footer">
+        <a class="resume-btn" href="/">All work ←</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="col-hero">
+    <div class="col-eyebrow">§ How this site was built</div>
+    <h1 class="col-h1">The portfolio is also<br />a <em>case study</em>.</h1>
+    <p class="col-lede">Stack, build pipeline, design decisions, and exactly how Claude Code was used — including what I directed vs. what it generated. The AI section on the homepage makes claims. This page is the receipts.</p>
+  </div>
+
+  <div class="col-body" id="col-main">
+    <nav class="col-nav" aria-label="Page sections">
+      <ul class="col-nav-list">
+        <li><a href="#stack">Stack</a></li>
+        <li><a href="#pipeline">Build pipeline</a></li>
+        <li><a href="#claude-code">Claude Code workflow</a></li>
+        <li><a href="#decisions">Design decisions</a></li>
+        <li><a href="#performance">Performance</a></li>
+        <li><a href="#accessibility">Accessibility</a></li>
+      </ul>
+    </nav>
+
+    <main class="col-sections">
+
+      <section class="col-section" id="stack">
+        <div class="col-section-label">01 — Stack</div>
+        <h2>Intentionally <em>simple</em>.</h2>
+        <p>No build toolchain, no bundler, no framework, no npm. The constraint was a feature: a static site that can be deployed anywhere and understood by any developer in under 10 minutes.</p>
+
+        <table class="col-table">
+          <thead>
+            <tr><th>Layer</th><th>Choice</th><th>Why</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>HTML/CSS</td>
+              <td>Vanilla, hand-authored</td>
+              <td>Full control, no abstraction tax, works everywhere</td>
+            </tr>
+            <tr>
+              <td>JavaScript</td>
+              <td>React 18 UMD + Babel Standalone</td>
+              <td>JSX authoring without a build step for case studies; loaded from CDN with SRI hashes</td>
+            </tr>
+            <tr>
+              <td>Fonts</td>
+              <td>Geist, JetBrains Mono, Playfair Display, Space Mono via Google Fonts</td>
+              <td>Editorial hierarchy: one grotesque (all weights), one true mono, one serif for counterpoint</td>
+            </tr>
+            <tr>
+              <td>Color</td>
+              <td>OKLCH throughout</td>
+              <td>Perceptually uniform — changing lightness doesn't shift perceived hue</td>
+            </tr>
+            <tr>
+              <td>Analytics</td>
+              <td>Google Analytics 4 (G-0SSHKT8LPF)</td>
+              <td>Case study click tracking, Q&amp;A engagement events, session data</td>
+            </tr>
+            <tr>
+              <td>Hosting</td>
+              <td>GitHub Pages (fable-updates branch)</td>
+              <td>Free, fast, zero ops, direct git deploy</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>The <strong>style-switcher</strong> (five color themes: Studio, Cream, Plasma, Acid, Cobalt, Ember) persists the selected theme in <code>localStorage</code> and applies it via a <code>data-theme</code> attribute on <code>&lt;html&gt;</code>. All colors are defined as OKLCH custom properties, so every theme variant is a single <code>:root</code> block swap.</p>
+      </section>
+
+      <section class="col-section" id="pipeline">
+        <div class="col-section-label">02 — Build pipeline</div>
+        <h2>One <em>Node script</em>, no dependencies.</h2>
+        <p>Case studies live in a single <code>case-studies.jsx</code> file as a <code>CASE_STUDIES</code> object — one source of truth for content, schema, and rendering. A <code>build.js</code> script (Node, no npm installs) does two things:</p>
+        <p><strong>Bundles CSS:</strong> concatenates five stylesheets (<code>styles.css</code>, <code>style-switcher.css</code>, <code>styles-hero.css</code>, <code>styles-rest.css</code>, <code>case-study.css</code>) into <code>dist-css/case-study-bundle.css</code>. Reduces CSS requests from 6 to 2 (bundle + Google Fonts) on every case study page.</p>
+        <p><strong>Generates static shells:</strong> writes <code>work/&lt;slug&gt;/index.html</code> for each of the 8 case studies, with the correct <code>&lt;title&gt;</code>, meta description, OG tags, and Twitter card baked into the static HTML. Social crawlers get real metadata without running JavaScript. Each shell loads the same Babel + JSX stack the dev environment uses, so there's no separate production build.</p>
+        <p>A <code>&lt;base href="/"&gt;</code> tag in each generated page makes relative asset paths resolve from the root regardless of URL depth, so the same image references work at <code>/</code> and at <code>/work/gridx-empower/</code>.</p>
+
+        <div class="col-decision">
+          <div class="col-decision-q">Why not server-side rendering?</div>
+          <div class="col-decision-a">SSR requires a runtime. The goal was a site that deploys as a folder of files. The compromise — static HTML shells with client-side React hydration — gives crawlers what they need (title, description, OG tags) without a server dependency.</div>
+        </div>
+      </section>
+
+      <section class="col-section" id="claude-code">
+        <div class="col-section-label">03 — Claude Code workflow</div>
+        <h2>What I directed. What <em>it generated</em>.</h2>
+        <p>Claude Code (Anthropic's CLI, running claude-sonnet-4-6) was the primary implementation tool for this site. The workflow was a tight loop: I wrote the spec, Claude Code wrote the code, I reviewed it in the browser, we iterated.</p>
+        <p>Being specific about this matters. "Built with Claude Code" covers a lot of ground — from "I described a button and accepted what it generated" to "I wrote a detailed spec and critically reviewed every line." This was closer to the latter.</p>
+
+        <div class="col-decision">
+          <div class="col-decision-q">What I directed</div>
+          <div class="col-decision-a">The full site spec: IA, typography system, color palette (OKLCH values chosen by me), section layout and hierarchy, component behavior, content strategy, accessibility requirements. Every major design decision — the editorial index aesthetic, the work hub structure, the confidential-work treatment using SVG schematics, the style-switcher panel — was specified before implementation. Metric accuracy: I corrected fabricated or misattributed numbers and supplied the verified data.</div>
+        </div>
+
+        <div class="col-decision">
+          <div class="col-decision-q">What Claude Code generated</div>
+          <div class="col-decision-a">CSS (following my system), HTML structure, React components (<code>CaseStudy</code>, <code>Lightbox</code>, <code>WorkflowComparison</code>, <code>ConfidentialNotice</code>, SVG Schematics), the build script, the axe accessibility audit loop, and the fix iterations when audits failed. It also caught several bugs I missed: a missing <code>id="work"</code> on the ledger section that broke nav anchor links, and an <code>aria-controls</code> wiring gap in the Q&amp;A accordion.</div>
+        </div>
+
+        <div class="col-decision">
+          <div class="col-decision-q">Where it needed correction</div>
+          <div class="col-decision-a">Early drafts imported metrics from one case study into another (the 55-hour stat appeared in the wrong study). The tool can't verify facts — it surfaces what it finds and I have to catch what's wrong. The metric integrity pass was fully directed by me with verified source data. Claude Code never fabricated a quote or outcome; it flagged unknowns with <code>[VERIFY]</code> placeholders as instructed.</div>
+        </div>
+
+        <p>The session that built most of this site ran across multiple context windows over several days. Claude Code's memory system (project and user memory files) carried context between sessions so I didn't have to re-explain the design system on every restart.</p>
+      </section>
+
+      <section class="col-section" id="decisions">
+        <div class="col-section-label">04 — Design decisions</div>
+        <h2>Three choices worth <em>explaining</em>.</h2>
+
+        <div class="col-decision">
+          <div class="col-decision-q">Index-first layout — work is the page</div>
+          <div class="col-decision-a">Most portfolio sites lead with a hero that delays the work. This one leads with the work index. The hero is a compact strip. The reasoning: a recruiter opening this tab sees projects immediately, not a tagline. The "30-second tour" modal gives the elevator pitch to anyone who wants it without blocking everyone else.</div>
+        </div>
+
+        <div class="col-decision">
+          <div class="col-decision-q">Confidential work as a designed feature</div>
+          <div class="col-decision-a">Four of the eight case studies are fully confidential — no production UI can be shown. Rather than treating this as a gap, each confidential study uses an SVG "Schematics" component (abstracted system diagrams with annotation callouts), a <code>WorkflowComparison</code> component (before/after step counts and tool maps), and a <code>ConfidentialNotice</code> badge. The thinking is visible even when the screens aren't.</div>
+        </div>
+
+        <div class="col-decision">
+          <div class="col-decision-q">OKLCH for the color system</div>
+          <div class="col-decision-a">HSL's perceptual non-uniformity means that changing lightness in blue vs. yellow produces visually unequal results. OKLCH's lightness axis is perceptually linear, which makes it far easier to build a multi-theme system where all themes feel equally balanced. Every one of the six style-switcher themes was defined in OKLCH — changing the theme is a single <code>:root</code> swap of about 10 custom properties.</div>
+        </div>
+      </section>
+
+      <section class="col-section" id="performance">
+        <div class="col-section-label">05 — Performance</div>
+        <h2>What was <em>measured</em>.</h2>
+        <div class="col-stat-row">
+          <div class="col-stat">
+            <span class="n">2</span>
+            <span class="l">CSS requests per case study page<br>(was 6)</span>
+          </div>
+          <div class="col-stat">
+            <span class="n">8</span>
+            <span class="l">Static pages with baked-in<br>OG / Twitter meta</span>
+          </div>
+          <div class="col-stat">
+            <span class="n em"><em>swap</em></span>
+            <span class="l">font-display on all<br>Google Fonts loads</span>
+          </div>
+        </div>
+        <p>Lazy loading is applied to all work-index thumbnails below the fold. The LCP image (first work row, above fold) is not lazy-loaded. Explicit width/height on thumbnails prevents layout shift.</p>
+        <p>Babel Standalone and React UMD are the heaviest assets — they're the cost of JSX without a build step. For a portfolio with low traffic and no repeat-visit caching concerns, the tradeoff is acceptable. A production-grade version would pre-compile the JSX and ship a minified React bundle.</p>
+      </section>
+
+      <section class="col-section" id="accessibility">
+        <div class="col-section-label">06 — Accessibility</div>
+        <h2>WCAG 2.2 AA — <em>verified</em>.</h2>
+        <p>Audited with axe-core 4.9.1 (injected via Puppeteer MCP) across the homepage and all eight case study pages. Starting state had two violation categories:</p>
+
+        <table class="col-table">
+          <thead>
+            <tr><th>Issue</th><th>Before</th><th>Fix</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Color contrast (ink-3)</td>
+              <td>4.2:1 on 10px mono text (needs 4.5:1)</td>
+              <td>Darkened <code>--ink-3</code> from <code>oklch(0.560)</code> to <code>oklch(0.480)</code> in default and cream themes</td>
+            </tr>
+            <tr>
+              <td>Touch target size</td>
+              <td>Doodle color swatches 16×16px (needs 24×24px per WCAG 2.2 §2.5.8)</td>
+              <td>Increased <code>.doodle-color</code> to 24×24px</td>
+            </tr>
+            <tr>
+              <td>Results section labels</td>
+              <td>3.78–4.19:1 on dark ink background</td>
+              <td>Increased paper opacity in <code>color-mix()</code> from 45% to 65%</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>Additional work done beyond the audit findings: global <code>:focus-visible</code> ring using <code>var(--mark)</code>, skip-to-content link, <code>prefers-reduced-motion</code> media query disabling decorative animations, <code>aria-controls</code> / <code>aria-labelledby</code> wiring on Q&amp;A accordion, <code>role="dialog"</code> + <code>aria-modal</code> + focus trapping on the image lightbox, and <code>aria-live="polite"</code> on the lightbox counter.</p>
+        <p>Final axe result: <strong>0 violations, 23 passing rules</strong> on both homepage and case study pages.</p>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <span class="site-footer-copy">© 2026 Dan Gruskin</span>
+      <span class="site-footer-mid"></span>
+      <span class="site-footer-a11y">This site meets <abbr title="Web Content Accessibility Guidelines">WCAG</abbr> 2.2 AA · Verified with axe-core 4.9.1</span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const burger = document.getElementById("topbar-burger");
+      const nav = document.getElementById("topbar-nav-mobile");
+      if (!burger || !nav) return;
+      const open  = () => { nav.hidden = false; burger.setAttribute("aria-expanded", "true");  burger.setAttribute("aria-label", "Close menu"); };
+      const close = () => { nav.hidden = true;  burger.setAttribute("aria-expanded", "false"); burger.setAttribute("aria-label", "Open menu");  };
+      burger.addEventListener("click", () => nav.hidden ? open() : close());
+      nav.querySelectorAll("a").forEach(a => a.addEventListener("click", close));
+      window.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+    })();
+  </script>
+</body>
+</html>

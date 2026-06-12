@@ -192,11 +192,11 @@
   color: var(--paper);
   border-top: 4px solid var(--mark) !important;
 }
-.cs-section--results .lhs { color: color-mix(in srgb, var(--paper) 45%, transparent); }
+.cs-section--results .lhs { color: color-mix(in srgb, var(--paper) 65%, transparent); }
 .cs-section--results .rhs p { color: color-mix(in srgb, var(--paper) 70%, transparent); }
 .cs-section--results .cs-results { border-top-color: color-mix(in srgb, var(--paper) 15%, transparent); border-bottom-color: color-mix(in srgb, var(--paper) 15%, transparent); }
 .cs-section--results .cs-results .cell { border-left-color: color-mix(in srgb, var(--paper) 15%, transparent); }
-.cs-section--results .cs-results .cell .top { color: color-mix(in srgb, var(--paper) 45%, transparent); }
+.cs-section--results .cs-results .cell .top { color: color-mix(in srgb, var(--paper) 65%, transparent); }
 .cs-section--results .cs-results .cell .top::before { content: "◆"; color: var(--mark); font-size: 16px; margin-right: 8px; display: inline-block; vertical-align: -1px; line-height: 1; }
 .cs-section--results .cs-results .cell .desc { color: color-mix(in srgb, var(--paper) 60%, transparent); }
 
